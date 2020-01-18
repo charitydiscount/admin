@@ -6718,7 +6718,7 @@ Tween.propHooks = {
 			// complex values such as "rotate(1rad)" are returned as-is.
 			result = jQuery.css( tween.elem, tween.prop, "" );
 
-			// Empty strings, null, undefined and "auto" are converted to 0.
+			// EmptyComponent strings, null, undefined and "auto" are converted to 0.
 			return !result || result === "auto" ? 0 : result;
 		},
 		set: function( tween ) {
@@ -7261,7 +7261,7 @@ jQuery.fn.extend( {
 				// Operate on a copy of prop so per-property easing won't be lost
 				var anim = Animation( this, jQuery.extend( {}, prop ), optall );
 
-				// Empty animations, or finishing resolves immediately
+				// EmptyComponent animations, or finishing resolves immediately
 				if ( empty || dataPriv.get( this, "finish" ) ) {
 					anim.stop( true );
 				}
@@ -7339,7 +7339,7 @@ jQuery.fn.extend( {
 			// Enable finishing flag on private data
 			data.finish = true;
 
-			// Empty the queue first
+			// EmptyComponent the queue first
 			jQuery.queue( this, type, [] );
 
 			if ( hooks && hooks.stop ) {

@@ -4,6 +4,7 @@ import NavigationLayout from "./components/layout/NavigationLayout";
 import HeaderLayoutDesktop from "./components/layout/HeaderLayoutDesktop";
 import PageLayout from "./components/layout/PageLayout";
 import Login from "./components/login/Login";
+import {connect} from "react-redux";
 
 interface AppProps {
     isLoggedIn ?: boolean
@@ -36,4 +37,10 @@ class App extends React.Component<AppProps> {
     }
 }
 
-export default App;
+const mapStateToProps = (state: any) => {
+    return {
+        isLoggedIn: state.user.isLoggedIn,
+    }
+};
+
+export default connect(mapStateToProps)(App);

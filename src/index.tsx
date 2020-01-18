@@ -6,7 +6,6 @@ import thunk from 'redux-thunk';
 import { ConnectedRouter, routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import createRootReducer from './redux/reducer/RootReducer';
-
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 

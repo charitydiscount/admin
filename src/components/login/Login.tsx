@@ -1,5 +1,7 @@
 import React from "react";
-import {checkLogin} from "../../rest/UserService";
+import {doLogin} from "../../rest/UserService";
+import {Routes} from "../layout/Routes";
+import {history} from "../../index"
 
 interface LoginProps {
 
@@ -26,7 +28,10 @@ class Login extends React.Component<LoginProps, LoginState> {
     }
 
     onSignIn() {
-        checkLogin(this.state.username, this.state.password);
+        let response = doLogin(this.state.username, this.state.password);
+        if (response) {
+            history.push(Routes.DASHBOARD)
+        }
     }
 
     handleTextChange = (event: any) => {
@@ -45,7 +50,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                             <div className="login-content">
                                 <div className="login-logo">
                                     <a href="#">
-                                        <img src="images/icon/logo.png" alt="CoolAdmin"/>
+                                        <img src="/images/icon/logo.png" alt="CoolAdmin"/>
                                     </a>
                                 </div>
                                 <div className="login-form">
