@@ -1,6 +1,40 @@
 import React from "react";
+import {checkLogin} from "../../rest/UserService";
 
-class Login extends React.Component {
+interface LoginProps {
+
+}
+
+interface LoginState {
+    username: string,
+    password: string
+}
+
+
+class Login extends React.Component<LoginProps, LoginState> {
+
+
+    constructor(props: Readonly<LoginProps>) {
+        super(props);
+
+        this.state = {
+            username: '',
+            password: ''
+        };
+
+        this.onSignIn = this.onSignIn.bind(this);
+    }
+
+    onSignIn() {
+        checkLogin(this.state.username, this.state.password);
+    }
+
+    handleTextChange = (event: any) => {
+        this.setState({
+            ...this.state,
+            [event.target.id]: event.target.value
+        });
+    };
 
     public render() {
         return (
@@ -15,46 +49,26 @@ class Login extends React.Component {
                                     </a>
                                 </div>
                                 <div className="login-form">
-                                    <form action="" method="post">
-                                        <div className="form-group">
-                                            <label>Email Address</label>
-                                            <input className="au-input au-input--full" type="email" name="email"
-                                                   placeholder="Email"/>
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Password</label>
-                                            <input className="au-input au-input--full" type="password" name="password"
-                                                   placeholder="Password"/>
-                                        </div>
-                                        <div className="login-checkbox">
-                                            <label>
-                                                <input type="checkbox" name="remember"/>Remember Me
-                                            </label>
-                                            <label>
-                                                <a href="#">Forgotten Password?</a>
-                                            </label>
-                                        </div>
-                                        <button className="au-btn au-btn--block au-btn--green m-b-20" type="submit">sign
-                                            in
-                                        </button>
-                                        <div className="social-login-content">
-                                            <div className="social-button">
-                                                <button className="au-btn au-btn--block au-btn--blue m-b-20">sign in
-                                                    with
-                                                    facebook
-                                                </button>
-                                                <button className="au-btn au-btn--block au-btn--blue2">sign in with
-                                                    twitter
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <div className="register-link">
-                                        <p>
-                                            Don't you have account?
-                                            <a href="#">Sign Up Here</a>
-                                        </p>
+                                    <div className="form-group">
+                                        <label>Email Address</label>
+                                        <input className="au-input au-input--full" type="email" name="email"
+                                               id="username"
+                                               onChange={this.handleTextChange}
+                                               value={this.state.username}
+                                               placeholder="Email"/>
                                     </div>
+                                    <div className="form-group">
+                                        <label>Password</label>
+                                        <input className="au-input au-input--full" type="password" name="password"
+                                               id="password"
+                                               onChange={this.handleTextChange}
+                                               value={this.state.password}
+                                               placeholder="Password"/>
+                                    </div>
+                                    <button className="au-btn au-btn--block au-btn--green m-b-20" type="submit"
+                                            onClick={this.onSignIn}>
+                                        Sign in
+                                    </button>
                                 </div>
                             </div>
                         </div>
