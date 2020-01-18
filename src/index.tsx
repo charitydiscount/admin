@@ -1,20 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { applyMiddleware, createStore } from 'redux';
+import {Provider} from 'react-redux';
+import {applyMiddleware, createStore} from 'redux';
 import thunk from 'redux-thunk';
-import { ConnectedRouter, routerMiddleware } from 'connected-react-router';
-import { createBrowserHistory } from 'history';
+import {ConnectedRouter, routerMiddleware} from 'connected-react-router';
+import {createBrowserHistory} from 'history';
 import createRootReducer from './redux/reducer/RootReducer';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import {getLocalStorage, StorageKey} from "./Helper";
+import {UserActions} from "./redux/actions/UserActions";
 
 
 export const publicUrl = process.env.PUBLIC_URL || '';
 
 // REDUX----------------------------------------------------------------------------------------------------------------
 const initialState = {};
-export const history = createBrowserHistory({ basename: publicUrl });
+export const history = createBrowserHistory({basename: publicUrl});
 // redux store
 export const store = createStore(
     createRootReducer(history),
@@ -22,10 +24,15 @@ export const store = createStore(
     applyMiddleware(thunk, routerMiddleware(history))
 );
 
+const user = getLocalStorage(StorageKey.USER);
+if (user && user.length > 0) {
+    store.dispatch(UserActions.setLoggedUserAction(user));
+}
+
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <App />
+            <App/>
         </ConnectedRouter>
     </Provider>,
     document.getElementById('root'));

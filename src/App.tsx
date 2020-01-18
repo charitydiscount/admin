@@ -7,7 +7,7 @@ import Login from "./components/login/Login";
 import {connect} from "react-redux";
 
 interface AppProps {
-    isLoggedIn ?: boolean
+    isLoggedIn?: boolean
 }
 
 class App extends React.Component<AppProps> {
@@ -17,19 +17,23 @@ class App extends React.Component<AppProps> {
             <React.Fragment>
                 <div className="page-wrapper">
                     {this.props.isLoggedIn &&
-                        <React.Fragment>
-                            <HeaderLayoutMobile/>
-                            <NavigationLayout/>
-                            <div className="page-container">
-                                <HeaderLayoutDesktop/>
-                                <div className="main-content">
-                                    <PageLayout/>
+                    <React.Fragment>
+                        <HeaderLayoutMobile/>
+                        <NavigationLayout/>
+                        <div className="page-container">
+                            <HeaderLayoutDesktop/>
+                            <div className="main-content">
+                                <div className="section__content section__content--p30">
+                                    <div className="container-fluid">
+                                        <PageLayout/>
+                                    </div>
                                 </div>
                             </div>
-                        </React.Fragment>
+                        </div>
+                    </React.Fragment>
                     }
                     {!this.props.isLoggedIn &&
-                        <Login/>
+                    <Login/>
                     }
                 </div>
             </React.Fragment>

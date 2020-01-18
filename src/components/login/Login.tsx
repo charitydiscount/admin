@@ -2,6 +2,7 @@ import React from "react";
 import {doLogin} from "../../rest/UserService";
 import {Routes} from "../layout/Routes";
 import {history} from "../../index"
+import {emptyHrefLink} from "../../Helper";
 
 interface LoginProps {
 
@@ -30,7 +31,7 @@ class Login extends React.Component<LoginProps, LoginState> {
     onSignIn() {
         let response = doLogin(this.state.username, this.state.password);
         if (response) {
-            history.push(Routes.DASHBOARD)
+            history.push(Routes.DASHBOARD);
         }
     }
 
@@ -49,7 +50,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                         <div className="login-wrap">
                             <div className="login-content">
                                 <div className="login-logo">
-                                    <a href="#">
+                                    <a href={emptyHrefLink}>
                                         <img src="/images/icon/logo.png" alt="CoolAdmin"/>
                                     </a>
                                 </div>
