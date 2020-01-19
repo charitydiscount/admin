@@ -1,4 +1,10 @@
 import React from "react";
+import {CommissionDto} from "../../rest/Mocks";
+import CommissionsElement from "./CommissionElement";
+
+interface CommissionsState {
+    commissions: CommissionDto[]
+}
 
 class Commissions extends React.Component {
 
@@ -64,161 +70,9 @@ class Commissions extends React.Component {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr className="tr-shadow">
-                                    <td>
-                                        <label className="au-checkbox">
-                                            <input type="checkbox"/>
-                                            <span className="au-checkmark"></span>
-                                        </label>
-                                    </td>
-                                    <td>Lori Lynch</td>
-                                    <td>
-                                        <span className="block-email">lori@example.com</span>
-                                    </td>
-                                    <td className="desc">Samsung S8 Black</td>
-                                    <td>2018-09-27 02:12</td>
-                                    <td>
-                                        <span className="status--process">Processed</span>
-                                    </td>
-                                    <td>$679.00</td>
-                                    <td>
-                                        <div className="table-data-feature">
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Send">
-                                                <i className="zmdi zmdi-mail-send"></i>
-                                            </button>
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Edit">
-                                                <i className="zmdi zmdi-edit"></i>
-                                            </button>
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Delete">
-                                                <i className="zmdi zmdi-delete"></i>
-                                            </button>
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="More">
-                                                <i className="zmdi zmdi-more"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr className="spacer"></tr>
-                                <tr className="tr-shadow">
-                                    <td>
-                                        <label className="au-checkbox">
-                                            <input type="checkbox"/>
-                                            <span className="au-checkmark"></span>
-                                        </label>
-                                    </td>
-                                    <td>Lori Lynch</td>
-                                    <td>
-                                        <span className="block-email">john@example.com</span>
-                                    </td>
-                                    <td className="desc">iPhone X 64Gb Grey</td>
-                                    <td>2018-09-29 05:57</td>
-                                    <td>
-                                        <span className="status--process">Processed</span>
-                                    </td>
-                                    <td>$999.00</td>
-                                    <td>
-                                        <div className="table-data-feature">
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Send">
-                                                <i className="zmdi zmdi-mail-send"></i>
-                                            </button>
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Edit">
-                                                <i className="zmdi zmdi-edit"></i>
-                                            </button>
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Delete">
-                                                <i className="zmdi zmdi-delete"></i>
-                                            </button>
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="More">
-                                                <i className="zmdi zmdi-more"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr className="spacer"></tr>
-                                <tr className="tr-shadow">
-                                    <td>
-                                        <label className="au-checkbox">
-                                            <input type="checkbox"/>
-                                            <span className="au-checkmark"></span>
-                                        </label>
-                                    </td>
-                                    <td>Lori Lynch</td>
-                                    <td>
-                                        <span className="block-email">lyn@example.com</span>
-                                    </td>
-                                    <td className="desc">iPhone X 256Gb Black</td>
-                                    <td>2018-09-25 19:03</td>
-                                    <td>
-                                        <span className="status--denied">Denied</span>
-                                    </td>
-                                    <td>$1199.00</td>
-                                    <td>
-                                        <div className="table-data-feature">
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Send">
-                                                <i className="zmdi zmdi-mail-send"></i>
-                                            </button>
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Edit">
-                                                <i className="zmdi zmdi-edit"></i>
-                                            </button>
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Delete">
-                                                <i className="zmdi zmdi-delete"></i>
-                                            </button>
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="More">
-                                                <i className="zmdi zmdi-more"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr className="spacer"></tr>
-                                <tr className="tr-shadow">
-                                    <td>
-                                        <label className="au-checkbox">
-                                            <input type="checkbox"/>
-                                            <span className="au-checkmark"></span>
-                                        </label>
-                                    </td>
-                                    <td>Lori Lynch</td>
-                                    <td>
-                                        <span className="block-email">doe@example.com</span>
-                                    </td>
-                                    <td className="desc">Camera C430W 4k</td>
-                                    <td>2018-09-24 19:10</td>
-                                    <td>
-                                        <span className="status--process">Processed</span>
-                                    </td>
-                                    <td>$699.00</td>
-                                    <td>
-                                        <div className="table-data-feature">
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Send">
-                                                <i className="zmdi zmdi-mail-send"></i>
-                                            </button>
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Edit">
-                                                <i className="zmdi zmdi-edit"></i>
-                                            </button>
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="Delete">
-                                                <i className="zmdi zmdi-delete"></i>
-                                            </button>
-                                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                                    title="More">
-                                                <i className="zmdi zmdi-more"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    <CommissionsElement/>
+                                    <CommissionsElement/>
+                                    <CommissionsElement/>
                                 </tbody>
                             </table>
                         </div>
