@@ -6,8 +6,8 @@ import {history} from "../../index"
 import {Routes} from "../../components/layout/Routes";
 
 export const UserActions = {
-    setLoggedUserAction: (loginInfo: string | null) =>
-        createAction(LoginActionTypes.SET_LOGGED_USER_ACTION, loginInfo),
+    setLoggedUserAction: (loginAuthorized: string | null) =>
+        createAction(LoginActionTypes.SET_LOGGED_USER_ACTION, loginAuthorized),
     resetLoggedUserAction: () =>
         createAction(LoginActionTypes.RESET_LOGGED_USER_ACTION)
 };
