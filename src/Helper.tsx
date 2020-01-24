@@ -1,6 +1,11 @@
 export enum StorageKey {
-    //LOCAL STORAGE
-    USER = '/userAdminCD',
+    //SESSION STORAGE
+    USER_KEY = '/userAdminCD',
+    USER_AUTH_KEY = '/userAdminAuthCD'
+}
+
+export enum FirebaseTable {
+   ROLES = "roles"
 }
 
 export const emptyHrefLink = '#';

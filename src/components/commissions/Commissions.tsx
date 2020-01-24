@@ -1,9 +1,7 @@
 import React from "react";
-import {CommissionDto} from "../../rest/Mocks";
 import CommissionsElement from "./CommissionElement";
 
 interface CommissionsState {
-    commissions: CommissionDto[]
 }
 
 class Commissions extends React.Component {

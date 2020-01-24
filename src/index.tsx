@@ -8,9 +8,12 @@ import {createBrowserHistory} from 'history';
 import createRootReducer from './redux/reducer/RootReducer';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {getLocalStorage, StorageKey} from "./Helper";
+import {getSessionStorage, StorageKey} from "./Helper";
 import {UserActions} from "./redux/actions/UserActions";
-
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+import firebaseConfig from "./config/FirebaseConfig";
 
 export const publicUrl = process.env.PUBLIC_URL || '';
 
@@ -24,9 +27,14 @@ export const store = createStore(
     applyMiddleware(thunk, routerMiddleware(history))
 );
 
-const user = getLocalStorage(StorageKey.USER);
-if (user && user.length > 0) {
-    store.dispatch(UserActions.setLoggedUserAction(user));
+// Firebase--------------------------------------------------------------------------------------------------
+export const firebaseApp = firebase.initializeApp(firebaseConfig);
+export const DB = firebaseApp.firestore();
+export const auth = firebaseApp.auth();
+
+let userKey = getSessionStorage(StorageKey.USER_KEY);
+if (userKey && userKey.length > 10) {
+    store.dispatch(UserActions.setLoggedUserAction("User authorized"));
 }
 
 ReactDOM.render(

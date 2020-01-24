@@ -1,45 +1,35 @@
 import React from "react";
-import {doLogin} from "../../rest/UserService";
-import {Routes} from "../layout/Routes";
-import {history} from "../../index"
-import {emptyHrefLink} from "../../Helper";
+import {auth} from "../../index"
+import firebase from 'firebase/app';
+import {emptyHrefLink, setSessionStorage, StorageKey} from "../../Helper";
+import {StyledFirebaseAuth} from "react-firebaseui";
 
 interface LoginProps {
-
 }
 
 interface LoginState {
-    username: string,
-    password: string
 }
-
 
 class Login extends React.Component<LoginProps, LoginState> {
 
-
-    constructor(props: Readonly<LoginProps>) {
-        super(props);
-
-        this.state = {
-            username: '',
-            password: ''
-        };
-
-        this.onSignIn = this.onSignIn.bind(this);
+    static onSignInSuccess(response: any) {
+        setSessionStorage(StorageKey.USER_AUTH_KEY, response.user.uid);
+        return true;
     }
 
-    onSignIn() {
-        let response = doLogin(this.state.username, this.state.password);
-        if (response) {
-            history.push(Routes.DASHBOARD);
-        }
-    }
-
-    handleTextChange = (event: any) => {
-        this.setState({
-            ...this.state,
-            [event.target.id]: event.target.value
-        });
+    uiConfig = {
+        signInFlow: 'popup',
+        tosUrl: '/',
+        signInSuccessUrl: '/login',
+        privacyPolicyUrl: '/',
+        signInOptions: [
+            firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            firebase.auth.FacebookAuthProvider.PROVIDER_ID
+        ],
+        callbacks: {
+            signInSuccessWithAuthResult: Login.onSignInSuccess
+        },
     };
 
     public render() {
@@ -55,26 +45,11 @@ class Login extends React.Component<LoginProps, LoginState> {
                                     </a>
                                 </div>
                                 <div className="login-form">
-                                    <div className="form-group">
-                                        <label>Email Address</label>
-                                        <input className="au-input au-input--full" type="email" name="email"
-                                               id="username"
-                                               onChange={this.handleTextChange}
-                                               value={this.state.username}
-                                               placeholder="Email"/>
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Password</label>
-                                        <input className="au-input au-input--full" type="password" name="password"
-                                               id="password"
-                                               onChange={this.handleTextChange}
-                                               value={this.state.password}
-                                               placeholder="Password"/>
-                                    </div>
-                                    <button className="au-btn au-btn--block au-btn--green m-b-20" type="submit"
-                                            onClick={this.onSignIn}>
-                                        Sign in
-                                    </button>
+                                    <StyledFirebaseAuth
+                                        uiConfig={this.uiConfig}
+                                        firebaseAuth={auth}
+                                        className="mx-auto"
+                                    />
                                 </div>
                             </div>
                         </div>

@@ -1,13 +1,24 @@
-import {store} from "../index";
-import {UserActions} from "../redux/actions/UserActions";
-import {setLocalStorage, StorageKey} from "../Helper";
+import {DB} from "../index";
+import {FirebaseTable, getSessionStorage, StorageKey} from "../Helper";
 
-export function doLogin(username: string, password: string) {
-    if (!username.trim() || !password.trim()) {
-        alert("Please type something");
-        return false;
-    }
-    setLocalStorage(StorageKey.USER, "UserLogat");
-    store.dispatch(UserActions.setLoggedUserAction("UserLogat"));
-    return true;
+export function checkUserIsAuthorized() {
+    return new Promise(((resolve) => {
+        let userKey = getSessionStorage(StorageKey.USER_AUTH_KEY);
+        if (userKey) {
+            DB.collection(FirebaseTable.ROLES).doc(userKey)
+                .get()
+                .then(function (doc: any) {
+                    if (doc.exists) {
+                        resolve(userKey);
+                    } else {
+                        resolve(false);
+                    }
+                })
+                .catch(() => {
+                    resolve(false);
+                });
+        } else {
+            resolve(false);
+        }
+    }));
 }
