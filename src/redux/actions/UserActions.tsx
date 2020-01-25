@@ -16,7 +16,8 @@ export type UserActions = ActionTypesUnion<typeof UserActions>;
 export function doLogoutAction(): any {
     return (dispatch: any) => {
         dispatch(UserActions.resetLoggedUserAction());
-        removeSessionStorage(StorageKey.USER_KEY);
+        removeSessionStorage(StorageKey.USER_INFO_KEY);
+        removeSessionStorage(StorageKey.USER_LOGGED_KEY);
         history.push(Routes.LOGIN);
     };
 }

@@ -1,15 +1,8 @@
 import React from "react";
 import {Routes} from "./Routes";
-import {doLogoutAction} from "../../redux/actions/UserActions";
-import {store} from "../../index";
-import {emptyHrefLink} from "../../Helper";
+import {emptyHrefLink, handleLogOut} from "../../Helper";
 
 class NavigationLayout extends React.Component {
-
-    handleLogOut(event: any) {
-        event.preventDefault();
-        store.dispatch(doLogoutAction());
-    }
 
     public render() {
         return (
@@ -27,7 +20,7 @@ class NavigationLayout extends React.Component {
                                     <a href={Routes.COMMISSIONS}>
                                         <i className="fas fa-table"/>Commissions
                                     </a>
-                                    <a href={emptyHrefLink} onClick={this.handleLogOut}>
+                                    <a href={emptyHrefLink} onClick={handleLogOut}>
                                         <i className="zmdi zmdi-power"/>Logout
                                     </a>
                                 </li>

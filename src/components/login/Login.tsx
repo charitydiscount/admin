@@ -14,6 +14,10 @@ class Login extends React.Component<LoginProps, LoginState> {
 
     static onSignInSuccess(response: any) {
         setSessionStorage(StorageKey.USER_AUTH_KEY, response.user.uid);
+        setSessionStorage(StorageKey.USER_INFO_KEY, JSON.stringify({
+            name: response.user.displayName,
+            photoUrl: response.user.photoURL
+        }));
         return true;
     }
 

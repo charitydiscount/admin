@@ -1,9 +1,10 @@
 import React from 'react'
 import {Routes} from "./Routes";
+import {emptyHrefLink, handleLogOut} from "../../Helper";
 
 class HeaderLayoutMobile extends React.Component {
 
-    render(): React.ReactNode {
+    render() {
         return (
             <React.Fragment>
                 <header className="header-mobile d-block d-lg-none">
@@ -28,6 +29,12 @@ class HeaderLayoutMobile extends React.Component {
                                     <a className="js-arrow" href={Routes.COMMISSIONS}>
                                         <i className="fas fa-tachometer-alt"></i>Commissions</a>
                                 </li>
+                                <li className="has-sub">
+                                    <a href={emptyHrefLink} onClick={handleLogOut}>
+                                        <i className="zmdi zmdi-power"/>Logout
+                                    </a>
+                                </li>
+
                             </ul>
                         </div>
                     </nav>

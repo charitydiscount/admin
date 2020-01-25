@@ -1,11 +1,20 @@
+import {store} from "./index";
+import {doLogoutAction} from "./redux/actions/UserActions";
+
 export enum StorageKey {
     //SESSION STORAGE
-    USER_KEY = '/userAdminCD',
+    USER_LOGGED_KEY = '/userAdminCD',
+    USER_INFO_KEY = "/userAdminInfoCD",
     USER_AUTH_KEY = '/userAdminAuthCD'
 }
 
 export enum FirebaseTable {
-   ROLES = "roles"
+    ROLES = "roles"
+}
+
+export function handleLogOut(event: any) {
+    event.preventDefault();
+    store.dispatch(doLogoutAction());
 }
 
 export const emptyHrefLink = '#';

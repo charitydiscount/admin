@@ -32,7 +32,7 @@ export const firebaseApp = firebase.initializeApp(firebaseConfig);
 export const DB = firebaseApp.firestore();
 export const auth = firebaseApp.auth();
 
-let userKey = getSessionStorage(StorageKey.USER_KEY);
+let userKey = getSessionStorage(StorageKey.USER_LOGGED_KEY);
 if (userKey && userKey.length > 10) {
     store.dispatch(UserActions.setLoggedUserAction("User authorized"));
 }

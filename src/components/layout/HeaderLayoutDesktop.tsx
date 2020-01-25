@@ -1,4 +1,6 @@
 import React from 'react'
+import {getUserInfo} from "../../rest/UserService";
+
 
 class HeaderLayoutDesktop extends React.Component {
 
@@ -26,10 +28,10 @@ class HeaderLayoutDesktop extends React.Component {
                                     <div className="account-wrap">
                                         <div className="account-item clearfix js-item-menu">
                                             <div className="image">
-                                                <img src="/images/icon/avatar-01.jpg" alt="John Doe"/>
+                                                <img src={getUserInfo().photoUrl} alt="John Doe"/>
                                             </div>
                                             <div className="content">
-                                                John doe
+                                                {getUserInfo().name}
                                             </div>
                                         </div>
                                     </div>
