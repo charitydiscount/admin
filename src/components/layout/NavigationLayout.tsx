@@ -1,6 +1,7 @@
 import React from "react";
 import {Routes} from "./Routes";
 import {emptyHrefLink, handleLogOut} from "../../Helper";
+import {Link} from 'react-router-dom';
 
 class NavigationLayout extends React.Component {
 
@@ -17,9 +18,11 @@ class NavigationLayout extends React.Component {
                         <nav className="navbar-sidebar">
                             <ul className="list-unstyled navbar__list">
                                 <li>
-                                    <a href={Routes.COMMISSIONS}>
+                                    <Link
+                                        to={Routes.COMMISSIONS}
+                                    >
                                         <i className="fas fa-table"/>Commissions
-                                    </a>
+                                    </Link>
                                     <a href={emptyHrefLink} onClick={handleLogOut}>
                                         <i className="zmdi zmdi-power"/>Logout
                                     </a>

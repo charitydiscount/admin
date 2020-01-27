@@ -1,5 +1,5 @@
-import {DB} from "../index";
-import {FirebaseTable, getSessionStorage, StorageKey} from "../Helper";
+import { auth, DB } from "../index";
+import { FirebaseTable, getSessionStorage, removeSessionStorage, StorageKey } from "../Helper";
 
 export interface UserInfoDto {
     name: string,
@@ -10,6 +10,7 @@ export function checkUserIsAuthorized() {
     return new Promise(((resolve) => {
         let userKey = getSessionStorage(StorageKey.USER_AUTH_KEY);
         if (userKey) {
+            removeSessionStorage(StorageKey.USER_AUTH_KEY);
             DB.collection(FirebaseTable.ROLES).doc(userKey)
                 .get()
                 .then(function (doc: any) {
@@ -29,9 +30,11 @@ export function checkUserIsAuthorized() {
 }
 
 export function getUserInfo(): UserInfoDto {
-    let userInfo = getSessionStorage(StorageKey.USER_INFO_KEY);
-    if (userInfo) {
-        return JSON.parse(userInfo) as UserInfoDto;
+    if (auth.currentUser) {
+        return {
+            name: auth.currentUser.displayName || '',
+            photoUrl: auth.currentUser.photoURL || ''
+        }
     }
     return {
         name: '',

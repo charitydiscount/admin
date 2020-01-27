@@ -1,15 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
-import {applyMiddleware, createStore} from 'redux';
+import { Provider } from 'react-redux';
+import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import {ConnectedRouter, routerMiddleware} from 'connected-react-router';
-import {createBrowserHistory} from 'history';
+import { ConnectedRouter, routerMiddleware } from 'connected-react-router';
+import { createBrowserHistory } from 'history';
 import createRootReducer from './redux/reducer/RootReducer';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {getSessionStorage, StorageKey} from "./Helper";
-import {UserActions} from "./redux/actions/UserActions";
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -31,11 +29,6 @@ export const store = createStore(
 export const firebaseApp = firebase.initializeApp(firebaseConfig);
 export const DB = firebaseApp.firestore();
 export const auth = firebaseApp.auth();
-
-let userKey = getSessionStorage(StorageKey.USER_LOGGED_KEY);
-if (userKey && userKey.length > 10) {
-    store.dispatch(UserActions.setLoggedUserAction("User authorized"));
-}
 
 ReactDOM.render(
     <Provider store={store}>

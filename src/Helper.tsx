@@ -2,9 +2,7 @@ import {store} from "./index";
 import {doLogoutAction} from "./redux/actions/UserActions";
 
 export enum StorageKey {
-    //SESSION STORAGE
-    USER_LOGGED_KEY = '/userAdminCD',
-    USER_INFO_KEY = "/userAdminInfoCD",
+     //SESSION STORAGE
     USER_AUTH_KEY = '/userAdminAuthCD'
 }
 
