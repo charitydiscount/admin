@@ -1,9 +1,15 @@
-import {store} from "./index";
-import {doLogoutAction} from "./redux/actions/UserActions";
+import { store } from "./index";
+import { doLogoutAction } from "./redux/actions/UserActions";
 
 export enum StorageKey {
-     //SESSION STORAGE
+    //SESSION STORAGE
     USER_AUTH_KEY = '/userAdminAuthCD'
+}
+
+export const EXPRESS_URL = 'https://europe-west1-charitydiscount-test.cloudfunctions.net/manage/';
+
+export enum ExpressLink {
+    PROGRAMS = "programs"
 }
 
 export enum FirebaseTable {

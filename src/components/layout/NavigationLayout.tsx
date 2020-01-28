@@ -23,6 +23,11 @@ class NavigationLayout extends React.Component {
                                     >
                                         <i className="fas fa-table"/>Commissions
                                     </Link>
+                                    <Link
+                                        to={Routes.PROGRAMS}
+                                    >
+                                        <i className="fas fa-table"/>Programs
+                                    </Link>
                                     <a href={emptyHrefLink} onClick={handleLogOut}>
                                         <i className="zmdi zmdi-power"/>Logout
                                     </a>
