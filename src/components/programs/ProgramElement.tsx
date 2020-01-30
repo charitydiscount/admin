@@ -11,39 +11,26 @@ class ProgramElement extends React.Component<ProgramElementProps> {
         return (
             <React.Fragment>
                 <tr className="tr-shadow">
-                    <td>
-                        <label className="au-checkbox">
-                            <input type="checkbox"/>
-                            <span className="au-checkmark"></span>
-                        </label>
-                    </td>
-                    <td>Lori Lynch</td>
-                    <td>
-                        <span className="block-email">lori@example.com</span>
-                    </td>
-                    <td className="desc">Samsung S8 Black</td>
-                    <td>2018-09-27 02:12</td>
-                    <td>
-                        <span className="status--process">Processed</span>
-                    </td>
-                    <td>$679.00</td>
+                    <td>{this.props.program.id}</td>
+                    <td>{this.props.program.uniqueCode}</td>
+                    <td>{this.props.program.name}</td>
+                    <td>{this.props.program.order}</td>
+                    <td>{this.props.program.status}</td>
+                    <td>{this.props.program.category}</td>
+                    <td>{this.props.program.defaultLeadCommissionAmount}</td>
+                    <td>{this.props.program.defaultLeadCommissionType}</td>
+                    <td>{this.props.program.defaultSaleCommissionRate}</td>
+                    <td>{this.props.program.defaultSaleCommissionType}</td>
                     <td>
                         <div className="table-data-feature">
-                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                    title="Send">
-                                <i className="zmdi zmdi-mail-send"></i>
-                            </button>
-                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                    title="Edit">
+                            <button className="item" data-placement="top"
+                                    title="Delete" data-toggle="modal"
+                                    data-target="#mediumModal">
                                 <i className="zmdi zmdi-edit"></i>
                             </button>
                             <button className="item" data-toggle="tooltip" data-placement="top"
                                     title="Delete">
                                 <i className="zmdi zmdi-delete"></i>
-                            </button>
-                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                    title="More">
-                                <i className="zmdi zmdi-more"></i>
                             </button>
                         </div>
                     </td>

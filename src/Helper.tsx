@@ -1,5 +1,6 @@
 import { store } from "./index";
 import { doLogoutAction } from "./redux/actions/UserActions";
+import {css} from '@emotion/core';
 
 export enum StorageKey {
     //SESSION STORAGE
@@ -15,6 +16,12 @@ export enum ExpressLink {
 export enum FirebaseTable {
     ROLES = "roles"
 }
+
+export const spinnerCss = css`
+    display: block;
+    margin: 200px auto;
+`;
+
 
 export function handleLogOut(event: any) {
     event.preventDefault();
