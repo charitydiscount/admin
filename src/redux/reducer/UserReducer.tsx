@@ -1,23 +1,33 @@
-import {LoginActionTypes} from "../actions/Actions";
-import {UserActions} from "../actions/UserActions";
+import { LoginActionTypes, AuthActionTypes } from '../actions/Actions';
+import { UserActions } from '../actions/UserActions';
 
 interface IUserState {
-    isLoggedIn: boolean
+    isLoggedIn: boolean;
+    isAuthorized: boolean;
 }
 
 const initialState: IUserState = {
-    isLoggedIn: false
+    isLoggedIn: false,
+    isAuthorized: false,
 };
 
-export default function (state: IUserState = initialState, action: UserActions): IUserState {
+export default function(
+    state: IUserState = initialState,
+    action: UserActions
+): IUserState {
     switch (action.type) {
         case LoginActionTypes.SET_LOGGED_USER_ACTION:
             return {
                 ...state,
-                isLoggedIn: true
+                isLoggedIn: true,
             };
         case LoginActionTypes.RESET_LOGGED_USER_ACTION:
             return initialState;
+        case AuthActionTypes.SET_AUTHORIZED_USER_ACTION:
+            return {
+                ...state,
+                isAuthorized: true,
+            };
         default:
             return state;
     }

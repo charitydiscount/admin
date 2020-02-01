@@ -1,35 +1,24 @@
-import React from "react";
-import {auth} from "../../index"
+import React from 'react';
+import { auth } from '../../index';
 import firebase from 'firebase/app';
-import {emptyHrefLink, setSessionStorage, StorageKey} from "../../Helper";
-import {StyledFirebaseAuth} from "react-firebaseui";
+import { emptyHrefLink } from '../../Helper';
+import { StyledFirebaseAuth } from 'react-firebaseui';
 
-interface LoginProps {
-}
+interface LoginProps {}
 
-interface LoginState {
-}
+interface LoginState {}
 
 class Login extends React.Component<LoginProps, LoginState> {
-
-    static onSignInSuccess(response: any) {
-        setSessionStorage(StorageKey.USER_AUTH_KEY, response.user.uid);
-        return true;
-    }
-
     uiConfig = {
         signInFlow: 'popup',
         tosUrl: '/',
-        signInSuccessUrl: '/login',
+        signInSuccessUrl: '/auth',
         privacyPolicyUrl: '/',
         signInOptions: [
             firebase.auth.EmailAuthProvider.PROVIDER_ID,
             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-            firebase.auth.FacebookAuthProvider.PROVIDER_ID
+            firebase.auth.FacebookAuthProvider.PROVIDER_ID,
         ],
-        callbacks: {
-            signInSuccessWithAuthResult: Login.onSignInSuccess
-        },
     };
 
     public render() {
@@ -41,7 +30,10 @@ class Login extends React.Component<LoginProps, LoginState> {
                             <div className="login-content">
                                 <div className="login-logo">
                                     <a href={emptyHrefLink}>
-                                        <img src="/images/icon/logo.png" alt="CoolAdmin"/>
+                                        <img
+                                            src="/images/icon/logo.png"
+                                            alt="CoolAdmin"
+                                        />
                                     </a>
                                 </div>
                                 <div className="login-form">
@@ -56,7 +48,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                     </div>
                 </div>
             </React.Fragment>
-        )
+        );
     }
 }
 

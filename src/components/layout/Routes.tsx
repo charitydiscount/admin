@@ -1,7 +1,7 @@
 export enum Routes {
-    LOGIN = "/",
-    LOGIN_AUTH = "/login",
-    DASHBOARD = "/dashboard",
-    COMMISSIONS = "/commissions",
-    PROGRAMS = "/programs"
+    LOGIN = '/',
+    AUTH = '/auth',
+    DASHBOARD = '/dashboard',
+    COMMISSIONS = '/commissions',
+    PROGRAMS = '/programs',
 }

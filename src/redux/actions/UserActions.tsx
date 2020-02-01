@@ -1,14 +1,16 @@
-import {ActionTypesUnion} from '../../redux/helper/TypesHelper';
-import {createAction} from '../../redux/helper/ActionHelper';
-import {LoginActionTypes} from '../../redux/actions/Actions';
-import {history} from "../../index"
-import {Routes} from "../../components/layout/Routes";
+import { ActionTypesUnion } from '../../redux/helper/TypesHelper';
+import { createAction } from '../../redux/helper/ActionHelper';
+import { LoginActionTypes, AuthActionTypes } from '../../redux/actions/Actions';
+import { history, auth } from '../../index';
+import { Routes } from '../../components/layout/Routes';
 
 export const UserActions = {
-    setLoggedUserAction: (loginAuthorized: string | null) =>
-        createAction(LoginActionTypes.SET_LOGGED_USER_ACTION, loginAuthorized),
+    setLoggedUserAction: () =>
+        createAction(LoginActionTypes.SET_LOGGED_USER_ACTION),
     resetLoggedUserAction: () =>
-        createAction(LoginActionTypes.RESET_LOGGED_USER_ACTION)
+        createAction(LoginActionTypes.RESET_LOGGED_USER_ACTION),
+    setAuthorizedUserAction: () =>
+        createAction(AuthActionTypes.SET_AUTHORIZED_USER_ACTION),
 };
 export type UserActions = ActionTypesUnion<typeof UserActions>;
 
@@ -16,5 +18,6 @@ export function doLogoutAction(): any {
     return (dispatch: any) => {
         dispatch(UserActions.resetLoggedUserAction());
         history.push(Routes.LOGIN);
+        auth.signOut();
     };
 }
