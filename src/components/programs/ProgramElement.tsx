@@ -33,6 +33,7 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
     closeModal() {
         this.setState({
             modalVisible: false,
+            program: this.props.program
         });
     }
 
@@ -68,6 +69,37 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                             value={this.state.program.name}
                             disabled={true}
                         />
+                        <TextField
+                            id="mainorder" label={"Main Order"}
+                            type="number"
+                            variant="filled"
+                            style={{width: '100%'}}
+                            value={this.props.program.mainOrder}
+                            onChange={event => {
+                                let program = this.state.program;
+                                program.mainOrder = parseInt(event.target.value);
+                                this.setState({
+                                    program: program
+                                })
+                            }
+                            }
+                        />
+                        {this.props.program.defaultSaleCommissionType === 'variable' &&
+                        <TextField
+                            id="commisionVariable" label={"Commision variable, take care to show 0.60 % percent to client"}
+                            variant="filled"
+                            style={{width: '100%'}}
+                            value={this.props.program.commissionInterval}
+                            onChange={event => {
+                                let program = this.state.program;
+                                program.commissionInterval = event.target.value;
+                                this.setState({
+                                    program: program
+                                })
+                            }
+                            }
+                        />
+                        }
                         {this.props.program.source === SourceTypes.TWO_PERFORMANT &&
                         <React.Fragment>
 
@@ -78,28 +110,6 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
 
                         </React.Fragment>
                         }
-                        <TextField
-                            id="order" label={"Order"}
-                            variant="filled"
-                            style={{width: '100%'}}
-                            value={this.state.program.order}
-                            disabled={true}
-                        />
-                        <TextField
-                            id="mainorder" label={"Main Order"}
-                            type="number"
-                            variant="filled"
-                            style={{width: '100%'}}
-                            value={this.state.program.mainOrder}
-                            onChange={event => {
-                                let program = this.state.program;
-                                program.mainOrder = parseInt(event.target.value);
-                                this.setState({
-                                    program: program
-                                })
-                            }
-                            }
-                        />
                     </React.Fragment>
                     }
                 </Modal>

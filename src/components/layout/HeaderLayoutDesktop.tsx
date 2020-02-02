@@ -12,11 +12,6 @@ class HeaderLayoutDesktop extends React.Component {
                         <div className="container-fluid">
                             <div className="header-wrap">
                                 <div className="form-header">
-                                    <input className="au-input au-input--xl" type="text" name="search"
-                                           placeholder="Search for datas &amp; reports..."/>
-                                    <button className="au-btn--submit" type="submit">
-                                        <i className="zmdi zmdi-search"/>
-                                    </button>
                                 </div>
                                 <div className="header-button">
                                     <div className="noti-wrap">
