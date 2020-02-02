@@ -26,9 +26,8 @@ export const spinnerCss = css`
 `;
 
 export enum SourceTypes {
-    TWO_PERFORMANT = "2p"
+    TWO_PERFORMANT = '2p',
 }
-
 
 export function handleLogOut(event: any) {
     event.preventDefault();
@@ -73,6 +72,11 @@ export function truncateText(
     return (
         (useWordBoundary
             ? subString.substr(0, subString.lastIndexOf(' '))
-            : subString) + '&hellip;'
+            : subString) + '...'
     );
+}
+
+export enum Operation {
+    CREATE = 'C',
+    UPDATE = 'U',
 }

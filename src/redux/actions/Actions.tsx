@@ -9,4 +9,5 @@ export enum AuthActionTypes {
 
 export enum CasesTypes {
     CASES_LOADED = 'CASES_LOADED',
+    SET_CURRENT_CASE = 'SET_CURRENT_CASE',
 }

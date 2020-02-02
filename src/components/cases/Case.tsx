@@ -4,6 +4,8 @@ import { truncateText } from '../../Helper';
 
 interface CaseProps {
     case: CharityCase;
+    onEdit: () => void;
+    onDelete: () => void;
 }
 
 export const Case = (props: CaseProps) => (
@@ -40,9 +42,10 @@ export const Case = (props: CaseProps) => (
                     <button
                         className="item"
                         data-placement="top"
-                        title="Delete"
+                        title="Edit"
                         data-toggle="modal"
                         data-target="#mediumModal"
+                        onClick={props.onEdit}
                     >
                         <i className="zmdi zmdi-edit"></i>
                     </button>
@@ -51,6 +54,7 @@ export const Case = (props: CaseProps) => (
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Delete"
+                        onClick={props.onDelete}
                     >
                         <i className="zmdi zmdi-delete"></i>
                     </button>

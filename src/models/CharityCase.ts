@@ -3,6 +3,7 @@ export interface CaseImage {
 }
 
 export interface CharityCase {
+    id?: string;
     title: string;
     description: string;
     site: string;

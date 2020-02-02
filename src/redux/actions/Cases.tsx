@@ -9,6 +9,8 @@ import { CharityCase } from '../../models/CharityCase';
 export const casesActions = {
     casesLoaded: (cases: CharityCase[]) =>
         createAction(CasesTypes.CASES_LOADED, cases),
+    setCurrentCase: (currentCase: CharityCase) =>
+        createAction(CasesTypes.SET_CURRENT_CASE, currentCase),
 };
 export type CasesActions = ActionTypesUnion<typeof casesActions>;
 

@@ -4,10 +4,12 @@ import { CharityCase } from '../../models/CharityCase';
 
 export interface ICasesState {
     cases?: CharityCase[];
+    currentCase?: CharityCase;
 }
 
 const initialState: ICasesState = {
     cases: undefined,
+    currentCase: undefined,
 };
 
 export default function(
@@ -19,6 +21,11 @@ export default function(
             return {
                 ...state,
                 cases: action.payload,
+            };
+        case CasesTypes.SET_CURRENT_CASE:
+            return {
+                ...state,
+                currentCase: action.payload,
             };
         default:
             return state;
