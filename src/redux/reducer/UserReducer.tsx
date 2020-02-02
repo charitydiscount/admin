@@ -1,7 +1,7 @@
 import { LoginActionTypes, AuthActionTypes } from '../actions/Actions';
 import { UserActions } from '../actions/UserActions';
 
-interface IUserState {
+export interface IUserState {
     isLoggedIn: boolean;
     isAuthorized: boolean;
 }

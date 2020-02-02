@@ -6,3 +6,7 @@ export enum LoginActionTypes {
 export enum AuthActionTypes {
     SET_AUTHORIZED_USER_ACTION = 'SET_AUTHORIZED_USER_ACTION',
 }
+
+export enum CasesTypes {
+    CASES_LOADED = 'CASES_LOADED',
+}

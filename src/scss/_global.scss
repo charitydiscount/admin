@@ -1,0 +1,6 @@
+.text-preview {
+    white-space: nowrap;
+    overflow: hidden; /* "overflow" value must be different from  visible"*/
+    -o-text-overflow: ellipsis; /* Opera < 11*/
+    text-overflow: ellipsis; /* IE, Safari (WebKit), Opera >= 11, FF > 6 */
+}

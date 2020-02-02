@@ -4,6 +4,7 @@ import { Routes } from './Routes';
 import EmptyComponent from './EmptyComponent';
 import Commissions from '../commissions/Commissions';
 import Programs from '../programs/Programs';
+import cases from '../cases';
 
 class PageContentLayout extends React.Component {
     public render() {
@@ -25,6 +26,11 @@ class PageContentLayout extends React.Component {
                             exact={true}
                             path={Routes.PROGRAMS}
                             component={Programs}
+                        />
+                        <Route
+                            exact={true}
+                            path={Routes.CASES}
+                            component={cases}
                         />
                         <Route
                             render={() => <Redirect to={Routes.DASHBOARD} />}

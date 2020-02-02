@@ -4,4 +4,5 @@ export enum Routes {
     DASHBOARD = '/dashboard',
     COMMISSIONS = '/commissions',
     PROGRAMS = '/programs',
+    CASES = '/cases',
 }

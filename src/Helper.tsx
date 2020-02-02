@@ -1,27 +1,29 @@
-import { store } from "./index";
-import { doLogoutAction } from "./redux/actions/UserActions";
-import {css} from '@emotion/core';
+import { store } from './index';
+import { doLogoutAction } from './redux/actions/UserActions';
+import { css } from '@emotion/core';
 
 export enum StorageKey {
     //SESSION STORAGE
-    USER_AUTH_KEY = '/userAdminAuthCD'
+    USER_AUTH_KEY = '/userAdminAuthCD',
 }
 
-export const EXPRESS_URL = 'https://europe-west1-charitydiscount-test.cloudfunctions.net/manage/';
+export const EXPRESS_URL =
+    'https://europe-west1-charitydiscount-test.cloudfunctions.net/manage/';
 
 export enum ExpressLink {
-    PROGRAMS = "programs"
+    PROGRAMS = 'programs',
+    CASES = 'cases',
 }
 
 export enum FirebaseTable {
-    ROLES = "roles"
+    ROLES = 'roles',
+    CASES = 'CASES',
 }
 
 export const spinnerCss = css`
     display: block;
     margin: 200px auto;
 `;
-
 
 export function handleLogOut(event: any) {
     event.preventDefault();
@@ -52,4 +54,20 @@ export function getSessionStorage(key: string) {
 
 export function removeSessionStorage(key: string) {
     return sessionStorage.removeItem(process.env.PUBLIC_URL + key);
+}
+
+export function truncateText(
+    text: string,
+    length: number,
+    useWordBoundary: boolean
+) {
+    if (text.length <= length) {
+        return text;
+    }
+    const subString = text.substr(0, length - 1);
+    return (
+        (useWordBoundary
+            ? subString.substr(0, subString.lastIndexOf(' '))
+            : subString) + '&hellip;'
+    );
 }
