@@ -18,7 +18,7 @@ interface DispatchProps {
 }
 
 interface ComponentState {
-    showModal: boolean;
+    modalVisible: boolean;
 }
 
 class Cases extends React.Component<
@@ -28,7 +28,7 @@ class Cases extends React.Component<
     constructor(props: StateProps & DispatchProps) {
         super(props);
         this.state = {
-            showModal: false,
+            modalVisible: false,
         };
     }
 
@@ -38,8 +38,12 @@ class Cases extends React.Component<
 
     showCaseModal() {
         this.setState({
-            showModal: true,
+            modalVisible: true,
         });
+    }
+
+    onCloseModal() {
+        this.setState({ modalVisible: false });
     }
 
     onSave(charityCase: CharityCase) {}
@@ -54,11 +58,12 @@ class Cases extends React.Component<
 
         return (
             <React.Fragment>
-                {this.state.showModal && (
+                {this.state.modalVisible && (
                     <Modal
+                        visible={this.state.modalVisible}
+                        onClose={() => this.onCloseModal()}
                         title="New Charity Case"
-                        onSave={() => this.onSave}
-                        onClose={() => this.setState({ showModal: false })}
+                        onSave={charityCase => this.onSave(charityCase)}
                     >
                         <CaseForm></CaseForm>
                     </Modal>

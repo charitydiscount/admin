@@ -40,7 +40,10 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
             this.state.programs.length > 0 &&
             this.state.programs.map(value => {
                 return (
-                    <ProgramElement key={value.uniqueCode} program={value} />
+                    <ProgramElement
+                        key={value.uniqueCode + value.id}
+                        program={value}
+                    />
                 );
             });
 

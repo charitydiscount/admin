@@ -2,7 +2,7 @@ import React from 'react';
 import { CharityCase } from '../../models/CharityCase';
 
 export interface CaseFormProps {
-    case?: CharityCase[];
+    case?: CharityCase;
 }
 
 class CaseForm extends React.Component<CaseFormProps> {
@@ -11,51 +11,47 @@ class CaseForm extends React.Component<CaseFormProps> {
     render() {
         return (
             <div className="card">
-                <div className="card-header">
-                    <strong>Company</strong>
-                    <small> Form</small>
-                </div>
                 <div className="card-body card-block">
                     <form onSubmit={() => this.handleSubmit}>
                         <div className="form-group">
                             <label
-                                htmlFor="company"
+                                htmlFor="title"
                                 className=" form-control-label"
                             >
-                                Company
+                                Title
                             </label>
                             <input
                                 type="text"
-                                id="company"
-                                placeholder="Enter your company name"
+                                id="title"
+                                placeholder="The charity case name"
                                 className="form-control"
                             />
                         </div>
                         <div className="form-group">
                             <label
-                                htmlFor="vat"
+                                htmlFor="description"
                                 className=" form-control-label"
                             >
-                                VAT
+                                Description
                             </label>
-                            <input
-                                type="text"
-                                id="vat"
-                                placeholder="DE1234567890"
+                            <textarea
+                                id="description"
+                                placeholder="Case details"
                                 className="form-control"
+                                rows={5}
                             />
                         </div>
                         <div className="form-group">
                             <label
-                                htmlFor="street"
+                                htmlFor="website"
                                 className=" form-control-label"
                             >
-                                Street
+                                Website
                             </label>
                             <input
                                 type="text"
-                                id="street"
-                                placeholder="Enter street name"
+                                id="website"
+                                placeholder="https://new-case.com"
                                 className="form-control"
                             />
                         </div>
@@ -63,49 +59,19 @@ class CaseForm extends React.Component<CaseFormProps> {
                             <div className="col-8">
                                 <div className="form-group">
                                     <label
-                                        htmlFor="city"
+                                        htmlFor="images"
                                         className=" form-control-label"
                                     >
-                                        City
+                                        Images
                                     </label>
                                     <input
                                         type="text"
-                                        id="city"
-                                        placeholder="Enter your city"
+                                        id="images"
+                                        placeholder="Add image links"
                                         className="form-control"
                                     />
                                 </div>
                             </div>
-                            <div className="col-8">
-                                <div className="form-group">
-                                    <label
-                                        htmlFor="postal-code"
-                                        className=" form-control-label"
-                                    >
-                                        Postal Code
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="postal-code"
-                                        placeholder="Postal Code"
-                                        className="form-control"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label
-                                htmlFor="country"
-                                className=" form-control-label"
-                            >
-                                Country
-                            </label>
-                            <input
-                                type="text"
-                                id="country"
-                                placeholder="Country name"
-                                className="form-control"
-                            />
                         </div>
                     </form>
                 </div>

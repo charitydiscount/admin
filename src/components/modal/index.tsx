@@ -1,20 +1,38 @@
 import React from 'react';
+import ReactModal from 'react-modal';
 
 export interface ModalProps {
+    visible: boolean;
     title: string;
-    onSave: Function;
-    onClose: Function;
+    onSave: (data: any) => void;
+    onClose: () => void;
 }
+
+ReactModal.setAppElement('#root');
 
 export const Modal: React.FunctionComponent<ModalProps> = props => {
     return (
-        <React.Fragment>
-            <div
-                className="modal fade"
-                id="mediumModal"
+        <div className="modal">
+            <ReactModal
+                isOpen={props.visible}
+                onRequestClose={props.onClose}
+                shouldCloseOnOverlayClick={true}
+                contentLabel="Modal used to create/update CharityDiscount models"
                 role="dialog"
-                aria-labelledby="mediumModalLabel"
-                aria-hidden="true"
+                aria={{
+                    labelledby: 'mediumModalLabel',
+                }}
+                style={{
+                    overlay: {
+                        zIndex: 10,
+                        backgroundColor: 'rgba(0, 0, 0, 0.75)'
+                    },
+                    content: {
+                        border: 'none',
+                        background: 'transparent',
+                        overflow: 'auto',
+                    },
+                }}
             >
                 <div className="modal-dialog modal-lg" role="document">
                     <div className="modal-content">
@@ -27,7 +45,7 @@ export const Modal: React.FunctionComponent<ModalProps> = props => {
                                 className="close"
                                 data-dismiss="modal"
                                 aria-label="Close"
-                                onClick={props.onClose()}
+                                onClick={props.onClose}
                             >
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -38,22 +56,22 @@ export const Modal: React.FunctionComponent<ModalProps> = props => {
                                 type="button"
                                 className="btn btn-secondary"
                                 data-dismiss="modal"
-                                onClick={props.onClose()}
+                                onClick={props.onClose}
                             >
                                 Cancel
                             </button>
                             <button
                                 type="button"
                                 className="btn btn-success"
-                                onClick={props.onSave()}
+                                onClick={() => props.onSave}
                             >
                                 Save
                             </button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </React.Fragment>
+            </ReactModal>
+        </div>
     );
 };
 
