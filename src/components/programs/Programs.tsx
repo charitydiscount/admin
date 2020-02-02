@@ -38,12 +38,9 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
         let programsList =
             this.state.programs &&
             this.state.programs.length > 0 &&
-            this.state.programs.map(value => {
+            this.state.programs.map((value, index) => {
                 return (
-                    <ProgramElement
-                        key={value.uniqueCode + value.id}
-                        program={value}
-                    />
+                    <ProgramElement key={index} program={value} />
                 );
             });
 
@@ -76,8 +73,10 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                                 <th>uniqueCode</th>
                                                 <th>name</th>
                                                 <th>order</th>
+                                                <th>main Order</th>
                                                 <th>status</th>
                                                 <th>category</th>
+                                                <th>interval</th>
                                                 <th>dlca</th>
                                                 <th>dlct</th>
                                                 <th>dscr</th>

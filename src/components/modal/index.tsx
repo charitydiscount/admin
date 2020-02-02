@@ -4,7 +4,7 @@ import ReactModal from 'react-modal';
 export interface ModalProps {
     visible: boolean;
     title: string;
-    onSave: (data: any) => void;
+    onSave: () => void;
     onClose: () => void;
 }
 
@@ -63,7 +63,7 @@ export const Modal: React.FunctionComponent<ModalProps> = props => {
                             <button
                                 type="button"
                                 className="btn btn-success"
-                                onClick={() => props.onSave}
+                                onClick={props.onSave}
                             >
                                 Save
                             </button>
