@@ -8,9 +8,12 @@ class NavigationLayout extends React.Component {
         return (
             <React.Fragment>
                 <aside className="menu-sidebar d-none d-lg-block">
-                    <div className="logo">
+                    <div className="logo" style={{ justifyContent: 'center' }}>
                         <a href="/">
-                            <img src="/images/icon/logo.png" alt="Cool Admin" />
+                            <img
+                                src="/images/icon/logo.png"
+                                alt="CharityDiscount Admin"
+                            />
                         </a>
                     </div>
                     <div className="menu-sidebar__content js-scrollbar1">
