@@ -46,7 +46,7 @@ class Cases extends React.Component<
         this.setState({ modalVisible: false });
     }
 
-    onSave(charityCase: CharityCase) {}
+    onSave() {}
 
     public render() {
         let casesList =
@@ -63,7 +63,7 @@ class Cases extends React.Component<
                         visible={this.state.modalVisible}
                         onClose={() => this.onCloseModal()}
                         title="New Charity Case"
-                        onSave={charityCase => this.onSave(charityCase)}
+                        onSave={() => this.onSave()}
                     >
                         <CaseForm></CaseForm>
                     </Modal>

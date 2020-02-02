@@ -25,6 +25,11 @@ export const spinnerCss = css`
     margin: 200px auto;
 `;
 
+export enum SourceTypes {
+    TWO_PERFORMANT = "2p"
+}
+
+
 export function handleLogOut(event: any) {
     event.preventDefault();
     store.dispatch(doLogoutAction());
