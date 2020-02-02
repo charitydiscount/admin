@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { Routes } from './components/layout/Routes';
 import { Route, Switch } from 'react-router';
 import Modal from './components/modal/Modal';
+import './scss/index.scss';
 
 interface AppProps {
     isLoggedIn: boolean;
