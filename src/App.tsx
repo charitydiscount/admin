@@ -7,7 +7,6 @@ import Login from './components/login/Login';
 import { connect } from 'react-redux';
 import { Routes } from './components/layout/Routes';
 import { Route, Switch } from 'react-router';
-import Modal from './components/modal/Modal';
 
 interface AppProps {
     isLoggedIn: boolean;
@@ -30,7 +29,6 @@ class App extends React.Component<AppProps> {
                                 </div>
                             </div>
                         </div>
-                        <Modal />
                     </div>
                 </React.Fragment>
             ) : (
