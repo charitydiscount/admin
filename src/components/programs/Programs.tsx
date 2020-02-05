@@ -119,13 +119,10 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                     <table className="table table-data2">
                                         <thead>
                                         <tr>
-                                            <th>id</th>
                                             <th>uniqueCode</th>
                                             <th>name</th>
                                             <th>order</th>
                                             <th>main order</th>
-                                            <th>status</th>
-                                            <th>category</th>
                                             <th>interval</th>
                                             <th>dlca</th>
                                             <th>dlct</th>

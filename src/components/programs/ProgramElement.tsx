@@ -63,10 +63,31 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                     {this.state.modalVisible &&
                     <React.Fragment>
                         <TextField
+                            id="id" label={"Id"}
+                            variant="filled"
+                            style={{width: '100%'}}
+                            value={this.state.program.id}
+                            disabled={true}
+                        />
+                        <TextField
                             id="name" label={"Name"}
                             variant="filled"
                             style={{width: '100%'}}
                             value={this.state.program.name}
+                            disabled={true}
+                        />
+                        <TextField
+                            id="id" label={"Category"}
+                            variant="filled"
+                            style={{width: '100%'}}
+                            value={this.state.program.category}
+                            disabled={true}
+                        />
+                        <TextField
+                            id="id" label={"Status"}
+                            variant="filled"
+                            style={{width: '100%'}}
+                            value={this.state.program.status}
                             disabled={true}
                         />
                         <TextField
@@ -86,7 +107,8 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                         />
                         {this.props.program.defaultSaleCommissionType === 'variable' &&
                         <TextField
-                            id="commisionVariable" label={"Commision variable, take care to show 0.60 % percent to client"}
+                            id="commisionVariable"
+                            label={"Commision variable, take care to show 0.60 % percent to client"}
                             variant="filled"
                             style={{width: '100%'}}
                             value={this.props.program.commissionInterval}
@@ -114,9 +136,8 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                     }
                 </Modal>
                 <tr className="tr-shadow">
-                    <td>{this.props.program.id}</td>
                     <td>{this.props.program.uniqueCode}</td>
-                    <td>
+                    <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
                         <a href={emptyHrefLink} style={{
                             textDecoration: "underline",
                             color: "#007bff",
@@ -127,8 +148,6 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                     </td>
                     <td>{this.props.program.order}</td>
                     <td>{this.props.program.mainOrder}</td>
-                    <td>{this.props.program.status}</td>
-                    <td>{this.props.program.category}</td>
                     <td>{this.props.program.commissionInterval}</td>
                     <td>{this.props.program.defaultLeadCommissionAmount}</td>
                     <td>{this.props.program.defaultLeadCommissionType}</td>

@@ -4476,7 +4476,7 @@ section {
     border-bottom: none;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1800px) {
     .table-responsive-data2 {
         overflow: visible;
     }
