@@ -4,6 +4,7 @@ import ProgramElement from './ProgramElement';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { spinnerCss } from '../../Helper';
 import { Button, TextField } from "@material-ui/core";
+import ReactPaginate from 'react-paginate';
 
 interface ProgramsProps {
 }
@@ -11,8 +12,11 @@ interface ProgramsProps {
 interface ProgramsState {
     isLoading: boolean;
     programs: ProgramDto[];
+    currentPage: number;
     defaultProgramList: ProgramDto[];
 }
+
+const pageLimit = 8; // programs per page
 
 class Programs extends React.Component<ProgramsProps, ProgramsState> {
 
@@ -23,10 +27,12 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
         this.state = {
             isLoading: true,
             programs: [],
-            defaultProgramList: []
+            defaultProgramList: [],
+            currentPage: 0
         };
         this.searchPrograms = this.searchPrograms.bind(this);
         this.enterSearch = this.enterSearch.bind(this);
+        this.updatePageNumber = this.updatePageNumber.bind(this);
     }
 
     async componentDidMount() {
@@ -49,6 +55,12 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
         if (event.keyCode === 13) {
             this.searchPrograms();
         }
+    }
+
+    public updatePageNumber(data) {
+        this.setState({
+            currentPage: data.selected
+        });
     }
 
     searchPrograms() {
@@ -75,6 +87,25 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                 );
             });
 
+        let pageCount = 0;
+        if (
+            this.state.programs &&
+            this.state.programs.length > 0
+        ) {
+            if (this.state.programs.length > pageLimit) {
+                pageCount = this.state.programs.length / pageLimit;
+                let offset = this.state.currentPage;
+                programsList = this.state.programs
+                    .slice(offset * pageLimit, (offset + 1) * pageLimit).map((value, index) => {
+                        return (
+                            <ProgramElement key={index} program={value}/>
+                        );
+                    });
+            } else {
+                pageCount = 1;
+            }
+        }
+
         return (
             <React.Fragment>
                 <div className="row">
@@ -92,7 +123,7 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                         <Button
                                             color="primary"
                                             variant="contained"
-                                            style={{marginTop:25}}
+                                            style={{marginTop: 25}}
                                             size={"large"}
                                             onClick={
                                                 this.searchPrograms
@@ -103,7 +134,7 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                         <div className="rs-select2--light rs-select2--md">
                                             <TextField
                                                 id="commisionVariable" label={"Search after name or uniqueCode"}
-                                                style={{width: '100%', marginLeft:8}}
+                                                style={{width: '100%', marginLeft: 8}}
                                                 onChange={event => this.search = event.target.value}
                                             />
                                         </div>
@@ -113,6 +144,34 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                             <i className="zmdi zmdi-plus"></i>
                                             add item
                                         </button>
+                                        <div>
+                                            <ReactPaginate
+                                                previousLabel={'<'}
+                                                previousLinkClassName={
+                                                    'page-link'
+                                                }
+                                                nextLabel={'>'}
+                                                nextLinkClassName={'page-link'}
+                                                breakLabel={'...'}
+                                                breakClassName={'blank'}
+                                                breakLinkClassName={'page-link'}
+                                                pageCount={pageCount}
+                                                marginPagesDisplayed={1}
+                                                pageRangeDisplayed={2}
+                                                forcePage={
+                                                    0
+                                                }
+                                                onPageChange={
+                                                    this.updatePageNumber
+                                                }
+                                                containerClassName={
+                                                    'pagination'
+                                                }
+                                                pageClassName={'page-item'}
+                                                pageLinkClassName={'page-link'}
+                                                activeClassName={'active'}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="table-responsive table-responsive-data2">
