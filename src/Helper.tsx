@@ -29,6 +29,12 @@ export enum SourceTypes {
     TWO_PERFORMANT = '2p',
 }
 
+export const linkStyle = {
+    textDecoration: "underline",
+    color: "#007bff",
+    cursor: "pointer"
+};
+
 export function handleLogOut(event: any) {
     event.preventDefault();
     store.dispatch(doLogoutAction());

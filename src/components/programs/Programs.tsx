@@ -2,7 +2,7 @@ import React from 'react';
 import { getPrograms, ProgramDto } from '../../rest/ProgramService';
 import ProgramElement from './ProgramElement';
 import FadeLoader from 'react-spinners/FadeLoader';
-import { spinnerCss } from '../../Helper';
+import { emptyHrefLink, linkStyle, spinnerCss } from '../../Helper';
 import { Button, TextField } from "@material-ui/core";
 import ReactPaginate from 'react-paginate';
 
@@ -14,6 +14,18 @@ interface ProgramsState {
     programs: ProgramDto[];
     currentPage: number;
     defaultProgramList: ProgramDto[];
+    sort: SortType
+    sortOrder: boolean // asc -> true, desc -> false
+}
+
+enum SortType {
+    DLCA = 'dlca',
+    DLCT = 'dlct',
+    DSCR = 'dscr',
+    DSCT = 'dsct',
+    NAME = 'name',
+    MAIN_ODER = 'mainOrder',
+    EMPTY = ''
 }
 
 const pageLimit = 8; // programs per page
@@ -28,11 +40,14 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
             isLoading: true,
             programs: [],
             defaultProgramList: [],
-            currentPage: 0
+            currentPage: 0,
+            sort: SortType.EMPTY,
+            sortOrder: true
         };
         this.searchPrograms = this.searchPrograms.bind(this);
         this.enterSearch = this.enterSearch.bind(this);
         this.updatePageNumber = this.updatePageNumber.bind(this);
+        this.sort = this.sort.bind(this);
     }
 
     async componentDidMount() {
@@ -57,10 +72,25 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
         }
     }
 
-    public updatePageNumber(data) {
+    updatePageNumber(data) {
         this.setState({
             currentPage: data.selected
         });
+    }
+
+    sort(event, sortType: SortType) {
+        event.preventDefault();
+        if (this.state.sortOrder) {
+            this.setState({
+                sortOrder: false,
+                sort: sortType
+            })
+        } else {
+            this.setState({
+                sortOrder: true,
+                sort: sortType
+            })
+        }
     }
 
     searchPrograms() {
@@ -78,34 +108,90 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
     }
 
     public render() {
-        let programsList =
-            this.state.programs &&
-            this.state.programs.length > 0 &&
-            this.state.programs.map((value, index) => {
-                return (
-                    <ProgramElement key={index} program={value}/>
-                );
-            });
-
+        let programsList;
         let pageCount = 0;
-        if (
-            this.state.programs &&
-            this.state.programs.length > 0
-        ) {
-            if (this.state.programs.length > pageLimit) {
+        if (this.state.programs && this.state.programs.length > 0) {
+            programsList = this.state.programs
+                .sort((a, b) => {
+                    if (this.state.sort) {
+                        let va,vb;
+                        switch (this.state.sort) {
+                            case SortType.NAME:
+                                if (a.name < b.name) {
+                                    return this.state.sortOrder ? 1 : -1;
+                                } else {
+                                    return this.state.sortOrder ? -1 : 1;
+                                }
+                            case SortType.MAIN_ODER:
+                                va = (a.mainOrder === null) ? "" : "" + a.mainOrder;
+                                vb = (b.mainOrder === null) ? "" : "" + b.mainOrder;
+
+                                if (va < vb) {
+                                    return this.state.sortOrder ? 1 : -1;
+                                } else {
+                                    return this.state.sortOrder ? -1 : 1;
+                                }
+                            case SortType.DLCA:
+                                va = (a.defaultLeadCommissionAmount === null) ? "" : "" + a.defaultLeadCommissionAmount;
+                                vb = (b.defaultLeadCommissionAmount === null) ? "" : "" + b.defaultLeadCommissionAmount;
+
+                                if (va < vb) {
+                                    return this.state.sortOrder ? 1 : -1;
+                                } else {
+                                    return this.state.sortOrder ? -1 : 1;
+                                }
+                            case SortType.DLCT:
+                                va = (a.defaultLeadCommissionType === null) ? "" : "" + a.defaultLeadCommissionType;
+                                vb = (b.defaultLeadCommissionType === null) ? "" : "" + b.defaultLeadCommissionType;
+
+                                if (va < vb) {
+                                    return this.state.sortOrder ? 1 : -1;
+                                } else {
+                                    return this.state.sortOrder ? -1 : 1;
+                                }
+                            case SortType.DSCR:
+                                va = (a.defaultSaleCommissionRate === null) ? "" : "" + a.defaultSaleCommissionRate;
+                                vb = (b.defaultSaleCommissionRate === null) ? "" : "" + b.defaultSaleCommissionRate;
+
+                                if (va < vb) {
+                                    return this.state.sortOrder ? 1 : -1;
+                                } else {
+                                    return this.state.sortOrder ? -1 : 1;
+                                }
+                            case SortType.DSCT:
+                                va = (a.defaultSaleCommissionType === null) ? "" : "" + a.defaultSaleCommissionType;
+                                vb = (b.defaultSaleCommissionType === null) ? "" : "" + b.defaultSaleCommissionType;
+
+                                if (va < vb) {
+                                    return this.state.sortOrder ? 1 : -1;
+                                } else {
+                                    return this.state.sortOrder ? -1 : 1;
+                                }
+                            default:
+                                return 0;
+                        }
+                    } else {
+                        return 0;
+                    }
+                });
+
+
+            if (programsList.length > pageLimit) {
                 pageCount = this.state.programs.length / pageLimit;
                 let offset = this.state.currentPage;
-                programsList = this.state.programs
-                    .slice(offset * pageLimit, (offset + 1) * pageLimit).map((value, index) => {
-                        return (
-                            <ProgramElement key={index} program={value}/>
-                        );
-                    });
+                programsList = programsList
+                    .slice(offset * pageLimit, (offset + 1) * pageLimit);
             } else {
                 pageCount = 1;
             }
-        }
 
+            programsList = programsList
+                .map((value, index) => {
+                    return (
+                        <ProgramElement key={index} program={value}/>
+                    );
+                });
+        }
         return (
             <React.Fragment>
                 <div className="row">
@@ -179,14 +265,74 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                         <thead>
                                         <tr>
                                             <th>uniqueCode</th>
-                                            <th>name</th>
+                                            <th>
+                                                <a href={emptyHrefLink}
+                                                   onClick={(event) => this.sort(event, SortType.NAME)}
+                                                   style={linkStyle}>
+                                                    {this.state.sort && this.state.sort === SortType.NAME && (
+                                                        this.state.sortOrder ?
+                                                            <i className="fa fa-arrow-up"/> :
+                                                            <i className="fa fa-arrow-down"/>
+                                                    )}
+                                                    name
+                                                </a>
+                                            </th>
                                             <th>order</th>
-                                            <th>main order</th>
+                                            <th>
+                                                <a href={emptyHrefLink}
+                                                   onClick={(event) => this.sort(event, SortType.MAIN_ODER)}
+                                                   style={linkStyle}>
+                                                    {this.state.sort && this.state.sort === SortType.MAIN_ODER && (
+                                                        this.state.sortOrder ?
+                                                            <i className="fa fa-arrow-up"/> :
+                                                            <i className="fa fa-arrow-down"/>
+                                                    )} main order
+                                                </a></th>
                                             <th>interval</th>
-                                            <th>dlca</th>
-                                            <th>dlct</th>
-                                            <th>dscr</th>
-                                            <th>dsct</th>
+                                            <th>
+                                                <a href={emptyHrefLink}
+                                                   onClick={(event) => this.sort(event, SortType.DLCA)}
+                                                   style={linkStyle}>
+                                                    {this.state.sort && this.state.sort === SortType.DLCA && (
+                                                        this.state.sortOrder ?
+                                                            <i className="fa fa-arrow-up"/> :
+                                                            <i className="fa fa-arrow-down"/>
+                                                    )} dlca
+                                                </a>
+                                            </th>
+                                            <th>
+                                                <a href={emptyHrefLink}
+                                                   onClick={(event) => this.sort(event, SortType.DLCT)}
+                                                   style={linkStyle}>
+                                                    {this.state.sort && this.state.sort === SortType.DLCT && (
+                                                        this.state.sortOrder ?
+                                                            <i className="fa fa-arrow-up"/> :
+                                                            <i className="fa fa-arrow-down"/>
+                                                    )} dlct
+                                                </a>
+                                            </th>
+                                            <th>
+                                                <a href={emptyHrefLink}
+                                                   onClick={(event) => this.sort(event, SortType.DSCR)}
+                                                   style={linkStyle}>
+                                                    {this.state.sort && this.state.sort === SortType.DSCR && (
+                                                        this.state.sortOrder ?
+                                                            <i className="fa fa-arrow-up"/> :
+                                                            <i className="fa fa-arrow-down"/>
+                                                    )} dscr
+                                                </a>
+                                            </th>
+                                            <th>
+                                                <a href={emptyHrefLink}
+                                                   onClick={(event) => this.sort(event, SortType.DSCT)}
+                                                   style={linkStyle}>
+                                                    {this.state.sort && this.state.sort === SortType.DSCT && (
+                                                        this.state.sortOrder ?
+                                                            <i className="fa fa-arrow-up"/> :
+                                                            <i className="fa fa-arrow-down"/>
+                                                    )} dsct
+                                                </a>
+                                            </th>
                                         </tr>
                                         </thead>
                                         <tbody>{programsList}</tbody>
