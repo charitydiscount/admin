@@ -5,26 +5,31 @@ import FadeLoader from 'react-spinners/FadeLoader';
 import { emptyHrefLink, linkStyle, spinnerCss } from '../../Helper';
 import { Button, TextField } from "@material-ui/core";
 import ReactPaginate from 'react-paginate';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 interface ProgramsProps {
 }
 
 interface ProgramsState {
-    isLoading: boolean;
-    programs: ProgramDto[];
-    currentPage: number;
-    defaultProgramList: ProgramDto[];
-    sort: SortType
-    sortOrder: boolean // asc -> true, desc -> false
+    isLoading: boolean,
+    programs: ProgramDto[],
+    currentPage: number,
+    defaultProgramList: ProgramDto[],
+    sort: SortType,
+    sortOrder: boolean, // asc -> true, desc -> false
+    filterType: FilterType
 }
 
 enum SortType {
-    DLCA = 'dlca',
-    DLCT = 'dlct',
-    DSCR = 'dscr',
-    DSCT = 'dsct',
     NAME = 'name',
-    MAIN_ODER = 'mainOrder',
+    EMPTY = ''
+}
+
+enum FilterType {
+    DSCT_VARIABLE = 'dsctVariable',
     EMPTY = ''
 }
 
@@ -42,12 +47,14 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
             defaultProgramList: [],
             currentPage: 0,
             sort: SortType.EMPTY,
-            sortOrder: true
+            sortOrder: true,
+            filterType: FilterType.EMPTY
         };
         this.searchPrograms = this.searchPrograms.bind(this);
         this.enterSearch = this.enterSearch.bind(this);
         this.updatePageNumber = this.updatePageNumber.bind(this);
         this.sort = this.sort.bind(this);
+        this.filter = this.filter.bind(this);
     }
 
     async componentDidMount() {
@@ -69,6 +76,19 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
     enterSearch(event) {
         if (event.keyCode === 13) {
             this.searchPrograms();
+        }
+    }
+
+    filter(event) {
+        event.preventDefault();
+        if (event.target.value === 'dsctVariable') {
+            this.setState({
+                filterType: FilterType.DSCT_VARIABLE
+            });
+        } else {
+            this.setState({
+                filterType: FilterType.EMPTY
+            });
         }
     }
 
@@ -114,55 +134,9 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
             programsList = this.state.programs
                 .sort((a, b) => {
                     if (this.state.sort) {
-                        let va,vb;
                         switch (this.state.sort) {
                             case SortType.NAME:
                                 if (a.name < b.name) {
-                                    return this.state.sortOrder ? 1 : -1;
-                                } else {
-                                    return this.state.sortOrder ? -1 : 1;
-                                }
-                            case SortType.MAIN_ODER:
-                                va = (a.mainOrder === null) ? "" : "" + a.mainOrder;
-                                vb = (b.mainOrder === null) ? "" : "" + b.mainOrder;
-
-                                if (va < vb) {
-                                    return this.state.sortOrder ? 1 : -1;
-                                } else {
-                                    return this.state.sortOrder ? -1 : 1;
-                                }
-                            case SortType.DLCA:
-                                va = (a.defaultLeadCommissionAmount === null) ? "" : "" + a.defaultLeadCommissionAmount;
-                                vb = (b.defaultLeadCommissionAmount === null) ? "" : "" + b.defaultLeadCommissionAmount;
-
-                                if (va < vb) {
-                                    return this.state.sortOrder ? 1 : -1;
-                                } else {
-                                    return this.state.sortOrder ? -1 : 1;
-                                }
-                            case SortType.DLCT:
-                                va = (a.defaultLeadCommissionType === null) ? "" : "" + a.defaultLeadCommissionType;
-                                vb = (b.defaultLeadCommissionType === null) ? "" : "" + b.defaultLeadCommissionType;
-
-                                if (va < vb) {
-                                    return this.state.sortOrder ? 1 : -1;
-                                } else {
-                                    return this.state.sortOrder ? -1 : 1;
-                                }
-                            case SortType.DSCR:
-                                va = (a.defaultSaleCommissionRate === null) ? "" : "" + a.defaultSaleCommissionRate;
-                                vb = (b.defaultSaleCommissionRate === null) ? "" : "" + b.defaultSaleCommissionRate;
-
-                                if (va < vb) {
-                                    return this.state.sortOrder ? 1 : -1;
-                                } else {
-                                    return this.state.sortOrder ? -1 : 1;
-                                }
-                            case SortType.DSCT:
-                                va = (a.defaultSaleCommissionType === null) ? "" : "" + a.defaultSaleCommissionType;
-                                vb = (b.defaultSaleCommissionType === null) ? "" : "" + b.defaultSaleCommissionType;
-
-                                if (va < vb) {
                                     return this.state.sortOrder ? 1 : -1;
                                 } else {
                                     return this.state.sortOrder ? -1 : 1;
@@ -173,11 +147,21 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                     } else {
                         return 0;
                     }
+                }).filter(value => {
+                    switch (this.state.filterType) {
+                        case FilterType.DSCT_VARIABLE:
+                            if (value.defaultSaleCommissionType) {
+                                return value.defaultSaleCommissionType.includes("variable");
+                            }
+                            return false;
+                        default:
+                            return true;
+                    }
                 });
 
 
             if (programsList.length > pageLimit) {
-                pageCount = this.state.programs.length / pageLimit;
+                pageCount = programsList.length / pageLimit;
                 let offset = this.state.currentPage;
                 programsList = programsList
                     .slice(offset * pageLimit, (offset + 1) * pageLimit);
@@ -223,6 +207,32 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                                 style={{width: '100%', marginLeft: 8}}
                                                 onChange={event => this.search = event.target.value}
                                             />
+                                        </div>
+                                        <div className="rs-select2--light rs-select2--md">
+                                            <FormControl fullWidth>
+                                                <InputLabel id="demo-simple-select-filled-label">
+                                                    Filters
+                                                </InputLabel>
+                                                <Select
+                                                    MenuProps={{
+                                                        disableScrollLock: true,
+                                                        getContentAnchorEl: null,
+                                                        anchorOrigin: {
+                                                            vertical: 'bottom',
+                                                            horizontal: 'left',
+                                                        },
+                                                    }}
+                                                    labelId="demo-simple-select-filled-label"
+                                                    id="demo-simple-select-filled"
+                                                    value={this.state.filterType}
+                                                    onChange={this.filter}
+                                                >
+                                                    <MenuItem value="">
+                                                        <em>None</em>
+                                                    </MenuItem>
+                                                    <MenuItem value={"dsctVariable"}>DSCT - Variable</MenuItem>
+                                                </Select>
+                                            </FormControl>
                                         </div>
                                     </div>
                                     <div className="table-data__tool-right">
@@ -279,59 +289,20 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                             </th>
                                             <th>order</th>
                                             <th>
-                                                <a href={emptyHrefLink}
-                                                   onClick={(event) => this.sort(event, SortType.MAIN_ODER)}
-                                                   style={linkStyle}>
-                                                    {this.state.sort && this.state.sort === SortType.MAIN_ODER && (
-                                                        this.state.sortOrder ?
-                                                            <i className="fa fa-arrow-up"/> :
-                                                            <i className="fa fa-arrow-down"/>
-                                                    )} main order
-                                                </a></th>
+                                                main order
+                                            </th>
                                             <th>interval</th>
                                             <th>
-                                                <a href={emptyHrefLink}
-                                                   onClick={(event) => this.sort(event, SortType.DLCA)}
-                                                   style={linkStyle}>
-                                                    {this.state.sort && this.state.sort === SortType.DLCA && (
-                                                        this.state.sortOrder ?
-                                                            <i className="fa fa-arrow-up"/> :
-                                                            <i className="fa fa-arrow-down"/>
-                                                    )} dlca
-                                                </a>
+                                                dlca
                                             </th>
                                             <th>
-                                                <a href={emptyHrefLink}
-                                                   onClick={(event) => this.sort(event, SortType.DLCT)}
-                                                   style={linkStyle}>
-                                                    {this.state.sort && this.state.sort === SortType.DLCT && (
-                                                        this.state.sortOrder ?
-                                                            <i className="fa fa-arrow-up"/> :
-                                                            <i className="fa fa-arrow-down"/>
-                                                    )} dlct
-                                                </a>
+                                                dlct
                                             </th>
                                             <th>
-                                                <a href={emptyHrefLink}
-                                                   onClick={(event) => this.sort(event, SortType.DSCR)}
-                                                   style={linkStyle}>
-                                                    {this.state.sort && this.state.sort === SortType.DSCR && (
-                                                        this.state.sortOrder ?
-                                                            <i className="fa fa-arrow-up"/> :
-                                                            <i className="fa fa-arrow-down"/>
-                                                    )} dscr
-                                                </a>
+                                                dscr
                                             </th>
                                             <th>
-                                                <a href={emptyHrefLink}
-                                                   onClick={(event) => this.sort(event, SortType.DSCT)}
-                                                   style={linkStyle}>
-                                                    {this.state.sort && this.state.sort === SortType.DSCT && (
-                                                        this.state.sortOrder ?
-                                                            <i className="fa fa-arrow-up"/> :
-                                                            <i className="fa fa-arrow-down"/>
-                                                    )} dsct
-                                                </a>
+                                                dsct
                                             </th>
                                         </tr>
                                         </thead>
