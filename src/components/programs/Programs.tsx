@@ -1,5 +1,5 @@
 import React from 'react';
-import { getPrograms, ProgramDto } from '../../rest/ProgramService';
+import { createProgram, DEFAULT_PROGRAM, getPrograms, ProgramDto } from '../../rest/ProgramService';
 import ProgramElement from './ProgramElement';
 import FadeLoader from 'react-spinners/FadeLoader';
 import { emptyHrefLink, linkStyle, spinnerCss } from '../../Helper';
@@ -9,6 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Modal from '../modal';
 
 interface ProgramsProps {
 }
@@ -20,7 +21,9 @@ interface ProgramsState {
     defaultProgramList: ProgramDto[],
     sort: SortType,
     sortOrder: boolean, // asc -> true, desc -> false
-    filterType: FilterType
+    filterType: FilterType,
+    modalVisible: boolean,
+    createProgram: ProgramDto
 }
 
 enum SortType {
@@ -48,7 +51,9 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
             currentPage: 0,
             sort: SortType.EMPTY,
             sortOrder: true,
-            filterType: FilterType.EMPTY
+            filterType: FilterType.EMPTY,
+            modalVisible: false,
+            createProgram: {...DEFAULT_PROGRAM}
         };
         this.searchPrograms = this.searchPrograms.bind(this);
         this.enterSearch = this.enterSearch.bind(this);
@@ -127,6 +132,36 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
 
     }
 
+    openModal() {
+        this.setState({
+            modalVisible: true
+        });
+    }
+
+    closeModal() {
+        this.setState({
+            modalVisible: false
+        });
+    }
+
+    async onModalSave() {
+        try {
+            if (this.state.createProgram) {
+                let response = await createProgram(this.state.createProgram);
+                if (response) {
+                    alert("Program successfully created");
+                    window.location.reload();
+                } else {
+                    alert("Something went wrong with update");
+                }
+            } else {
+                alert("Nothing to update")
+            }
+        } catch (e) {
+            alert(e);
+        }
+    }
+
     public render() {
         let programsList;
         let pageCount = 0;
@@ -181,6 +216,132 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                 <div className="row">
                     <div className="col-md-12">
                         <h3 className="title-5 m-b-35">programs</h3>
+                        <Modal
+                            visible={this.state.modalVisible}
+                            onClose={() => this.closeModal()}
+                            title="Create program"
+                            onSave={() => this.onModalSave()}
+                        >
+                            {this.state.modalVisible &&
+                            <React.Fragment>
+                                <TextField id="name" label={"Name"} variant="filled" style={{width: '100%'}}
+                                           value={this.state.createProgram.name}
+                                           onChange={(event) => {
+                                               let program = this.state.createProgram;
+                                               program.name = event.target.value;
+                                               this.setState({
+                                                   createProgram: program
+                                               })
+                                           }}
+                                />
+                                <TextField id="category" label={"Category"} variant="filled" style={{width: '100%'}}
+                                           value={this.state.createProgram.category}
+                                           onChange={(event) => {
+                                               let program = this.state.createProgram;
+                                               program.category = event.target.value;
+                                               this.setState({
+                                                   createProgram: program
+                                               })
+                                           }}
+                                />
+                                <TextField id="status" label={"Status"} variant="filled" style={{width: '100%'}}
+                                           value={this.state.createProgram.status}
+                                           onChange={(event) => {
+                                               let program = this.state.createProgram;
+                                               program.status = event.target.value;
+                                               this.setState({
+                                                   createProgram: program
+                                               })
+                                           }}
+                                />
+                                <TextField id="logoPath" label={"Logo Path"} variant="filled" style={{width: '100%'}}
+                                           value={this.state.createProgram.logoPath}
+                                           onChange={(event) => {
+                                               let program = this.state.createProgram;
+                                               program.logoPath = event.target.value;
+                                               this.setState({
+                                                   createProgram: program
+                                               })
+                                           }}
+                                />
+                                <TextField id="mainUrl" label={"Main Url"} variant="filled" style={{width: '100%'}}
+                                           value={this.state.createProgram.mainUrl}
+                                           onChange={(event) => {
+                                               let program = this.state.createProgram;
+                                               program.mainUrl = event.target.value;
+                                               this.setState({
+                                                   createProgram: program
+                                               })
+                                           }}
+                                />
+                                <TextField id="source" label={"Source"} variant="filled" style={{width: '100%'}}
+                                           value={this.state.createProgram.source}
+                                           onChange={(event) => {
+                                               let program = this.state.createProgram;
+                                               program.source = event.target.value;
+                                               this.setState({
+                                                   createProgram: program
+                                               })
+                                           }}
+                                />
+                                <TextField id="order" label={"Order"} variant="filled" style={{width: '100%'}}
+                                           type="number"
+                                           value={this.state.createProgram.order}
+                                           onChange={(event) => {
+                                               let program = this.state.createProgram;
+                                               program.order = parseInt(event.target.value);
+                                               this.setState({
+                                                   createProgram: program
+                                               })
+                                           }}
+                                />
+                                <TextField id="defaultLeadCommissionAmount" label={"Default Lead Commission Amount"}
+                                           variant="filled" style={{width: '100%'}}
+                                           value={this.state.createProgram.defaultLeadCommissionAmount}
+                                           onChange={(event) => {
+                                               let program = this.state.createProgram;
+                                               program.defaultLeadCommissionAmount = event.target.value;
+                                               this.setState({
+                                                   createProgram: program
+                                               })
+                                           }}
+                                />
+                                <TextField id="defaultLeadCommissionType" label={"Default Lead Commission Type"}
+                                           variant="filled" style={{width: '100%'}}
+                                           value={this.state.createProgram.defaultLeadCommissionType}
+                                           onChange={(event) => {
+                                               let program = this.state.createProgram;
+                                               program.defaultLeadCommissionType = event.target.value;
+                                               this.setState({
+                                                   createProgram: program
+                                               })
+                                           }}
+                                />
+                                <TextField id="defaultSaleCommissionRate" label={"Default Sale Commission Rate"}
+                                           variant="filled" style={{width: '100%'}}
+                                           value={this.state.createProgram.defaultSaleCommissionRate}
+                                           onChange={(event) => {
+                                               let program = this.state.createProgram;
+                                               program.defaultSaleCommissionRate = event.target.value;
+                                               this.setState({
+                                                   createProgram: program
+                                               })
+                                           }}
+                                />
+                                <TextField id="defaultSaleCommissionType" label={"Default Sale Commission Type"}
+                                           variant="filled" style={{width: '100%'}}
+                                           value={this.state.createProgram.defaultSaleCommissionType}
+                                           onChange={(event) => {
+                                               let program = this.state.createProgram;
+                                               program.defaultSaleCommissionType = event.target.value;
+                                               this.setState({
+                                                   createProgram: program
+                                               })
+                                           }}
+                                />
+                            </React.Fragment>
+                            }
+                        </Modal>
                         <FadeLoader
                             loading={this.state.isLoading}
                             color={'#1641ff'}
@@ -236,9 +397,10 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                         </div>
                                     </div>
                                     <div className="table-data__tool-right">
-                                        <button className="au-btn au-btn-icon au-btn--green au-btn--small">
-                                            <i className="zmdi zmdi-plus"></i>
-                                            add item
+                                        <button className="au-btn au-btn-icon au-btn--green au-btn--small"
+                                                onClick={() => this.openModal()}>
+                                            <i className="zmdi zmdi-plus"/>
+                                            add program
                                         </button>
                                         <div>
                                             <ReactPaginate
