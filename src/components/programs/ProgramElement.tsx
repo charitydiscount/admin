@@ -84,19 +84,26 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                 }}
                             />
                             {this.props.program.defaultSaleCommissionType === 'variable' &&
-                            <TextField
-                                id="commisionVariable"
-                                label={"Commision variable, take care to show 0.60 % percent to client"}
-                                variant="filled" style={{width: '100%'}} value={this.state.program.commissionInterval}
-                                onChange={event => {
-                                    let program = this.state.program;
-                                    program.commissionInterval = event.target.value;
-                                    this.setState({
-                                        program: program
-                                    })
-                                }
-                                }
-                            />
+                            <React.Fragment>
+                                <TextField
+                                    id="defaultSaleCommissionRate" label={"Default Sale Commission Rate"} variant="filled" style={{width: '100%'}}
+                                    value={this.state.program.defaultSaleCommissionRate} disabled={true}
+                                />
+                                <TextField
+                                    id="commisionVariable"
+                                    label={"Commision variable, take care to show 0.60 % percent to client"}
+                                    variant="filled" style={{width: '100%'}}
+                                    value={this.state.program.commissionInterval}
+                                    onChange={event => {
+                                        let program = this.state.program;
+                                        program.commissionInterval = event.target.value;
+                                        this.setState({
+                                            program: program
+                                        })
+                                    }
+                                    }
+                                />
+                            </React.Fragment>
                             }
                         </React.Fragment>
                         }
