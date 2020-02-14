@@ -74,6 +74,7 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                 });
             }
         } catch (error) {
+            alert(error);
             //programs not loaded
         }
     }
@@ -167,6 +168,17 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
         let pageCount = 0;
         if (this.state.programs && this.state.programs.length > 0) {
             programsList = this.state.programs
+                .filter(value => {
+                    switch (this.state.filterType) {
+                        case FilterType.DSCT_VARIABLE:
+                            if (value.defaultSaleCommissionType) {
+                                return value.defaultSaleCommissionType.includes("variable");
+                            }
+                            return false;
+                        default:
+                            return true;
+                    }
+                })
                 .sort((a, b) => {
                     if (this.state.sort) {
                         switch (this.state.sort) {
@@ -181,16 +193,6 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                         }
                     } else {
                         return 0;
-                    }
-                }).filter(value => {
-                    switch (this.state.filterType) {
-                        case FilterType.DSCT_VARIABLE:
-                            if (value.defaultSaleCommissionType) {
-                                return value.defaultSaleCommissionType.includes("variable");
-                            }
-                            return false;
-                        default:
-                            return true;
                     }
                 });
 

@@ -1,49 +1,96 @@
 import React from "react";
+import { CommissionDto } from "../../rest/CommissionService";
+import Modal from '../modal';
+import { TextField } from "@material-ui/core";
+import { emptyHrefLink } from "../../Helper";
 
+interface CommissionsElementProps {
+    commission: CommissionDto
+}
 
-class CommissionsElement extends React.Component {
+interface CommissionsElementState {
+    modalVisible: boolean
+    commission: CommissionDto
+}
 
+class CommissionsElement extends React.Component<CommissionsElementProps, CommissionsElementState> {
+
+    constructor(props: CommissionsElementProps) {
+        super(props);
+        this.state = {
+            modalVisible: false,
+            commission: this.props.commission
+        };
+        this.onModalSave = this.onModalSave.bind(this);
+    }
+
+    openModal() {
+        this.setState({
+            commission: this.props.commission,
+            modalVisible: true,
+        });
+    }
+
+    closeModal() {
+        this.setState({
+            modalVisible: false,
+        });
+    }
+
+    async onModalSave() {
+        this.closeModal();
+        //nothing yet
+    }
 
     render(): React.ReactNode {
         return (
             <React.Fragment>
+                <Modal
+                    visible={this.state.modalVisible}
+                    onClose={() => this.closeModal()}
+                    title="Update commission"
+                    onSave={() => this.onModalSave()}
+                >
+                    {this.state.modalVisible &&
+                    <React.Fragment>
+                        <TextField
+                            id="uniqueCode" label={"User id"} variant="filled" style={{width: '100%'}}
+                            value={this.state.commission.userId} disabled={true}
+                        />
+                        <TextField
+                            id="uniqueCode" label={"Commission id"} variant="filled" style={{width: '100%'}}
+                            value={this.state.commission.commissionId} disabled={true}
+                        />
+                        <TextField
+                            id="uniqueCode" label={"Status"} variant="filled" style={{width: '100%'}}
+                            value={this.state.commission.details.status} disabled={true}
+                        />
+                        <TextField
+                            id="uniqueCode" label={"Reason"} variant="filled" style={{width: '100%'}}
+                            value={this.state.commission.details.reason} disabled={true}
+                        />
+                        <TextField
+                            id="uniqueCode" label={"Amount"} variant="filled" style={{width: '100%'}}
+                            value={this.state.commission.details.amount} disabled={true}
+                        />
+                    </React.Fragment>
+                    }
+                </Modal>
                 <tr className="tr-shadow">
-                    <td>
-                        <label className="au-checkbox">
-                            <input type="checkbox"/>
-                            <span className="au-checkmark"></span>
-                        </label>
+                    <td>{this.props.commission.userId}</td>
+                    <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
+                        <a href={emptyHrefLink} style={{
+                            textDecoration: "underline",
+                            color: "#007bff",
+                            cursor: "pointer"
+                        }} onClick={() => this.openModal()}>
+                            {this.props.commission.commissionId}
+                        </a>
                     </td>
-                    <td>Lori Lynch</td>
-                    <td>
-                        <span className="block-email">lori@example.com</span>
-                    </td>
-                    <td className="desc">Samsung S8 Black</td>
-                    <td>2018-09-27 02:12</td>
-                    <td>
-                        <span className="status--process">Processed</span>
-                    </td>
-                    <td>$679.00</td>
-                    <td>
-                        <div className="table-data-feature">
-                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                    title="Send">
-                                <i className="zmdi zmdi-mail-send"></i>
-                            </button>
-                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                    title="Edit">
-                                <i className="zmdi zmdi-edit"></i>
-                            </button>
-                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                    title="Delete">
-                                <i className="zmdi zmdi-delete"></i>
-                            </button>
-                            <button className="item" data-toggle="tooltip" data-placement="top"
-                                    title="More">
-                                <i className="zmdi zmdi-more"></i>
-                            </button>
-                        </div>
-                    </td>
+                    <td>{this.props.commission.details.status}</td>
+                    <td>{this.props.commission.details.amount}</td>
+                    <td>{this.props.commission.details.currency}</td>
+                    <td>{this.props.commission.details.originalCurrency}</td>
                 </tr>
                 <tr className="spacer"></tr>
             </React.Fragment>

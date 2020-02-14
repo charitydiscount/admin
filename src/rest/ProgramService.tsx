@@ -127,7 +127,11 @@ export async function createProgram(program: ProgramDto) {
         throw Error('Enter a status');
     }
     if (!program.source || (program.source.length < 1)) {
-        throw Error('Enter a source');
+        throw Error('Source required');
+    }
+
+    if (!program.defaultSaleCommissionRate || (program.defaultSaleCommissionRate.length < 1)) {
+        throw Error('Cashback required');
     }
 
     const token = await auth.currentUser.getIdToken();

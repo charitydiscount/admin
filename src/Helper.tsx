@@ -2,22 +2,17 @@ import { store } from './index';
 import { doLogoutAction } from './redux/actions/UserActions';
 import { css } from '@emotion/core';
 
-export enum StorageKey {
-    //SESSION STORAGE
-    USER_AUTH_KEY = '/userAdminAuthCD',
-}
-
 export const EXPRESS_URL =
     'https://europe-west1-charitydiscount-test.cloudfunctions.net/manage/';
 
 export enum ExpressLink {
     PROGRAMS = 'programs',
+    COMMISSIONS = 'commissions',
     CASES = 'cases',
 }
 
 export enum FirebaseTable {
     ROLES = 'roles',
-    CASES = 'CASES',
 }
 
 export const spinnerCss = css`
