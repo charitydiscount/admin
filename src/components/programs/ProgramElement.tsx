@@ -90,13 +90,27 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                     value={this.state.program.defaultSaleCommissionRate} disabled={true}
                                 />
                                 <TextField
-                                    id="commisionVariable"
-                                    label={"Commision variable, take care to show 0.60 % percent to client"}
+                                    id="commisionVariableMin2perf"
+                                    type="number" label={"Cashback min"}
                                     variant="filled" style={{width: '100%'}}
-                                    value={this.state.program.commissionInterval}
+                                    value={this.state.program.commissionMin}
                                     onChange={event => {
                                         let program = this.state.program;
-                                        program.commissionInterval = event.target.value;
+                                        program.commissionMin = event.target.value;
+                                        this.setState({
+                                            program: program
+                                        })
+                                    }
+                                    }
+                                />
+                                <TextField
+                                    id="commisionVariableMax2perf"
+                                    label={"Cashback max"}
+                                    type="number" variant="filled" style={{width: '100%'}}
+                                    value={this.state.program.commissionMax}
+                                    onChange={event => {
+                                        let program = this.state.program;
+                                        program.commissionMax = event.target.value;
                                         this.setState({
                                             program: program
                                         })
@@ -207,13 +221,27 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                 }
                             />
                             <TextField
-                                id="commissionInterval"
-                                label={"Commision variable, take care to show 0.60 % percent to client"}
-                                variant="filled"
-                                style={{width: '100%'}} value={this.state.program.commissionInterval}
+                                id="commissionIntervalMinExternal"
+                                label={"Cashback min"}
+                                variant="filled" type="number"
+                                style={{width: '100%'}} value={this.state.program.commissionMin}
                                 onChange={event => {
                                     let program = this.state.program;
-                                    program.commissionInterval = event.target.value;
+                                    program.commissionMin = event.target.value;
+                                    this.setState({
+                                        program: program
+                                    })
+                                }
+                                }
+                            />
+                            <TextField
+                                id="commissionIntervalMaxExternal"
+                                label={"Cashback max"}
+                                variant="filled" type="number"
+                                style={{width: '100%'}} value={this.state.program.commissionMax}
+                                onChange={event => {
+                                    let program = this.state.program;
+                                    program.commissionMax = event.target.value;
                                     this.setState({
                                         program: program
                                     })
@@ -286,7 +314,8 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                     </td>
                     <td>{this.props.program.order}</td>
                     <td>{this.props.program.mainOrder}</td>
-                    <td>{this.props.program.commissionInterval}</td>
+                    <td>{this.props.program.commissionMin}</td>
+                    <td>{this.props.program.commissionMax}</td>
                     <td>{this.props.program.defaultLeadCommissionAmount}</td>
                     <td>{this.props.program.defaultLeadCommissionType}</td>
                     <td>{this.props.program.defaultSaleCommissionRate}</td>

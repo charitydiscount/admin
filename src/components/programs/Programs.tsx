@@ -455,7 +455,8 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                             <th>
                                                 main order
                                             </th>
-                                            <th>interval</th>
+                                            <th>% min</th>
+                                            <th>% max</th>
                                             <th>
                                                 dlca
                                             </th>

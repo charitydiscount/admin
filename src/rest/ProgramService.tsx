@@ -24,7 +24,8 @@ export interface ProgramDto {
     averagePaymentTime?: number,
     order: number,
     mainOrder?: number,
-    commissionInterval?: string,
+    commissionMin?: string,
+    commissionMax?: string,
     workingCurrencyCode: string,
     sellingCountries?: Country[],
     productsCount?: number
