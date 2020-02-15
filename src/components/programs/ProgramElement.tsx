@@ -173,8 +173,9 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                 id="mainUrl" label={"Main Url"} variant="filled"
                                 style={{width: '100%'}} value={this.state.program.mainUrl}
                                 onChange={event => {
-                                    let program = this.state.program;
+                                    const program = this.state.program;
                                     program.mainUrl = event.target.value;
+                                    program.affiliateUrl = program.mainUrl;
                                     this.setState({
                                         program: program
                                     })
