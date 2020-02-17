@@ -2,7 +2,7 @@ import React from 'react';
 import { createProgram, DEFAULT_PROGRAM, getPrograms, ProgramDto } from '../../rest/ProgramService';
 import ProgramElement from './ProgramElement';
 import FadeLoader from 'react-spinners/FadeLoader';
-import { emptyHrefLink, linkStyle, spinnerCss } from '../../Helper';
+import { emptyHrefLink, linkStyle, SourceTypes, spinnerCss } from '../../Helper';
 import { Button, TextField } from "@material-ui/core";
 import ReactPaginate from 'react-paginate';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -33,6 +33,8 @@ enum SortType {
 
 enum FilterType {
     DSCT_VARIABLE = 'dsctVariable',
+    SOURCE_EXTERNAL = 'sourceExternal',
+    INACTIVE = 'inactive',
     EMPTY = ''
 }
 
@@ -87,15 +89,9 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
 
     filter(event) {
         event.preventDefault();
-        if (event.target.value === 'dsctVariable') {
-            this.setState({
-                filterType: FilterType.DSCT_VARIABLE
-            });
-        } else {
-            this.setState({
-                filterType: FilterType.EMPTY
-            });
-        }
+        this.setState({
+            filterType: event.target.value
+        });
     }
 
     updatePageNumber(data) {
@@ -175,6 +171,10 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                 return value.defaultSaleCommissionType.includes("variable");
                             }
                             return false;
+                        case FilterType.SOURCE_EXTERNAL:
+                            return !value.source.includes(SourceTypes.TWO_PERFORMANT.toString());
+                        case FilterType.INACTIVE:
+                            return value.status.includes("inactive");
                         default:
                             return true;
                     }
@@ -246,16 +246,32 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                                })
                                            }}
                                 />
-                                <TextField id="status" label={"Status"} variant="filled" style={{width: '100%'}}
-                                           value={this.state.createProgram.status}
-                                           onChange={(event) => {
-                                               let program = this.state.createProgram;
-                                               program.status = event.target.value;
-                                               this.setState({
-                                                   createProgram: program
-                                               })
-                                           }}
-                                />
+                                <FormControl variant="filled" style={{width: '100%'}}>
+                                    <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
+                                    <Select
+                                        MenuProps={{
+                                            disableScrollLock: true,
+                                            getContentAnchorEl: null,
+                                            anchorOrigin: {
+                                                vertical: 'bottom',
+                                                horizontal: 'left',
+                                            },
+                                        }}
+                                        labelId="demo-simple-select-filled-label"
+                                        id="demo-simple-select-filled"
+                                        value={this.state.createProgram.status}
+                                        onChange={event => {
+                                            let program = this.state.createProgram;
+                                            program.status = event.target.value as string;
+                                            this.setState({
+                                                createProgram: program
+                                            })
+                                        }}
+                                    >
+                                        <MenuItem value={"active"}> Active </MenuItem>
+                                        <MenuItem value={"inactive"}> Inactive </MenuItem>
+                                    </Select>
+                                </FormControl>
                                 <TextField id="logoPath" label={"Logo Path"} variant="filled" style={{width: '100%'}}
                                            value={this.state.createProgram.logoPath}
                                            onChange={(event) => {
@@ -298,6 +314,7 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                            }}
                                 />
                                 <TextField id="defaultLeadCommissionAmount" label={"Default Lead Commission Amount"}
+                                           type="number"
                                            variant="filled" style={{width: '100%'}}
                                            value={this.state.createProgram.defaultLeadCommissionAmount}
                                            onChange={(event) => {
@@ -308,18 +325,36 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                                })
                                            }}
                                 />
-                                <TextField id="defaultLeadCommissionType" label={"Default Lead Commission Type"}
-                                           variant="filled" style={{width: '100%'}}
-                                           value={this.state.createProgram.defaultLeadCommissionType}
-                                           onChange={(event) => {
-                                               let program = this.state.createProgram;
-                                               program.defaultLeadCommissionType = event.target.value;
-                                               this.setState({
-                                                   createProgram: program
-                                               })
-                                           }}
-                                />
+                                <FormControl variant="filled" style={{width: '100%'}}>
+                                    <InputLabel id="demo-simple-select-filled-label">Default Lead Commission Type</InputLabel>
+                                    <Select
+                                        MenuProps={{
+                                            disableScrollLock: true,
+                                            getContentAnchorEl: null,
+                                            anchorOrigin: {
+                                                vertical: 'bottom',
+                                                horizontal: 'left',
+                                            },
+                                        }}
+                                        labelId="demo-simple-select-filled-label"
+                                        id="demo-simple-select-filled"
+                                        value={this.state.createProgram.defaultLeadCommissionType}
+                                        onChange={event => {
+                                            let program = this.state.createProgram;
+                                            program.defaultLeadCommissionType = event.target.value as string;
+                                            this.setState({
+                                                createProgram: program
+                                            })
+                                        }}
+                                    >
+                                        <MenuItem value={""}> None </MenuItem>
+                                        <MenuItem value={"variable"}> Variable </MenuItem>
+                                        <MenuItem value={"fixed"}> Fixed </MenuItem>
+                                        <MenuItem value={"percent"}> Percent </MenuItem>
+                                    </Select>
+                                </FormControl>
                                 <TextField id="defaultSaleCommissionRate" label={"Default Sale Commission Rate"}
+                                           type="number"
                                            variant="filled" style={{width: '100%'}}
                                            value={this.state.createProgram.defaultSaleCommissionRate}
                                            onChange={(event) => {
@@ -330,17 +365,34 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                                })
                                            }}
                                 />
-                                <TextField id="defaultSaleCommissionType" label={"Default Sale Commission Type"}
-                                           variant="filled" style={{width: '100%'}}
-                                           value={this.state.createProgram.defaultSaleCommissionType}
-                                           onChange={(event) => {
-                                               let program = this.state.createProgram;
-                                               program.defaultSaleCommissionType = event.target.value;
-                                               this.setState({
-                                                   createProgram: program
-                                               })
-                                           }}
-                                />
+                                <FormControl variant="filled" style={{width: '100%'}}>
+                                    <InputLabel id="demo-simple-select-filled-label">Default Sale Commission Type</InputLabel>
+                                    <Select
+                                        MenuProps={{
+                                            disableScrollLock: true,
+                                            getContentAnchorEl: null,
+                                            anchorOrigin: {
+                                                vertical: 'bottom',
+                                                horizontal: 'left',
+                                            },
+                                        }}
+                                        labelId="demo-simple-select-filled-label"
+                                        id="demo-simple-select-filled"
+                                        value={this.state.createProgram.defaultSaleCommissionType}
+                                        onChange={event => {
+                                            let program = this.state.createProgram;
+                                            program.defaultSaleCommissionType = event.target.value as string;
+                                            this.setState({
+                                                createProgram: program
+                                            })
+                                        }}
+                                    >
+                                        <MenuItem value={""}> None </MenuItem>
+                                        <MenuItem value={"variable"}> Variable </MenuItem>
+                                        <MenuItem value={"fixed"}> Fixed </MenuItem>
+                                        <MenuItem value={"percent"}> Percent </MenuItem>
+                                    </Select>
+                                </FormControl>
                             </React.Fragment>
                             }
                         </Modal>
@@ -393,7 +445,15 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                                     <MenuItem value="">
                                                         <em>None</em>
                                                     </MenuItem>
-                                                    <MenuItem value={"dsctVariable"}>DSCT - Variable</MenuItem>
+                                                    <MenuItem value={FilterType.DSCT_VARIABLE}>DSCT -
+                                                        Variable
+                                                    </MenuItem>
+                                                    <MenuItem value={FilterType.SOURCE_EXTERNAL}>Source
+                                                        external
+                                                    </MenuItem>
+                                                    <MenuItem value={FilterType.INACTIVE}>
+                                                        Inactive
+                                                    </MenuItem>
                                                 </Select>
                                             </FormControl>
                                         </div>

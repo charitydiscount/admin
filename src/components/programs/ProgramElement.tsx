@@ -3,6 +3,10 @@ import { ProgramDto, updateProgram } from "../../rest/ProgramService";
 import { TextField } from '@material-ui/core';
 import { emptyHrefLink, SourceTypes } from "../../Helper";
 import Modal from '../modal';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 
 interface ProgramElementState {
     modalVisible: boolean
@@ -73,7 +77,7 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                 value={this.state.program.name} disabled={true}
                             />
                             <TextField
-                                id="mainorder" label={"Main Order"} type="number" variant="filled"
+                                id="mainOrder" label={"Main Order"} type="number" variant="filled"
                                 style={{width: '100%'}} value={this.props.program.mainOrder}
                                 onChange={event => {
                                     let program = this.state.program;
@@ -86,11 +90,12 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                             {this.props.program.defaultSaleCommissionType === 'variable' &&
                             <React.Fragment>
                                 <TextField
-                                    id="defaultSaleCommissionRate" label={"Default Sale Commission Rate"} variant="filled" style={{width: '100%'}}
+                                    id="defaultSaleCommissionRate" label={"Default Sale Commission Rate"}
+                                    variant="filled" style={{width: '100%'}}
                                     value={this.state.program.defaultSaleCommissionRate} disabled={true}
                                 />
                                 <TextField
-                                    id="commisionVariableMin2perf"
+                                    id="commissionVariableMin2perf"
                                     type="number" label={"Cashback min"}
                                     variant="filled" style={{width: '100%'}}
                                     value={this.state.program.commissionMin}
@@ -104,7 +109,7 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                     }
                                 />
                                 <TextField
-                                    id="commisionVariableMax2perf"
+                                    id="commissionVariableMax2perf"
                                     label={"Cashback max"}
                                     type="number" variant="filled" style={{width: '100%'}}
                                     value={this.state.program.commissionMax}
@@ -144,21 +149,34 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                     this.setState({
                                         program: program
                                     })
-                                }
-                                }
+                                }}
                             />
-                            <TextField
-                                id="status" label={"Status"} variant="filled"
-                                style={{width: '100%'}} value={this.state.program.status}
-                                onChange={event => {
-                                    let program = this.state.program;
-                                    program.status = event.target.value;
-                                    this.setState({
-                                        program: program
-                                    })
-                                }
-                                }
-                            />
+                            <FormControl variant="filled" style={{width: '100%'}}>
+                                <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
+                                <Select
+                                    MenuProps={{
+                                        disableScrollLock: true,
+                                        getContentAnchorEl: null,
+                                        anchorOrigin: {
+                                            vertical: 'bottom',
+                                            horizontal: 'left',
+                                        },
+                                    }}
+                                    labelId="demo-simple-select-filled-label"
+                                    id="demo-simple-select-filled"
+                                    value={this.state.program.status}
+                                    onChange={event => {
+                                        let program = this.state.program;
+                                        program.status = event.target.value as string;
+                                        this.setState({
+                                            program: program
+                                        })
+                                    }}
+                                >
+                                    <MenuItem value={"active"}> Active </MenuItem>
+                                    <MenuItem value={"inactive"}> Inactive </MenuItem>
+                                </Select>
+                            </FormControl>
                             <TextField
                                 id="source" label={"Source"} variant="filled"
                                 style={{width: '100%'}} value={this.state.program.source}
@@ -167,8 +185,7 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                     program.source = event.target.value;
                                     this.setState({
                                         program: program
-                                    })
-                                }
+                                    })}
                                 }
                             />
                             <TextField
@@ -249,7 +266,9 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                 }
                             />
                             <TextField
-                                id="defaultLeadCommissionAmount" label={"Default Lead Commission Amount"} variant="filled"
+                                id="defaultLeadCommissionAmount" label={"Default Lead Commission Amount"}
+                                type="number"
+                                variant="filled"
                                 style={{width: '100%'}} value={this.state.program.defaultLeadCommissionAmount}
                                 onChange={event => {
                                     let program = this.state.program;
@@ -260,21 +279,38 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                 }
                                 }
                             />
-                            <TextField
-                                id="defaultLeadCommissionType" label={"Default Lead Commission Type"} variant="filled"
-                                style={{width: '100%'}} value={this.state.program.defaultLeadCommissionType }
-                                onChange={event => {
-                                    let program = this.state.program;
-                                    program.defaultLeadCommissionType = event.target.value;
-                                    this.setState({
-                                        program: program
-                                    })
-                                }
-                                }
-                            />
+                            <FormControl variant="filled" style={{width: '100%'}}>
+                                <InputLabel id="demo-simple-select-filled-label">Default Lead Commission Type</InputLabel>
+                                <Select
+                                    MenuProps={{
+                                        disableScrollLock: true,
+                                        getContentAnchorEl: null,
+                                        anchorOrigin: {
+                                            vertical: 'bottom',
+                                            horizontal: 'left',
+                                        },
+                                    }}
+                                    labelId="demo-simple-select-filled-label"
+                                    id="demo-simple-select-filled"
+                                    value={this.state.program.defaultLeadCommissionType}
+                                    onChange={event => {
+                                        let program = this.state.program;
+                                        program.defaultLeadCommissionType = event.target.value as string;
+                                        this.setState({
+                                            program: program
+                                        })
+                                    }}
+                                >
+                                    <MenuItem value={""}> None </MenuItem>
+                                    <MenuItem value={"variable"}> Variable </MenuItem>
+                                    <MenuItem value={"fixed"}> Fixed </MenuItem>
+                                    <MenuItem value={"percent"}> Percent </MenuItem>
+                                </Select>
+                            </FormControl>
                             <TextField
                                 id="defaultSaleCommissionRate" label={"Default Sale Commission Rate"} variant="filled"
-                                style={{width: '100%'}} value={this.state.program.defaultSaleCommissionRate }
+                                type="number"
+                                style={{width: '100%'}} value={this.state.program.defaultSaleCommissionRate}
                                 onChange={event => {
                                     let program = this.state.program;
                                     program.defaultSaleCommissionRate = event.target.value;
@@ -284,18 +320,34 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                 }
                                 }
                             />
-                            <TextField
-                                id="defaultSaleCommissionType" label={"Default Sale Commission Type"} variant="filled"
-                                style={{width: '100%'}} value={this.state.program.defaultSaleCommissionType }
-                                onChange={event => {
-                                    let program = this.state.program;
-                                    program.defaultSaleCommissionType = event.target.value;
-                                    this.setState({
-                                        program: program
-                                    })
-                                }
-                                }
-                            />
+                            <FormControl variant="filled" style={{width: '100%'}}>
+                                <InputLabel id="demo-simple-select-filled-label">Default Sale Commission Type</InputLabel>
+                                <Select
+                                    MenuProps={{
+                                        disableScrollLock: true,
+                                        getContentAnchorEl: null,
+                                        anchorOrigin: {
+                                            vertical: 'bottom',
+                                            horizontal: 'left',
+                                        },
+                                    }}
+                                    labelId="demo-simple-select-filled-label"
+                                    id="demo-simple-select-filled"
+                                    value={this.state.program.defaultSaleCommissionType}
+                                    onChange={event => {
+                                        let program = this.state.program;
+                                        program.defaultSaleCommissionType = event.target.value as string;
+                                        this.setState({
+                                            program: program
+                                        })
+                                    }}
+                                >
+                                    <MenuItem value={""}> None </MenuItem>
+                                    <MenuItem value={"variable"}> Variable </MenuItem>
+                                    <MenuItem value={"fixed"}> Fixed </MenuItem>
+                                    <MenuItem value={"percent"}> Percent </MenuItem>
+                                </Select>
+                            </FormControl>
                         </React.Fragment>
                         }
                     </React.Fragment>

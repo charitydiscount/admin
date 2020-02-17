@@ -51,7 +51,7 @@ export const DEFAULT_PROGRAM: ProgramDto = {
     affiliateUrl: '',
     id: 0,
     name: '',
-    status: '',
+    status: 'active',
     uniqueCode: '',
     source: '',
     order: 55000,
