@@ -24,10 +24,8 @@ interface ComponentState {
     saving: boolean;
 }
 
-class Cases extends React.Component<
-    StateProps & DispatchProps,
-    ComponentState
-> {
+class Cases extends React.Component<StateProps & DispatchProps,
+    ComponentState> {
     constructor(props: StateProps & DispatchProps) {
         super(props);
         this.state = {
@@ -63,26 +61,24 @@ class Cases extends React.Component<
     }
 
     onCloseModal() {
-        this.setState({ modalVisible: false });
+        this.setState({modalVisible: false});
     }
 
-    onSave() {
-        //TODO Validate fields
-        //TODO Save the case
+    async onSave() {
         if (this.state.currentCase) {
             this.setState({
                 saving: true,
             });
             if (this.state.currentCase.id) {
                 updateCase(this.state.currentCase).then(() => {
-                    this.setState({ modalVisible: false, saving: false });
+                    this.setState({modalVisible: false, saving: false});
                     this.props.loadCases();
-                });
+                }).catch((e) => alert(e));
             } else {
                 createCase(this.state.currentCase).then(() => {
-                    this.setState({ modalVisible: false, saving: false });
+                    this.setState({modalVisible: false, saving: false});
                     this.props.loadCases();
-                });
+                }).catch((e) => alert(e));
             }
         }
     }
@@ -106,7 +102,7 @@ class Cases extends React.Component<
         this.setState({
             currentCase: {
                 ...this.state.currentCase,
-                images: this.state.currentCase.images.concat({ url: imageUrl }),
+                images: this.state.currentCase.images.concat({url: imageUrl}),
             },
         });
     }
@@ -128,7 +124,7 @@ class Cases extends React.Component<
 
     onDeleteCase(charityCase: CharityCase) {
         deleteCase(charityCase).then(() => {
-            this.setState({ saving: false });
+            this.setState({saving: false});
             this.props.loadCases();
         });
     }
@@ -198,14 +194,14 @@ class Cases extends React.Component<
                                 <div className="table-responsive table-responsive-data2">
                                     <table className="table table-data2">
                                         <thead>
-                                            <tr>
-                                                <th>Title</th>
-                                                <th>Description</th>
-                                                <th>Website</th>
-                                                <th>Images</th>
-                                                <th>Funds</th>
-                                                <th>Actions</th>
-                                            </tr>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Description</th>
+                                            <th>Website</th>
+                                            <th>Images</th>
+                                            <th>Funds</th>
+                                            <th>Actions</th>
+                                        </tr>
                                         </thead>
                                         <tbody>{casesList}</tbody>
                                     </table>
@@ -225,4 +221,4 @@ const mapStateToProps = (state: AppState): StateProps => {
     };
 };
 
-export default connect(mapStateToProps, { loadCases })(Cases);
+export default connect(mapStateToProps, {loadCases})(Cases);
