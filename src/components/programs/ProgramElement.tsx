@@ -7,6 +7,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import { CategoryDto } from "../../rest/CategoriesService";
 
 interface ProgramElementState {
     modalVisible: boolean
@@ -15,6 +16,7 @@ interface ProgramElementState {
 
 interface ProgramElementProps {
     program: ProgramDto
+    categories: CategoryDto[]
 }
 
 class ProgramElement extends React.Component<ProgramElementProps, ProgramElementState> {
@@ -56,6 +58,15 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
     }
 
     render(): React.ReactNode {
+        let categories;
+        if (this.props.categories && this.props.categories.length > 0) {
+            categories = this.props.categories.map((value) => {
+                return (
+                    <MenuItem value={value.category}> {value.category} </MenuItem>
+                );
+            });
+        }
+
         return (
             <React.Fragment>
                 <Modal
@@ -140,17 +151,31 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                 }
                                 }
                             />
-                            <TextField
-                                id="category" label={"Category"} variant="filled"
-                                style={{width: '100%'}} value={this.state.program.category}
-                                onChange={event => {
-                                    let program = this.state.program;
-                                    program.category = event.target.value;
-                                    this.setState({
-                                        program: program
-                                    })
-                                }}
-                            />
+                            <FormControl variant="filled" style={{width: '100%'}}>
+                                <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
+                                <Select
+                                    MenuProps={{
+                                        disableScrollLock: true,
+                                        getContentAnchorEl: null,
+                                        anchorOrigin: {
+                                            vertical: 'bottom',
+                                            horizontal: 'left',
+                                        },
+                                    }}
+                                    labelId="demo-simple-select-filled-label"
+                                    id="demo-simple-select-filled"
+                                    value={this.state.program.category}
+                                    onChange={(event) => {
+                                        let program = this.state.program;
+                                        program.category = event.target.value as string;
+                                        this.setState({
+                                            program: program
+                                        })
+                                    }}
+                                >
+                                    {categories}
+                                </Select>
+                            </FormControl>
                             <FormControl variant="filled" style={{width: '100%'}}>
                                 <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
                                 <Select

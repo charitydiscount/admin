@@ -13,6 +13,11 @@ export enum ExpressLink {
 
 export enum FirebaseTable {
     ROLES = 'roles',
+    META = 'meta'
+}
+
+export enum TableDocument {
+    PROGRAMS = 'programs'
 }
 
 export const spinnerCss = css`

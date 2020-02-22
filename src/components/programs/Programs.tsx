@@ -10,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Modal from '../modal';
+import { CategoryDto, getCategories } from "../../rest/CategoriesService";
 
 interface ProgramsProps {
 }
@@ -17,6 +18,7 @@ interface ProgramsProps {
 interface ProgramsState {
     isLoading: boolean,
     programs: ProgramDto[],
+    categories: CategoryDto[]
     currentPage: number,
     defaultProgramList: ProgramDto[],
     sort: SortType,
@@ -55,6 +57,7 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
             sortOrder: true,
             filterType: FilterType.EMPTY,
             modalVisible: false,
+            categories: [],
             createProgram: {...DEFAULT_PROGRAM}
         };
         this.searchPrograms = this.searchPrograms.bind(this);
@@ -78,6 +81,17 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
         } catch (error) {
             alert(error);
             //programs not loaded
+        }
+        try {
+            let response = await getCategories();
+            if (response) {
+                this.setState({
+                    categories: response
+                });
+            }
+        } catch (error) {
+            alert(error);
+            //categories not loaded
         }
     }
 
@@ -209,10 +223,19 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
             programsList = programsList
                 .map((value, index) => {
                     return (
-                        <ProgramElement key={index} program={value}/>
+                        <ProgramElement key={index} program={value} categories={this.state.categories}/>
                     );
                 });
         }
+        let categories;
+        if (this.state.categories && this.state.categories.length > 0) {
+            categories = this.state.categories.map((value) => {
+                return (
+                    <MenuItem value={value.category}> {value.category} </MenuItem>
+                );
+            });
+        }
+
         return (
             <React.Fragment>
                 <div className="row">
@@ -236,16 +259,31 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                                })
                                            }}
                                 />
-                                <TextField id="category" label={"Category"} variant="filled" style={{width: '100%'}}
-                                           value={this.state.createProgram.category}
-                                           onChange={(event) => {
-                                               let program = this.state.createProgram;
-                                               program.category = event.target.value;
-                                               this.setState({
-                                                   createProgram: program
-                                               })
-                                           }}
-                                />
+                                <FormControl variant="filled" style={{width: '100%'}}>
+                                    <InputLabel id="demo-simple-select-filled-label">Category</InputLabel>
+                                    <Select
+                                        MenuProps={{
+                                            disableScrollLock: true,
+                                            getContentAnchorEl: null,
+                                            anchorOrigin: {
+                                                vertical: 'bottom',
+                                                horizontal: 'left',
+                                            },
+                                        }}
+                                        labelId="demo-simple-select-filled-label"
+                                        id="demo-simple-select-filled"
+                                        value={this.state.createProgram.category}
+                                        onChange={(event) => {
+                                            let program = this.state.createProgram;
+                                            program.category = event.target.value as string;
+                                            this.setState({
+                                                createProgram: program
+                                            })
+                                        }}
+                                    >
+                                        {categories}
+                                    </Select>
+                                </FormControl>
                                 <FormControl variant="filled" style={{width: '100%'}}>
                                     <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
                                     <Select
@@ -326,7 +364,8 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                            }}
                                 />
                                 <FormControl variant="filled" style={{width: '100%'}}>
-                                    <InputLabel id="demo-simple-select-filled-label">Default Lead Commission Type</InputLabel>
+                                    <InputLabel id="demo-simple-select-filled-label">Default Lead Commission
+                                        Type</InputLabel>
                                     <Select
                                         MenuProps={{
                                             disableScrollLock: true,
@@ -366,7 +405,8 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                            }}
                                 />
                                 <FormControl variant="filled" style={{width: '100%'}}>
-                                    <InputLabel id="demo-simple-select-filled-label">Default Sale Commission Type</InputLabel>
+                                    <InputLabel id="demo-simple-select-filled-label">Default Sale Commission
+                                        Type</InputLabel>
                                     <Select
                                         MenuProps={{
                                             disableScrollLock: true,
