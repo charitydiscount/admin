@@ -1,6 +1,6 @@
 import React from 'react'
-import {Routes} from "./Routes";
-import {emptyHrefLink, handleLogOut} from "../../Helper";
+import { Routes } from "./Routes";
+import { emptyHrefLink, handleLogOut } from "../../Helper";
 import { Link } from "react-router-dom";
 
 class HeaderLayoutMobile extends React.Component {
@@ -27,17 +27,23 @@ class HeaderLayoutMobile extends React.Component {
                         <div className="container-fluid">
                             <ul className="navbar-mobile__list list-unstyled">
                                 <li className="has-sub">
-                                    <Link
-                                        to={Routes.COMMISSIONS}
-                                    >
+                                    <Link to={Routes.COMMISSIONS}>
                                         <i className="fas fa-table"/>Commissions
                                     </Link>
                                 </li>
                                 <li className="has-sub">
-                                    <Link
-                                        to={Routes.PROGRAMS}
-                                    >
+                                    <Link to={Routes.PROGRAMS}>
                                         <i className="fas fa-table"/>Programs
+                                    </Link>
+                                </li>
+                                <li className="has-sub">
+                                    <Link to={Routes.CASES}>
+                                        <i className="fas fa-table"/>Charity Cases
+                                    </Link>
+                                </li>
+                                <li className="has-sub">
+                                    <Link to={Routes.CASHOUT}>
+                                        <i className="fas fa-table"/>Cashouts
                                     </Link>
                                 </li>
                                 <li className="has-sub">

@@ -55,7 +55,7 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
             sortOrder: true,
             sort: SortType.EMPTY
         };
-        this.searchPrograms = this.searchPrograms.bind(this);
+        this.searchCommissions = this.searchCommissions.bind(this);
         this.enterSearch = this.enterSearch.bind(this);
         this.updatePageNumber = this.updatePageNumber.bind(this);
         this.filter = this.filter.bind(this);
@@ -80,7 +80,7 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
 
     enterSearch(event) {
         if (event.keyCode === 13) {
-            this.searchPrograms();
+            this.searchCommissions();
         }
     }
 
@@ -99,7 +99,7 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
         }
     }
 
-    searchPrograms() {
+    searchCommissions() {
         if (this.search) {
             let resultedPrograms = this.state.defaultCommissionsList
                 .filter(value => value.commissionId.startsWith(this.search) || value.userId.startsWith(this.search));
@@ -225,7 +225,7 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                                         style={{marginTop: 25}}
                                         size={"large"}
                                         onClick={
-                                            this.searchPrograms
+                                            this.searchCommissions
                                         }
                                     >
                                         >

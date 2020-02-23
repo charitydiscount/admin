@@ -7,6 +7,7 @@ export const EXPRESS_URL =
 
 export enum ExpressLink {
     PROGRAMS = 'programs',
+    CASHOUT = 'cashout',
     COMMISSIONS = 'commissions',
     CASES = 'cases',
 }
@@ -86,3 +87,13 @@ export enum Operation {
     CREATE = 'C',
     UPDATE = 'U',
 }
+
+export const dateOptions = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+};
+

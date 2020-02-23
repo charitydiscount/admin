@@ -5,4 +5,5 @@ export enum Routes {
     COMMISSIONS = '/commissions',
     PROGRAMS = '/programs',
     CASES = '/cases',
+    CASHOUT = '/cashout'
 }
