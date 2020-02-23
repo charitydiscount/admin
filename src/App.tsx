@@ -16,9 +16,8 @@ interface AppProps {
 
 class App extends React.Component<AppProps> {
     public render() {
-        if (this.props.isLoggedIn) {
-            return this.props.isAuthorized ? (
-
+        if (this.props.isLoggedIn && this.props.isAuthorized) {
+            return (
                 <React.Fragment>
                     <div className="page-wrapper">
                         <HeaderLayoutMobile/>
@@ -35,9 +34,7 @@ class App extends React.Component<AppProps> {
                         </div>
                     </div>
                 </React.Fragment>
-            ) : (
-                <React.Fragment/>
-            );
+            )
         } else {
             return (
                 <React.Fragment>

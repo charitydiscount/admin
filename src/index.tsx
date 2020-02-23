@@ -47,6 +47,9 @@ auth.onAuthStateChanged(user => {
         authorizeUser().then(authResult => {
             if (authResult === true) {
                 store.dispatch(UserActions.setAuthorizedUserAction());
+            } else {
+                history.push("/");
+                alert("User not authorized");
             }
         });
     }
