@@ -171,7 +171,7 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
                                 <table className="table table-data2">
                                     <thead>
                                     <tr>
-                                        {/*<th>Created at</th>*/}
+                                        <th>Created at</th>
                                         <th>User Id</th>
                                         <th>Status</th>
                                         <th>amount</th>

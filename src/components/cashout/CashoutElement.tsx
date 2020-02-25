@@ -16,9 +16,7 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
         return (
             <React.Fragment>
                 <tr className="tr-shadow">
-                    {/*<td>{this.props.cashout.createdAt*/}
-                            {/*.toDate()*/}
-                            {/*.toLocaleDateString('ro-RO', dateOptions)}</td>*/}
+                    <td>{new Date(parseFloat(this.props.cashout.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}</td>
                     <td>{this.props.cashout.userId}</td>
                     <td>{this.props.cashout.status}</td>
                     <td>{this.props.cashout.amount}</td>

@@ -14,8 +14,13 @@ export interface CashoutDto {
     target: string,
     amount: number,
     currency: string,
-    createdAt: firestore.Timestamp,
-    updatedAt: firestore.Timestamp
+    createdAt: ProxyDate,
+    updatedAt: ProxyDate
+}
+
+export interface ProxyDate {
+    _seconds: string
+    _nanoseconds: string
 }
 
 
@@ -34,5 +39,8 @@ export async function getCashouts() {
     return Object.entries(response.data as CashoutDocDto)
         .map(([index, cashout]) => {
             return cashout;
+        })
+        .sort((p1, p2) => {
+            return p2.createdAt._seconds - p1.createdAt._seconds;
         });
 }
