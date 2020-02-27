@@ -1,5 +1,5 @@
 import React from "react";
-import { CashoutDto, getCashouts } from "../../rest/CashoutService";
+import { getCashouts, UiCashoutDto } from "../../rest/CashoutService";
 import { spinnerCss } from "../../Helper";
 import FadeLoader from 'react-spinners/FadeLoader';
 import CashoutElement from "./CashoutElement";
@@ -13,8 +13,8 @@ export interface CashoutsProps {
 export interface CashoutsState {
     isLoading: boolean,
     currentPage: number,
-    cashouts: CashoutDto[],
-    defaultCashoutsList: CashoutDto[],
+    cashouts: UiCashoutDto[],
+    defaultCashoutsList: UiCashoutDto[]
 }
 
 const pageLimit = 8; // cashouts per page
@@ -51,7 +51,7 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
     searchCashouts() {
         if (this.search) {
             let resultedPrograms = this.state.defaultCashoutsList
-                .filter(value => value.userId.startsWith(this.search));
+                .filter(value => value.cashout.userId.startsWith(this.search));
             this.setState({
                 cashouts: resultedPrograms
             })
@@ -69,8 +69,8 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
             let response = await getCashouts();
             if (response) {
                 this.setState({
-                    cashouts: response as CashoutDto[],
-                    defaultCashoutsList: response as CashoutDto[],
+                    cashouts: response as UiCashoutDto[],
+                    defaultCashoutsList: response as UiCashoutDto[],
                     isLoading: false
                 });
             }
@@ -97,7 +97,7 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
             cashoutList = cashoutList
                 .map((value, index) => {
                     return (
-                        <CashoutElement key={index} cashout={value}/>
+                        <CashoutElement key={index} uiCashout={value}/>
                     );
                 });
         }
@@ -172,6 +172,7 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
                                     <thead>
                                     <tr>
                                         <th>Created at</th>
+                                        <th>Id</th>
                                         <th>User Id</th>
                                         <th>Status</th>
                                         <th>amount</th>
