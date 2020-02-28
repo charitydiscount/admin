@@ -1,5 +1,5 @@
 import React from "react";
-import { UiCashoutDto, updateCashout } from "../../rest/CashoutService";
+import { CashoutDto, updateCashout } from "../../rest/CashoutService";
 import { dateOptions, emptyHrefLink } from "../../Helper";
 import Modal from '../modal';
 import { TextField } from "@material-ui/core";
@@ -9,11 +9,11 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 
 interface CashoutElementProps {
-    uiCashout: UiCashoutDto
+    cashout: CashoutDto
 }
 
 interface CashoutElementState {
-    uiCashout: UiCashoutDto,
+    cashout: CashoutDto,
     modalVisible: boolean
 }
 
@@ -22,14 +22,14 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
     constructor(props: CashoutElementProps) {
         super(props);
         this.state = ({
-            uiCashout: this.props.uiCashout,
+            cashout: this.props.cashout,
             modalVisible: false
         })
     }
 
     openModal() {
         this.setState({
-            uiCashout: this.props.uiCashout,
+            cashout: this.props.cashout,
             modalVisible: true
         });
     }
@@ -42,7 +42,7 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
 
     async onModalSave() {
         try {
-            let response = await updateCashout(this.props.uiCashout.id, this.props.uiCashout.cashout);
+            let response = await updateCashout(this.props.cashout);
             if (response) {
                 alert("Cashout successfully updated");
                 window.location.reload();
@@ -56,12 +56,22 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
 
     render(): React.ReactNode {
         let statusColumn;
-        if (this.props.uiCashout.cashout.status === "PAID") {
-            statusColumn = <td style={{backgroundColor: "#6eff24"}}>{this.props.uiCashout.cashout.status}</td>;
-        } else if (this.props.uiCashout.cashout.status === "REJECTED") {
-            statusColumn = <td style={{backgroundColor: "#ff4c4f"}}>{this.props.uiCashout.cashout.status}</td>;
+        let  idColumn = <td>{this.props.cashout.id}</td>;
+        if (this.props.cashout.status === "PAID") {
+            statusColumn = <td style={{backgroundColor: "#6eff24"}}>{this.props.cashout.status}</td>;
+        } else if (this.props.cashout.status === "REJECTED") {
+            statusColumn = <td style={{backgroundColor: "#ff4c4f"}}>{this.props.cashout.status}</td>;
         } else {
-            statusColumn = <td style={{backgroundColor: "#fffc82"}}>{this.props.uiCashout.cashout.status}</td>;
+            statusColumn = <td style={{backgroundColor: "#fffc82"}}>{this.props.cashout.status}</td>;
+            idColumn =  <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
+                <a href={emptyHrefLink} style={{
+                    textDecoration: "underline",
+                    color: "#007bff",
+                    cursor: "pointer"
+                }} onClick={() => this.openModal()}>
+                    {this.props.cashout.id}
+                </a>
+            </td>;
         }
 
         return (
@@ -76,11 +86,11 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                     <React.Fragment>
                         <TextField
                             id="id" label={"Id"} variant="filled" style={{width: '100%'}}
-                            value={this.props.uiCashout.id} disabled={true}
+                            value={this.props.cashout.id} disabled={true}
                         />
                         <TextField
                             id="userId" label={"User id"} variant="filled" style={{width: '100%'}}
-                            value={this.props.uiCashout.cashout.userId} disabled={true}
+                            value={this.props.cashout.userId} disabled={true}
                         />
                         <FormControl variant="filled" style={{width: '100%'}}>
                             <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
@@ -95,12 +105,12 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                                 }}
                                 labelId="demo-simple-select-filled-label"
                                 id="demo-simple-select-filled"
-                                value={this.state.uiCashout.cashout.status}
+                                value={this.state.cashout.status}
                                 onChange={event => {
-                                    let cashout = this.state.uiCashout;
-                                    cashout.cashout.status = event.target.value as string;
+                                    let cashout = this.state.cashout;
+                                    cashout.status = event.target.value as string;
                                     this.setState({
-                                        uiCashout: cashout
+                                        cashout: cashout
                                     })
                                 }}
                             >
@@ -112,20 +122,11 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                     }
                 </Modal>
                 <tr className="tr-shadow">
-                    <td>{new Date(parseFloat(this.props.uiCashout.cashout.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}</td>
-                    <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                        <a href={emptyHrefLink} style={{
-                            textDecoration: "underline",
-                            color: "#007bff",
-                            cursor: "pointer"
-                        }} onClick={() => this.openModal()}>
-                            {this.props.uiCashout.id}
-                        </a>
-                    </td>
-                    <td>{this.props.uiCashout.cashout.userId}</td>
+                    <td>{new Date(parseFloat(this.props.cashout.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}</td>
+                    {idColumn}
+                    <td>{this.props.cashout.userId}</td>
                     {statusColumn}
-                    <td>{this.props.uiCashout.cashout.amount}</td>
-                    <td>{this.props.uiCashout.cashout.target}</td>
+                    <td>{this.props.cashout.amount}</td>
                 </tr>
                 <tr className="spacer"></tr>
             </React.Fragment>

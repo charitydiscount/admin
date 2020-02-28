@@ -6,12 +6,8 @@ export interface CashoutDocDto {
     [id: number]: CashoutDto;
 }
 
-export interface UiCashoutDto {
-    id: string,
-    cashout: CashoutDto
-}
-
 export interface CashoutDto {
+    id: string,
     status: string,
     userId: string,
     target: string,
@@ -41,23 +37,21 @@ export async function getCashouts() {
 
     return Object.entries(response.data as CashoutDocDto)
         .map(([id, cashout]) => {
-            return {
-                id: id,
-                cashout: cashout
-            };
+            console.log(cashout);
+           return cashout
         })
         .sort((p1, p2) => {
-            return p2.cashout.createdAt._seconds - p1.cashout.createdAt._seconds;
+            return p2.createdAt._seconds - p1.createdAt._seconds;
         });
 }
 
-export async function updateCashout(id: string, cashout: CashoutDto) {
+export async function updateCashout(cashout: CashoutDto) {
     if (!auth.currentUser) {
         throw Error('User not logged in');
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = EXPRESS_URL + ExpressLink.CASHOUT + "/" + id;
+    let url = EXPRESS_URL + ExpressLink.CASHOUT + "/" + cashout.id;
 
     let response = await axios.put(url, cashout, {
         headers: {Authorization: `Bearer ${token}`},
