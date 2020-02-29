@@ -98,7 +98,11 @@ export async function updateTransaction(type: TxType, transaction: TransactionDt
     url += "/" + transaction.id;
 
     let requestUpdate = {
-        status: transaction.status
+        status: transaction.status,
+        target: {
+            id: transaction.target.id,
+            name: transaction.target.name
+        }
     };
     let response = await axios.put(url, requestUpdate, {
         headers: {Authorization: `Bearer ${token}`},

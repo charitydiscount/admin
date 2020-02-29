@@ -143,8 +143,28 @@ class DonationElement extends React.Component<DonationElementProps, DonationElem
                             value={this.props.donation.userId} disabled={true}
                         />
                         <TextField
-                            id="causeId" label={"Case Title"} variant="filled" style={{width: '100%'}}
-                            value={this.props.donation.target.name} disabled={true}
+                            id="caseId" label={"Case Id"} variant="filled" style={{width: '100%'}}
+                            value={this.props.donation.target.id}
+                            disabled={this.props.donation.status === "PAID"}
+                            onChange={event => {
+                                let donation = this.state.donation;
+                                donation.target.id = event.target.value;
+                                this.setState({
+                                    donation: donation
+                                });
+                            }}
+                        />
+                        <TextField
+                            id="caseTitle" label={"Case Title"} variant="filled" style={{width: '100%'}}
+                            value={this.props.donation.target.name}
+                            disabled={this.props.donation.status === "PAID"}
+                            onChange={event => {
+                                let donation = this.state.donation;
+                                donation.target.name = event.target.value;
+                                this.setState({
+                                    donation: donation
+                                });
+                            }}
                         />
                         <TextField
                             id="email" label={"Email"} variant="filled" style={{width: '100%'}}

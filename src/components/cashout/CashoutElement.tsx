@@ -155,13 +155,28 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                         />
                         <TextField
                             id="iban" label={"IBAN"} variant="filled" style={{width: '100%'}}
-                            value={this.props.cashout.target.id} disabled={true}
+                            value={this.props.cashout.target.id}
+                            disabled={this.props.cashout.status === "PAID"}
+                            onChange={event => {
+                                let cashout = this.state.cashout;
+                                cashout.target.id = event.target.value;
+                                this.setState({
+                                    cashout: cashout
+                                });
+                            }}
                         />
                         <TextField
-                            id="name" label={"Name"} variant="filled" style={{width: '100%'}}
-                            value={this.props.cashout.target.name} disabled={true}
+                            id="name" label={"Account holder name"} variant="filled" style={{width: '100%'}}
+                            value={this.props.cashout.target.name}
+                            disabled={this.props.cashout.status === "PAID"}
+                            onChange={event => {
+                                let cashout = this.state.cashout;
+                                cashout.target.name = event.target.value;
+                                this.setState({
+                                    cashout: cashout
+                                });
+                            }}
                         />
-
                         {statusUpdateColumn}
                     </React.Fragment>
                     }
