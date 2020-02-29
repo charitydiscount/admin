@@ -50,6 +50,37 @@ export async function getTransactions(type: TxType) {
         });
 }
 
+export async function getTotalAmount(type: TxType, userId: string) {
+    if (!auth.currentUser) {
+        throw Error('User not logged in');
+    }
+
+    const token = await auth.currentUser.getIdToken();
+    let url = EXPRESS_URL;
+    if (type === TxType.CASHOUT) {
+        url += ExpressLink.CASHOUT;
+    } else if (type === TxType.DONATION) {
+        url += ExpressLink.DONATION;
+    } else {
+        return;
+    }
+    url += "/user/" + userId;
+
+    let response = await axios.get(url, {
+        headers: {Authorization: `Bearer ${token}`}
+    });
+
+    let totalAmount = 0;
+    Object.entries(response.data as TransactionDocDto)
+        .map(([id, transaction]) => {
+            return transaction;
+        }).forEach(element => {
+        totalAmount += (element as TransactionDto).amount;
+    });
+
+    return totalAmount;
+}
+
 export async function updateTransaction(type: TxType, transaction: TransactionDto) {
     if (!auth.currentUser) {
         throw Error('User not logged in');

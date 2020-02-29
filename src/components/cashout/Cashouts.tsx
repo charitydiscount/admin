@@ -189,9 +189,9 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
                                     <tr>
                                         <th>Created</th>
                                         <th>Id</th>
-                                        <th>User Id</th>
                                         <th>Status</th>
                                         <th>amount</th>
+                                        <th>User Id</th>
                                     </tr>
                                     </thead>
                                     <tbody>

@@ -6,7 +6,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import { TransactionDto, updateTransaction } from "../../rest/TransactionsService";
+import { getTotalAmount, TransactionDto, updateTransaction } from "../../rest/TransactionsService";
 
 interface CashoutElementProps {
     key: string,
@@ -16,7 +16,9 @@ interface CashoutElementProps {
 
 interface CashoutElementState {
     cashout: TransactionDto,
-    modalVisible: boolean
+    modalVisible: boolean,
+    modalUserVisible: boolean,
+    totalAmount: number
 }
 
 class CashoutElement extends React.Component<CashoutElementProps, CashoutElementState> {
@@ -25,6 +27,8 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
         super(props);
         this.state = ({
             cashout: this.props.cashout,
+            totalAmount: 0,
+            modalUserVisible: false,
             modalVisible: false
         })
     }
@@ -41,6 +45,29 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
             modalVisible: false
         });
     }
+
+    async openUserModal() {
+        try {
+            let response = await getTotalAmount(TxType.CASHOUT, this.props.cashout.userId);
+            if (response) {
+                this.setState({
+                    totalAmount: response as number,
+                    modalUserVisible: true
+                })
+            } else {
+                alert("Something went wrong with returning total amount");
+            }
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+    closeUserModal() {
+        this.setState({
+            modalUserVisible: false
+        });
+    }
+
 
     async onModalSave() {
         try {
@@ -139,12 +166,36 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                     </React.Fragment>
                     }
                 </Modal>
+                <Modal
+                    visible={this.state.modalUserVisible}
+                    onClose={() => this.closeUserModal()}
+                    title="Total cashout for user"
+                    onSave={() => {
+                    }}
+                >
+                    {this.state.modalUserVisible &&
+                    <React.Fragment>
+                        <TextField
+                            id="userId" label={"User id"} variant="filled" style={{width: '100%'}}
+                            value={this.props.cashout.userId} disabled={true}
+                        />
+                        <TextField
+                            id="email" label={"Email"} variant="filled" style={{width: '100%'}}
+                            value={this.props.email} disabled={true}
+                        />
+                        <TextField
+                            id="totalAmount" label={"Total Amount(lei)"} variant="filled" style={{width: '100%'}}
+                            value={this.state.totalAmount} disabled={true}
+                        />
+                    </React.Fragment>
+                    }
+                </Modal>
                 <tr className="tr-shadow">
                     <td>{
                         this.props.cashout.createdAt &&
                         new Date(parseFloat(this.props.cashout.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}
                     </td>
-                    <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
+                    <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
                         <a href={emptyHrefLink} style={{
                             textDecoration: "underline",
                             color: "#007bff",
@@ -153,9 +204,17 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                             {this.props.cashout.id}
                         </a>
                     </td>
-                    <td>{this.props.cashout.userId}</td>
                     {statusColumn}
                     <td>{this.props.cashout.amount}</td>
+                    <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
+                        <a href={emptyHrefLink} style={{
+                            textDecoration: "underline",
+                            color: "#007bff",
+                            cursor: "pointer"
+                        }} onClick={() => this.openUserModal()}>
+                            {this.props.cashout.userId}
+                        </a>
+                    </td>
                 </tr>
                 <tr className="spacer"></tr>
             </React.Fragment>

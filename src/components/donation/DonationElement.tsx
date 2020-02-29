@@ -6,7 +6,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import { TransactionDto, updateTransaction } from "../../rest/TransactionsService";
+import { getTotalAmount, TransactionDto, updateTransaction } from "../../rest/TransactionsService";
 
 
 interface DonationElementProps {
@@ -17,6 +17,8 @@ interface DonationElementProps {
 
 interface DonationElementState {
     donation: TransactionDto,
+    modalUserVisible: boolean,
+    totalAmount: number,
     modalVisible: boolean
 }
 
@@ -26,6 +28,8 @@ class DonationElement extends React.Component<DonationElementProps, DonationElem
         super(props);
         this.state = ({
             donation: this.props.donation,
+            modalUserVisible: false,
+            totalAmount: 0,
             modalVisible: false
         })
     }
@@ -36,6 +40,29 @@ class DonationElement extends React.Component<DonationElementProps, DonationElem
             modalVisible: true
         });
     }
+
+    async openUserModal() {
+        try {
+            let response = await getTotalAmount(TxType.DONATION, this.props.donation.userId);
+            if (response) {
+                this.setState({
+                    totalAmount: response as number,
+                    modalUserVisible: true
+                })
+            } else {
+                alert("Something went wrong with returning total amount");
+            }
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+    closeUserModal() {
+        this.setState({
+            modalUserVisible: false
+        });
+    }
+
 
     closeModal() {
         this.setState({
@@ -84,10 +111,10 @@ class DonationElement extends React.Component<DonationElementProps, DonationElem
                     id="demo-simple-select-filled"
                     value={this.state.donation.status}
                     onChange={event => {
-                        let cashout = this.state.donation;
-                        cashout.status = event.target.value as string;
+                        let donation = this.state.donation;
+                        donation.status = event.target.value as string;
                         this.setState({
-                            donation: cashout
+                            donation: donation
                         })
                     }}
                 >
@@ -102,7 +129,7 @@ class DonationElement extends React.Component<DonationElementProps, DonationElem
                 <Modal
                     visible={this.state.modalVisible}
                     onClose={() => this.closeModal()}
-                    title="Update cashout"
+                    title="Update donation"
                     onSave={() => this.onModalSave()}
                 >
                     {this.state.modalVisible &&
@@ -127,12 +154,36 @@ class DonationElement extends React.Component<DonationElementProps, DonationElem
                     </React.Fragment>
                     }
                 </Modal>
+                <Modal
+                    visible={this.state.modalUserVisible}
+                    onClose={() => this.closeUserModal()}
+                    title="Total donation for user"
+                    onSave={() => {
+                    }}
+                >
+                    {this.state.modalUserVisible &&
+                    <React.Fragment>
+                        <TextField
+                            id="userId" label={"User id"} variant="filled" style={{width: '100%'}}
+                            value={this.props.donation.userId} disabled={true}
+                        />
+                        <TextField
+                            id="email" label={"Email"} variant="filled" style={{width: '100%'}}
+                            value={this.props.email} disabled={true}
+                        />
+                        <TextField
+                            id="totalAmount" label={"Total Amount(lei)"} variant="filled" style={{width: '100%'}}
+                            value={this.state.totalAmount} disabled={true}
+                        />
+                    </React.Fragment>
+                    }
+                </Modal>
                 <tr className="tr-shadow">
                     <td>{
                         this.props.donation.createdAt &&
                         new Date(parseFloat(this.props.donation.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}
                     </td>
-                    <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
+                    <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
                         <a href={emptyHrefLink} style={{
                             textDecoration: "underline",
                             color: "#007bff",
@@ -141,9 +192,17 @@ class DonationElement extends React.Component<DonationElementProps, DonationElem
                             {this.props.donation.id}
                         </a>
                     </td>
-                    <td>{this.props.donation.userId}</td>
                     {statusColumn}
                     <td>{this.props.donation.amount}</td>
+                    <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
+                        <a href={emptyHrefLink} style={{
+                            textDecoration: "underline",
+                            color: "#007bff",
+                            cursor: "pointer"
+                        }} onClick={() => this.openUserModal()}>
+                            {this.props.donation.userId}
+                        </a>
+                    </td>
                 </tr>
                 <tr className="spacer"></tr>
             </React.Fragment>
