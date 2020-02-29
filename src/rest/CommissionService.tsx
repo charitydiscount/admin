@@ -65,11 +65,13 @@ export async function getCommissions() {
                 )
         });
 
-    return commissions.sort((a, b) => {
-        if (a.userId > b.userId) {
-            return -1;
-        } else {
-            return 1;
-        }
-    });
+
+    return commissions
+        .sort((p1, p2) => {
+            if (p1.details.createdAt._seconds > p2.details.createdAt._seconds) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
 }

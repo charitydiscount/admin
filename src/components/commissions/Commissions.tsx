@@ -9,6 +9,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { getAllUsers } from "../../rest/UserService";
+import { CashoutDto } from "../../rest/CashoutService";
 
 interface CommissionsProps {
 
@@ -20,6 +22,7 @@ interface CommissionsState {
     defaultCommissionsList: CommissionDto[],
     currentPage: number,
     filterType: FilterType,
+    users: Map<string, string>,
     sortOrder: boolean,
     sort: SortType
 }
@@ -52,6 +55,7 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
             defaultCommissionsList: [],
             currentPage: 0,
             filterType: FilterType.EMPTY,
+            users: new Map<string, string>(),
             sortOrder: true,
             sort: SortType.EMPTY
         };
@@ -64,6 +68,7 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
 
     async componentDidMount() {
         document.addEventListener('keydown', this.enterSearch, false);
+
         try {
             let response = await getCommissions();
             if (response) {
@@ -75,6 +80,18 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
             }
         } catch (error) {
             alert(error);
+        }
+
+        try {
+            let response = await getAllUsers();
+            if (response) {
+                this.setState({
+                    users: response as Map<string, string>,
+                });
+            }
+        } catch (error) {
+            alert(error);
+            //users not loaded
         }
     }
 
@@ -200,7 +217,8 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
             commissionsList = commissionsList
                 .map((value, index) => {
                     return (
-                        <CommissionsElement key={index} commission={value}/>
+                        <CommissionsElement key={index} commission={value}
+                                            email={this.state.users.get((value as CashoutDto).userId)}/>
                     );
                 });
         }

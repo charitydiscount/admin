@@ -5,7 +5,8 @@ import { TextField } from "@material-ui/core";
 import { dateOptions, emptyHrefLink } from "../../Helper";
 
 interface CommissionsElementProps {
-    commission: CommissionDto
+    commission: CommissionDto,
+    email?: string
 }
 
 interface CommissionsElementState {
@@ -43,6 +44,15 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
     }
 
     render(): React.ReactNode {
+        let statusColumn;
+        if (this.props.commission.details.status === "paid") {
+            statusColumn = <td style={{backgroundColor: "#6eff24"}}>{this.props.commission.details.status}</td>;
+        } else if (this.props.commission.details.status === "rejected") {
+            statusColumn = <td style={{backgroundColor: "#ff4c4f"}}>{this.props.commission.details.status}</td>;
+        } else {
+            statusColumn = <td style={{backgroundColor: "#fffc82"}}>{this.props.commission.details.status}</td>;
+        }
+        
         return (
             <React.Fragment>
                 <Modal
@@ -56,6 +66,10 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                         <TextField
                             id="uniqueCode" label={"User id"} variant="filled" style={{width: '100%'}}
                             value={this.state.commission.userId} disabled={true}
+                        />
+                        <TextField
+                            id="email" label={"Email"} variant="filled" style={{width: '100%'}}
+                            value={this.props.email} disabled={true}
                         />
                         <TextField
                             id="uniqueCode" label={"Commission id"} variant="filled" style={{width: '100%'}}
@@ -94,7 +108,7 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                             {this.props.commission.commissionId}
                         </a>
                     </td>
-                    <td>{this.props.commission.details.status}</td>
+                    {statusColumn}
                     <td>{this.props.commission.details.amount}</td>
                     <td>{this.props.commission.details.currency}</td>
                     <td>{this.props.commission.details.originalCurrency}</td>
