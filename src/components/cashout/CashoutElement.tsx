@@ -9,7 +9,9 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 
 interface CashoutElementProps {
-    cashout: CashoutDto
+    key: string,
+    cashout: CashoutDto,
+    email?: string
 }
 
 interface CashoutElementState {
@@ -57,7 +59,7 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
     render(): React.ReactNode {
         let statusColumn;
         let statusUpdateColumn = <TextField
-            id="userId" label={"Status"} variant="filled" style={{width: '100%'}}
+            id="status" label={"Status"} variant="filled" style={{width: '100%'}}
             value={this.props.cashout.status} disabled={true}
         />;
         if (this.props.cashout.status === "PAID") {
@@ -111,6 +113,10 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                         <TextField
                             id="userId" label={"User id"} variant="filled" style={{width: '100%'}}
                             value={this.props.cashout.userId} disabled={true}
+                        />
+                        <TextField
+                            id="email" label={"Email"} variant="filled" style={{width: '100%'}}
+                            value={this.props.email} disabled={true}
                         />
                         {statusUpdateColumn}
                     </React.Fragment>

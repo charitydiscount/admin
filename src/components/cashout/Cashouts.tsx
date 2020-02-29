@@ -5,6 +5,7 @@ import FadeLoader from 'react-spinners/FadeLoader';
 import CashoutElement from "./CashoutElement";
 import ReactPaginate from 'react-paginate';
 import { Button, TextField } from "@material-ui/core";
+import { getAllUsers } from "../../rest/UserService";
 
 export interface CashoutsProps {
 
@@ -14,6 +15,7 @@ export interface CashoutsState {
     isLoading: boolean,
     currentPage: number,
     cashouts: CashoutDto[],
+    users: Map<string, string>,
     defaultCashoutsList: CashoutDto[]
 }
 
@@ -29,6 +31,7 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
             isLoading: true,
             currentPage: 0,
             cashouts: [],
+            users: new Map<string, string>(),
             defaultCashoutsList: []
         };
         this.updatePageNumber = this.updatePageNumber.bind(this);
@@ -77,12 +80,24 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
         } catch (error) {
             alert(error);
         }
+
+        try {
+            let response = await getAllUsers();
+            if (response) {
+                this.setState({
+                    users: response as Map<string, string>,
+                });
+            }
+        } catch (error) {
+            alert(error);
+            //users not loaded
+        }
     }
 
     render(): React.ReactNode {
         let pageCount = 0;
         let cashoutList;
-        if(this.state.cashouts && this.state.cashouts.length > 0) {
+        if (this.state.cashouts && this.state.cashouts.length > 0) {
             cashoutList = this.state.cashouts;
 
             if (cashoutList.length > pageLimit) {
@@ -97,7 +112,8 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
             cashoutList = cashoutList
                 .map((value, index) => {
                     return (
-                        <CashoutElement key={index} cashout={value}/>
+                        <CashoutElement key={index} cashout={value}
+                                        email={this.state.users.get((value as CashoutDto).userId)}/>
                     );
                 });
         }
@@ -180,7 +196,7 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        {cashoutList}
+                                    {cashoutList}
                                     </tbody>
                                 </table>
                             </div>

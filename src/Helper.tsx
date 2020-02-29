@@ -14,6 +14,7 @@ export enum ExpressLink {
 
 export enum FirebaseTable {
     ROLES = 'roles',
+    USERS = 'users',
     META = 'meta'
 }
 

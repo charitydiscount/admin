@@ -31,7 +31,6 @@ export async function getCashouts() {
 
     return Object.entries(response.data as CashoutDocDto)
         .map(([id, cashout]) => {
-            console.log(cashout);
            return cashout
         })
         .sort((p1, p2) => {
