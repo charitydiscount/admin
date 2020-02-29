@@ -56,22 +56,42 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
 
     render(): React.ReactNode {
         let statusColumn;
-        let  idColumn = <td>{this.props.cashout.id}</td>;
+        let statusUpdateColumn = <TextField
+            id="userId" label={"Status"} variant="filled" style={{width: '100%'}}
+            value={this.props.cashout.status} disabled={true}
+        />;
         if (this.props.cashout.status === "PAID") {
             statusColumn = <td style={{backgroundColor: "#6eff24"}}>{this.props.cashout.status}</td>;
         } else if (this.props.cashout.status === "REJECTED") {
             statusColumn = <td style={{backgroundColor: "#ff4c4f"}}>{this.props.cashout.status}</td>;
         } else {
             statusColumn = <td style={{backgroundColor: "#fffc82"}}>{this.props.cashout.status}</td>;
-            idColumn =  <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                <a href={emptyHrefLink} style={{
-                    textDecoration: "underline",
-                    color: "#007bff",
-                    cursor: "pointer"
-                }} onClick={() => this.openModal()}>
-                    {this.props.cashout.id}
-                </a>
-            </td>;
+            statusUpdateColumn = <FormControl variant="filled" style={{width: '100%'}}>
+                <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
+                <Select
+                    MenuProps={{
+                        disableScrollLock: true,
+                        getContentAnchorEl: null,
+                        anchorOrigin: {
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        },
+                    }}
+                    labelId="demo-simple-select-filled-label"
+                    id="demo-simple-select-filled"
+                    value={this.state.cashout.status}
+                    onChange={event => {
+                        let cashout = this.state.cashout;
+                        cashout.status = event.target.value as string;
+                        this.setState({
+                            cashout: cashout
+                        })
+                    }}
+                >
+                    <MenuItem value={"ACCEPTED"}> Accepted </MenuItem>
+                    <MenuItem value={"PAID"}> Paid </MenuItem>
+                </Select>
+            </FormControl>
         }
 
         return (
@@ -92,38 +112,21 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                             id="userId" label={"User id"} variant="filled" style={{width: '100%'}}
                             value={this.props.cashout.userId} disabled={true}
                         />
-                        <FormControl variant="filled" style={{width: '100%'}}>
-                            <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
-                            <Select
-                                MenuProps={{
-                                    disableScrollLock: true,
-                                    getContentAnchorEl: null,
-                                    anchorOrigin: {
-                                        vertical: 'bottom',
-                                        horizontal: 'left',
-                                    },
-                                }}
-                                labelId="demo-simple-select-filled-label"
-                                id="demo-simple-select-filled"
-                                value={this.state.cashout.status}
-                                onChange={event => {
-                                    let cashout = this.state.cashout;
-                                    cashout.status = event.target.value as string;
-                                    this.setState({
-                                        cashout: cashout
-                                    })
-                                }}
-                            >
-                                <MenuItem value={"ACCEPTED"}> Accepted </MenuItem>
-                                <MenuItem value={"PAID"}> Paid </MenuItem>
-                            </Select>
-                        </FormControl>
+                        {statusUpdateColumn}
                     </React.Fragment>
                     }
                 </Modal>
                 <tr className="tr-shadow">
                     <td>{new Date(parseFloat(this.props.cashout.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}</td>
-                    {idColumn}
+                    <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
+                        <a href={emptyHrefLink} style={{
+                            textDecoration: "underline",
+                            color: "#007bff",
+                            cursor: "pointer"
+                        }} onClick={() => this.openModal()}>
+                            {this.props.cashout.id}
+                        </a>
+                    </td>
                     <td>{this.props.cashout.userId}</td>
                     {statusColumn}
                     <td>{this.props.cashout.amount}</td>
