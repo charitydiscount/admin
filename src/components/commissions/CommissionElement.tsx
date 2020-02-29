@@ -63,6 +63,14 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                 >
                     {this.state.modalVisible &&
                     <React.Fragment>
+                        {this.props.commission.details.updatedAt &&
+                        <TextField
+                            id="updated" label={"Last updated"} variant="filled" style={{width: '100%'}}
+                            value={
+                                new Date(parseFloat(this.props.commission.details.updatedAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)
+                            } disabled={true}
+                        />
+                        }
                         <TextField
                             id="uniqueCode" label={"User id"} variant="filled" style={{width: '100%'}}
                             value={this.state.commission.userId} disabled={true}
@@ -93,12 +101,8 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                 <tr className="tr-shadow">
                     <td>{
                         this.props.commission.details.createdAt &&
-                        new Date(parseFloat(this.props.commission.details.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}</td>
-                    <td>{
-                        this.props.commission.details.updatedAt &&
-                        new Date(parseFloat(this.props.commission.details.updatedAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)
-                    }</td>
-                    <td>{this.props.commission.userId}</td>
+                        new Date(parseFloat(this.props.commission.details.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}
+                    </td>
                     <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
                         <a href={emptyHrefLink} style={{
                             textDecoration: "underline",
@@ -110,8 +114,7 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                     </td>
                     {statusColumn}
                     <td>{this.props.commission.details.amount}</td>
-                    <td>{this.props.commission.details.currency}</td>
-                    <td>{this.props.commission.details.originalCurrency}</td>
+                    <td>{this.props.commission.userId}</td>
                 </tr>
                 <tr className="spacer"></tr>
             </React.Fragment>

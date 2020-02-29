@@ -135,7 +135,7 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                     <React.Fragment>
                         {this.props.cashout.updatedAt &&
                         <TextField
-                            id="updated" label={"Updated"} variant="filled" style={{width: '100%'}}
+                            id="updated" label={"Last Updated"} variant="filled" style={{width: '100%'}}
                             value={
                                 new Date(parseFloat(this.props.cashout.updatedAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)
                             } disabled={true}

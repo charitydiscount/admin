@@ -324,8 +324,6 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                                     <thead>
                                     <tr>
                                         <th>Created</th>
-                                        <th>Updated</th>
-                                        <th>User Id</th>
                                         <th>Commission Id</th>
                                         <th>Status</th>
                                         <th>
@@ -340,8 +338,7 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                                                 amount
                                             </a>
                                         </th>
-                                        <th>Currency</th>
-                                        <th>Original Currency</th>
+                                        <th>User Id</th>
                                     </tr>
                                     </thead>
                                     <tbody>
