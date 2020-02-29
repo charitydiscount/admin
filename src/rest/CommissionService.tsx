@@ -1,5 +1,5 @@
 import { auth } from "../index";
-import { EXPRESS_URL, ExpressLink } from "../Helper";
+import { EXPRESS_URL, ExpressLink, ProxyDate } from "../Helper";
 import axios from "axios";
 import { ProgramDto } from "./ProgramService";
 
@@ -25,8 +25,8 @@ export interface CommissionResponseDto {
     currency: string,
     originalCurrency: string,
     program: ProgramDto,
-    createdAt: Date,
-    updatedAt: Date
+    createdAt: ProxyDate,
+    updatedAt: ProxyDate
 }
 
 export async function getCommissions() {

@@ -117,7 +117,12 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                     }
                 </Modal>
                 <tr className="tr-shadow">
-                    <td>{new Date(parseFloat(this.props.cashout.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}</td>
+                    <td>{
+                        this.props.cashout.createdAt &&
+                        new Date(parseFloat(this.props.cashout.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}</td>
+                    <td>{
+                        this.props.cashout.updatedAt &&
+                        new Date(parseFloat(this.props.cashout.updatedAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}</td>
                     <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
                         <a href={emptyHrefLink} style={{
                             textDecoration: "underline",

@@ -83,6 +83,11 @@ export function truncateText(
     );
 }
 
+export interface ProxyDate {
+    _seconds: string
+    _nanoseconds: string
+}
+
 export enum Operation {
     CREATE = 'C',
     UPDATE = 'U',

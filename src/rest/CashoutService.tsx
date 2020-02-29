@@ -1,5 +1,5 @@
 import { auth } from "../index";
-import { EXPRESS_URL, ExpressLink } from "../Helper";
+import { EXPRESS_URL, ExpressLink, ProxyDate } from "../Helper";
 import axios from "axios";
 
 export interface CashoutDocDto {
@@ -16,12 +16,6 @@ export interface CashoutDto {
     createdAt: ProxyDate,
     updatedAt: ProxyDate
 }
-
-export interface ProxyDate {
-    _seconds: string
-    _nanoseconds: string
-}
-
 
 export async function getCashouts() {
     if (!auth.currentUser) {

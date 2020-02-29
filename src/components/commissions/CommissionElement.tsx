@@ -2,7 +2,7 @@ import React from "react";
 import { CommissionDto } from "../../rest/CommissionService";
 import Modal from '../modal';
 import { TextField } from "@material-ui/core";
-import { emptyHrefLink } from "../../Helper";
+import { dateOptions, emptyHrefLink } from "../../Helper";
 
 interface CommissionsElementProps {
     commission: CommissionDto
@@ -77,6 +77,13 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                     }
                 </Modal>
                 <tr className="tr-shadow">
+                    <td>{
+                        this.props.commission.details.createdAt &&
+                        new Date(parseFloat(this.props.commission.details.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}</td>
+                    <td>{
+                        this.props.commission.details.updatedAt &&
+                        new Date(parseFloat(this.props.commission.details.updatedAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)
+                    }</td>
                     <td>{this.props.commission.userId}</td>
                     <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
                         <a href={emptyHrefLink} style={{

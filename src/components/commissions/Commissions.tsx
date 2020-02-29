@@ -306,6 +306,8 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                                 <table className="table table-data2">
                                     <thead>
                                     <tr>
+                                        <th>Created</th>
+                                        <th>Updated</th>
                                         <th>User Id</th>
                                         <th>Commission Id</th>
                                         <th>Status</th>
