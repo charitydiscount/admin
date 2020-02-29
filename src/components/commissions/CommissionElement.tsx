@@ -1,16 +1,21 @@
 import React from "react";
-import { CommissionDto } from "../../rest/CommissionService";
+import { CommissionDto, updateCommission } from "../../rest/CommissionService";
 import Modal from '../modal';
 import { TextField } from "@material-ui/core";
 import { dateOptions, emptyHrefLink } from "../../Helper";
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 interface CommissionsElementProps {
     commission: CommissionDto,
+    externalCommission : boolean,
     email?: string
 }
 
 interface CommissionsElementState {
-    modalVisible: boolean
+    modalVisible: boolean,
     commission: CommissionDto
 }
 
@@ -39,8 +44,22 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
     }
 
     async onModalSave() {
-        this.closeModal();
-        //nothing yet
+        if (this.props.externalCommission) {
+            try {
+                let response = await updateCommission(this.props.commission.userId, this.props.commission.commissionId,
+                    this.state.commission);
+                if (response) {
+                    alert("Commission successfully updated");
+                    window.location.reload();
+                } else {
+                    alert("Something went wrong with update");
+                }
+            } catch (e) {
+                alert(e);
+            }
+        } else {
+            this.closeModal();
+        }
     }
 
     render(): React.ReactNode {
@@ -52,7 +71,7 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
         } else {
             statusColumn = <td style={{backgroundColor: "#fffc82"}}>{this.props.commission.details.status}</td>;
         }
-        
+
         return (
             <React.Fragment>
                 <Modal
@@ -72,7 +91,7 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                         />
                         }
                         <TextField
-                            id="uniqueCode" label={"User id"} variant="filled" style={{width: '100%'}}
+                            id="userId" label={"User id"} variant="filled" style={{width: '100%'}}
                             value={this.state.commission.userId} disabled={true}
                         />
                         <TextField
@@ -80,20 +99,72 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                             value={this.props.email} disabled={true}
                         />
                         <TextField
-                            id="uniqueCode" label={"Commission id"} variant="filled" style={{width: '100%'}}
+                            id="commissionId" label={"Commission id"} variant="filled" style={{width: '100%'}}
                             value={this.state.commission.commissionId} disabled={true}
                         />
+                        {this.props.externalCommission &&
+                        <FormControl variant="filled" style={{width: '100%'}}>
+                            <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
+                            <Select
+                                MenuProps={{
+                                    disableScrollLock: true,
+                                    getContentAnchorEl: null,
+                                    anchorOrigin: {
+                                        vertical: 'bottom',
+                                        horizontal: 'left',
+                                    },
+                                }}
+                                labelId="demo-simple-select-filled-label"
+                                id="demo-simple-select-filled"
+                                value={this.state.commission.details.status}
+                                onChange={event => {
+                                    let commission = this.state.commission;
+                                    commission.details.status = event.target.value as string;
+                                    this.setState({
+                                        commission: commission
+                                    })
+                                }}
+                            >
+                                <MenuItem value={"pending"}> Pending </MenuItem>
+                                <MenuItem value={"accepted"}> Accepted </MenuItem>
+                                <MenuItem value={"rejected"}> Rejected </MenuItem>
+                                <MenuItem value={"paid"}> Paid </MenuItem>
+                            </Select>
+                        </FormControl>
+                        }
+                        {!this.props.externalCommission &&
                         <TextField
-                            id="uniqueCode" label={"Status"} variant="filled" style={{width: '100%'}}
+                            id="status" label={"Status"} variant="filled" style={{width: '100%'}}
                             value={this.state.commission.details.status} disabled={true}
                         />
+                        }
                         <TextField
-                            id="uniqueCode" label={"Reason"} variant="filled" style={{width: '100%'}}
-                            value={this.state.commission.details.reason} disabled={true}
+                            id="reason" label={"Reason"} variant="filled" style={{width: '100%'}}
+                            value={this.state.commission.details.reason}
+                            disabled={!this.props.externalCommission}
+                            onChange={event => {
+                                let commission = this.state.commission;
+                                commission.details.reason = event.target.value;
+                                this.setState({
+                                    commission: commission
+                                });
+                            }}
                         />
                         <TextField
-                            id="uniqueCode" label={"Amount"} variant="filled" style={{width: '100%'}}
-                            value={this.state.commission.details.amount} disabled={true}
+                            id="amount" label={"Amount"} variant="filled" style={{width: '100%'}}
+                            type="number"
+                            value={this.state.commission.details.amount}
+                            inputProps={{
+                                step: '0.1',
+                            }}
+                            onChange={event => {
+                                let commission = this.state.commission;
+                                commission.details.amount = parseFloat(event.target.value);
+                                this.setState({
+                                    commission: commission
+                                });
+                            }}
+                            disabled={!this.props.externalCommission}
                         />
                     </React.Fragment>
                     }

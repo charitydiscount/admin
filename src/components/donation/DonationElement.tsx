@@ -179,6 +179,7 @@ class DonationElement extends React.Component<DonationElementProps, DonationElem
                     onClose={() => this.closeUserModal()}
                     title="Total donation for user"
                     onSave={() => {
+                        this.closeUserModal();
                     }}
                 >
                     {this.state.modalUserVisible &&

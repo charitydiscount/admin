@@ -186,6 +186,7 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                     onClose={() => this.closeUserModal()}
                     title="Total cashout for user"
                     onSave={() => {
+                        this.closeUserModal();
                     }}
                 >
                     {this.state.modalUserVisible &&

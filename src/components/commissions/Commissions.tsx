@@ -1,6 +1,12 @@
 import React from "react";
 import CommissionsElement from "./CommissionElement";
-import { CommissionDto, getCommissions } from "../../rest/CommissionService";
+import {
+    CommissionCreateDto,
+    CommissionDto,
+    createCommission,
+    DEFAULT_COMMISSION,
+    getCommissions
+} from "../../rest/CommissionService";
 import FadeLoader from 'react-spinners/FadeLoader';
 import { emptyHrefLink, linkStyle, spinnerCss } from "../../Helper";
 import ReactPaginate from 'react-paginate';
@@ -10,6 +16,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { getAllUsers } from "../../rest/UserService";
+import {
+    getExternalPrograms,
+    ProgramDto
+} from "../../rest/ProgramService";
+import Modal from '../modal';
 
 interface CommissionsProps {
 
@@ -19,10 +30,14 @@ interface CommissionsState {
     isLoading: boolean,
     commissions: CommissionDto[],
     defaultCommissionsList: CommissionDto[],
+    externalPrograms: ProgramDto[],
     currentPage: number,
     filterType: FilterType,
     users: Map<string, string>,
     sortOrder: boolean,
+    modalVisible: boolean,
+    createCommission: CommissionCreateDto
+    createCommissionUserId: string,
     sort: SortType
 }
 
@@ -53,9 +68,13 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
             commissions: [],
             defaultCommissionsList: [],
             currentPage: 0,
+            externalPrograms: [],
             filterType: FilterType.EMPTY,
             users: new Map<string, string>(),
+            modalVisible: false,
             sortOrder: true,
+            createCommission: {...DEFAULT_COMMISSION},
+            createCommissionUserId: '',
             sort: SortType.EMPTY
         };
         this.searchCommissions = this.searchCommissions.bind(this);
@@ -79,6 +98,18 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
             }
         } catch (error) {
             alert(error);
+        }
+
+        try {
+            let response = await getExternalPrograms();
+            if (response) {
+                this.setState({
+                    externalPrograms: response,
+                });
+            }
+        } catch (error) {
+            alert(error);
+            //programs not loaded
         }
 
         try {
@@ -160,6 +191,37 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
         });
     }
 
+    openModal() {
+        this.setState({
+            modalVisible: true
+        });
+    }
+
+    closeModal() {
+        this.setState({
+            modalVisible: false
+        });
+    }
+
+    async onModalSave() {
+        try {
+            if (this.state.createCommission && this.state.createCommissionUserId) {
+                let response = await createCommission(this.state.createCommissionUserId, this.state.createCommission);
+                if (response) {
+                    alert("Commission successfully created");
+                    window.location.reload();
+                } else {
+                    alert("Something went wrong with creation");
+                }
+            } else {
+                alert("Nothing to update")
+            }
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+
     public render() {
         let pageCount = 0;
         let commissionsList;
@@ -215,9 +277,25 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
 
             commissionsList = commissionsList
                 .map((value, index) => {
+                    let externalProgram = this.state.externalPrograms.find(val => val.id === (value as CommissionDto).details.shopId);
+                    let externalCommission = false;
+                    if(externalProgram){
+                        externalCommission = true;
+                    }
                     return (
                         <CommissionsElement key={index} commission={value}
+                                            externalCommission={externalCommission}
                                             email={this.state.users.get((value as CommissionDto).userId)}/>
+                    );
+                });
+        }
+
+        let programsList;
+        if (this.state.externalPrograms && this.state.externalPrograms.length > 0) {
+            programsList = this.state.externalPrograms
+                .map((value, index) => {
+                    return (
+                        <MenuItem key={index} value={value.id}> {value.name}</MenuItem>
                     );
                 });
         }
@@ -227,6 +305,116 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                 <div className="row">
                     <div className="col-md-12">
                         <h3 className="title-5 m-b-35">Commissions</h3>
+                        <Modal
+                            visible={this.state.modalVisible}
+                            onClose={() => this.closeModal()}
+                            title="Create commission"
+                            onSave={() => this.onModalSave()}
+                        >
+                            <TextField id="userId" label={"User Id"} variant="filled" style={{width: '100%'}}
+                                       value={this.state.createCommissionUserId}
+                                       onChange={(event) => {
+                                           this.setState({
+                                               createCommissionUserId: event.target.value
+                                           })
+                                       }}
+                            />
+                            <FormControl variant="filled" style={{width: '100%'}}>
+                                <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
+                                <Select
+                                    MenuProps={{
+                                        disableScrollLock: true,
+                                        getContentAnchorEl: null,
+                                        anchorOrigin: {
+                                            vertical: 'bottom',
+                                            horizontal: 'left',
+                                        },
+                                    }}
+                                    labelId="demo-simple-select-filled-label"
+                                    id="demo-simple-select-filled"
+                                    value={this.state.createCommission.status}
+                                    onChange={event => {
+                                        let createCommission = this.state.createCommission;
+                                        createCommission.status = event.target.value as string;
+                                        this.setState({
+                                            createCommission: createCommission
+                                        })
+                                    }}
+                                >
+                                    <MenuItem value={"pending"}> Pending </MenuItem>
+                                    <MenuItem value={"accepted"}> Accepted </MenuItem>
+                                    <MenuItem value={"rejected"}> Rejected </MenuItem>
+                                    <MenuItem value={"paid"}> Paid </MenuItem>
+                                </Select>
+                            </FormControl>
+                            <TextField id="reason" label={"Reason"} variant="filled" style={{width: '100%'}}
+                                       value={this.state.createCommission.reason}
+                                       onChange={(event) => {
+                                           let createCommission = this.state.createCommission;
+                                           createCommission.reason = event.target.value;
+                                           this.setState({
+                                               createCommission: createCommission
+                                           })
+                                       }}
+                            />
+                            <TextField id="originalAmount" label={"Original Amount"} variant="filled"
+                                       style={{width: '100%'}}
+                                       type="number"
+                                       inputProps={{
+                                           min: 0,
+                                           step: '0.1'
+                                       }}
+                                       value={this.state.createCommission.originalAmount}
+                                       onChange={event => {
+                                           let commission = this.state.createCommission;
+                                           commission.originalAmount = parseFloat(event.target.value);
+                                           this.setState({
+                                               createCommission: commission
+                                           })
+                                       }}
+                            />
+                            <TextField id="originId" label={"Origin Id"} variant="filled" style={{width: '100%'}}
+                                       value={this.state.createCommission.originId}
+                                       onChange={(event) => {
+                                           let commission = this.state.createCommission;
+                                           commission.originId = event.target.value;
+                                           this.setState({
+                                               createCommission: commission
+                                           })
+                                       }}
+                            />
+                            <FormControl variant="filled" style={{width: '100%'}}>
+                                <InputLabel id="demo-simple-select-filled-label">Program</InputLabel>
+                                <Select
+                                    MenuProps={{
+                                        disableScrollLock: true,
+                                        getContentAnchorEl: null,
+                                        anchorOrigin: {
+                                            vertical: 'bottom',
+                                            horizontal: 'left',
+                                        },
+                                    }}
+                                    labelId="demo-simple-select-filled-label"
+                                    id="demo-simple-select-filled"
+                                    value={this.state.createCommission.shopId}
+                                    onChange={event => {
+                                        let createCommission = this.state.createCommission;
+                                        createCommission.shopId = event.target.value as string;
+                                        let extProgram = this.state.externalPrograms.find(value => value.id === createCommission.shopId);
+                                        if (extProgram) {
+                                            createCommission.program.status = extProgram.status;
+                                            createCommission.program.name = extProgram.name;
+                                            createCommission.program.logo = extProgram.logoPath;
+                                        }
+                                        this.setState({
+                                            createCommission: createCommission
+                                        })
+                                    }}
+                                >
+                                    {programsList}
+                                </Select>
+                            </FormControl>
+                        </Modal>
                         <FadeLoader
                             loading={this.state.isLoading}
                             color={'#1641ff'}
@@ -288,8 +476,10 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                                     </div>
                                 </div>
                                 <div className="table-data__tool-right">
-                                    <button className="au-btn au-btn-icon au-btn--green au-btn--small">
-                                        <i className="zmdi zmdi-plus"></i>add commission
+                                    <button className="au-btn au-btn-icon au-btn--green au-btn--small"
+                                            onClick={() => this.openModal()}>
+                                        <i className="zmdi zmdi-plus"/>
+                                        add commission
                                     </button>
                                     <ReactPaginate
                                         previousLabel={'<'}

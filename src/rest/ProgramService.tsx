@@ -1,6 +1,6 @@
 import { auth } from "../index";
 import axios from 'axios';
-import { EXPRESS_URL, ExpressLink } from "../Helper";
+import { EXPRESS_URL, ExpressLink, SourceTypes } from "../Helper";
 
 export interface ProgramDocDto {
     [uniqueCode: string]: ProgramDto;
@@ -16,7 +16,7 @@ export interface ProgramDto {
     logoPath: string,
     mainUrl: string,
     affiliateUrl: string,
-    id: number,
+    id: string,
     name: string,
     status: string,
     uniqueCode: string,
@@ -49,7 +49,7 @@ export const DEFAULT_PROGRAM: ProgramDto = {
     logoPath: '',
     mainUrl: '',
     affiliateUrl: '',
-    id: 0,
+    id: '',
     name: '',
     status: 'active',
     uniqueCode: '',
@@ -85,6 +85,37 @@ export async function getPrograms() {
             return program;
         })
         .filter(value => value && value.name)
+        .sort((p1, p2) => {
+            if (p1.mainOrder && p2.mainOrder) {
+                return p1.mainOrder - p2.mainOrder;
+            } else if (p1.mainOrder) {
+                return p1.mainOrder - p2.order;
+            } else if (p2.mainOrder) {
+                return p1.order - p2.mainOrder;
+            } else {
+                return p1.order - p2.order
+            }
+        });
+}
+6
+export async function getExternalPrograms() {
+    if (!auth.currentUser) {
+        return [];
+    }
+
+    const token = await auth.currentUser.getIdToken();
+    let url = EXPRESS_URL + ExpressLink.PROGRAMS;
+
+    let response = await axios.get(url, {
+        headers: {Authorization: `Bearer ${token}`}
+    });
+
+
+    return Object.entries(response.data as ProgramDocDto)
+        .map(([uniqueCode, program]) => {
+            return program;
+        })
+        .filter(value => value && value.name && value.source !== SourceTypes.TWO_PERFORMANT)
         .sort((p1, p2) => {
             if (p1.mainOrder && p2.mainOrder) {
                 return p1.mainOrder - p2.mainOrder;
