@@ -8,30 +8,31 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { TransactionDto, updateTransaction } from "../../rest/TransactionsService";
 
-interface CashoutElementProps {
+
+interface DonationElementProps {
     key: string,
-    cashout: TransactionDto,
+    donation: TransactionDto,
     email?: string
 }
 
-interface CashoutElementState {
-    cashout: TransactionDto,
+interface DonationElementState {
+    donation: TransactionDto,
     modalVisible: boolean
 }
 
-class CashoutElement extends React.Component<CashoutElementProps, CashoutElementState> {
+class DonationElement extends React.Component<DonationElementProps, DonationElementState> {
 
-    constructor(props: CashoutElementProps) {
+    constructor(props: DonationElementProps) {
         super(props);
         this.state = ({
-            cashout: this.props.cashout,
+            donation: this.props.donation,
             modalVisible: false
         })
     }
 
     openModal() {
         this.setState({
-            cashout: this.props.cashout,
+            donation: this.props.donation,
             modalVisible: true
         });
     }
@@ -44,9 +45,9 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
 
     async onModalSave() {
         try {
-            let response = await updateTransaction(TxType.CASHOUT, this.props.cashout);
+            let response = await updateTransaction(TxType.DONATION, this.props.donation);
             if (response) {
-                alert("Cashout successfully updated");
+                alert("Donation successfully updated");
                 window.location.reload();
             } else {
                 alert("Something went wrong with update");
@@ -60,14 +61,14 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
         let statusColumn;
         let statusUpdateColumn = <TextField
             id="status" label={"Status"} variant="filled" style={{width: '100%'}}
-            value={this.props.cashout.status} disabled={true}
+            value={this.props.donation.status} disabled={true}
         />;
-        if (this.props.cashout.status === "PAID") {
-            statusColumn = <td style={{backgroundColor: "#6eff24"}}>{this.props.cashout.status}</td>;
-        } else if (this.props.cashout.status === "REJECTED") {
-            statusColumn = <td style={{backgroundColor: "#ff4c4f"}}>{this.props.cashout.status}</td>;
+        if (this.props.donation.status === "PAID") {
+            statusColumn = <td style={{backgroundColor: "#6eff24"}}>{this.props.donation.status}</td>;
+        } else if (this.props.donation.status === "REJECTED") {
+            statusColumn = <td style={{backgroundColor: "#ff4c4f"}}>{this.props.donation.status}</td>;
         } else {
-            statusColumn = <td style={{backgroundColor: "#fffc82"}}>{this.props.cashout.status}</td>;
+            statusColumn = <td style={{backgroundColor: "#fffc82"}}>{this.props.donation.status}</td>;
             statusUpdateColumn = <FormControl variant="filled" style={{width: '100%'}}>
                 <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
                 <Select
@@ -81,12 +82,12 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                     }}
                     labelId="demo-simple-select-filled-label"
                     id="demo-simple-select-filled"
-                    value={this.state.cashout.status}
+                    value={this.state.donation.status}
                     onChange={event => {
-                        let cashout = this.state.cashout;
+                        let cashout = this.state.donation;
                         cashout.status = event.target.value as string;
                         this.setState({
-                            cashout: cashout
+                            donation: cashout
                         })
                     }}
                 >
@@ -106,43 +107,30 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                 >
                     {this.state.modalVisible &&
                     <React.Fragment>
-                        {this.props.cashout.updatedAt &&
-                        <TextField
-                            id="updated" label={"Updated"} variant="filled" style={{width: '100%'}}
-                            value={
-                                new Date(parseFloat(this.props.cashout.updatedAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)
-                            } disabled={true}
-                        />
-                        }
                         <TextField
                             id="id" label={"Id"} variant="filled" style={{width: '100%'}}
-                            value={this.props.cashout.id} disabled={true}
+                            value={this.props.donation.id} disabled={true}
                         />
                         <TextField
                             id="userId" label={"User id"} variant="filled" style={{width: '100%'}}
-                            value={this.props.cashout.userId} disabled={true}
+                            value={this.props.donation.userId} disabled={true}
+                        />
+                        <TextField
+                            id="causeId" label={"Case Title"} variant="filled" style={{width: '100%'}}
+                            value={this.props.donation.target.name} disabled={true}
                         />
                         <TextField
                             id="email" label={"Email"} variant="filled" style={{width: '100%'}}
                             value={this.props.email} disabled={true}
                         />
-                        <TextField
-                            id="iban" label={"IBAN"} variant="filled" style={{width: '100%'}}
-                            value={this.props.cashout.target.id} disabled={true}
-                        />
-                        <TextField
-                            id="name" label={"Name"} variant="filled" style={{width: '100%'}}
-                            value={this.props.cashout.target.name} disabled={true}
-                        />
-
                         {statusUpdateColumn}
                     </React.Fragment>
                     }
                 </Modal>
                 <tr className="tr-shadow">
                     <td>{
-                        this.props.cashout.createdAt &&
-                        new Date(parseFloat(this.props.cashout.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}
+                        this.props.donation.createdAt &&
+                        new Date(parseFloat(this.props.donation.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}
                     </td>
                     <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
                         <a href={emptyHrefLink} style={{
@@ -150,12 +138,12 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                             color: "#007bff",
                             cursor: "pointer"
                         }} onClick={() => this.openModal()}>
-                            {this.props.cashout.id}
+                            {this.props.donation.id}
                         </a>
                     </td>
-                    <td>{this.props.cashout.userId}</td>
+                    <td>{this.props.donation.userId}</td>
                     {statusColumn}
-                    <td>{this.props.cashout.amount}</td>
+                    <td>{this.props.donation.amount}</td>
                 </tr>
                 <tr className="spacer"></tr>
             </React.Fragment>
@@ -163,4 +151,4 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
     }
 }
 
-export default CashoutElement
+export default DonationElement

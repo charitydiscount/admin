@@ -8,6 +8,7 @@ export const EXPRESS_URL =
 export enum ExpressLink {
     PROGRAMS = 'programs',
     CASHOUT = 'cashout',
+    DONATION = 'donations',
     COMMISSIONS = 'commissions',
     CASES = 'cases',
 }
@@ -87,6 +88,11 @@ export function truncateText(
 export interface ProxyDate {
     _seconds: string
     _nanoseconds: string
+}
+
+export enum TxType {
+    DONATION,
+    CASHOUT
 }
 
 export enum Operation {

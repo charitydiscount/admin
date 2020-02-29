@@ -10,7 +10,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { getAllUsers } from "../../rest/UserService";
-import { CashoutDto } from "../../rest/CashoutService";
 
 interface CommissionsProps {
 
@@ -218,7 +217,7 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                 .map((value, index) => {
                     return (
                         <CommissionsElement key={index} commission={value}
-                                            email={this.state.users.get((value as CashoutDto).userId)}/>
+                                            email={this.state.users.get((value as CommissionDto).userId)}/>
                     );
                 });
         }

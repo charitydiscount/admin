@@ -36,6 +36,10 @@ class NavigationLayout extends React.Component {
                                         <i className="fas fa-table" />
                                         Cashouts
                                     </Link>
+                                    <Link to={Routes.DONATIONS}>
+                                        <i className="fas fa-table" />
+                                        Donations
+                                    </Link>
                                     <a
                                         href={emptyHrefLink}
                                         onClick={handleLogOut}

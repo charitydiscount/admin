@@ -1,7 +1,7 @@
 import React from "react";
 import { spinnerCss, TxType } from "../../Helper";
 import FadeLoader from 'react-spinners/FadeLoader';
-import CashoutElement from "./CashoutElement";
+import DonationElement from "./DonationElement";
 import ReactPaginate from 'react-paginate';
 import { Button, TextField } from "@material-ui/core";
 import { getAllUsers } from "../../rest/UserService";
@@ -14,14 +14,14 @@ export interface CashoutsProps {
 export interface CashoutsState {
     isLoading: boolean,
     currentPage: number,
-    cashouts: TransactionDto[],
+    donations: TransactionDto[],
     users: Map<string, string>,
-    defaultCashoutsList: TransactionDto[]
+    defaultDonationsList: TransactionDto[]
 }
 
-const pageLimit = 8; // cashouts per page
+const pageLimit = 8; // donations per page
 
-class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
+class Donations extends React.Component<CashoutsProps, CashoutsState> {
 
     private search: string = '';
 
@@ -30,18 +30,18 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
         this.state = {
             isLoading: true,
             currentPage: 0,
-            cashouts: [],
+            donations: [],
             users: new Map<string, string>(),
-            defaultCashoutsList: []
+            defaultDonationsList: []
         };
         this.updatePageNumber = this.updatePageNumber.bind(this);
-        this.searchCashouts = this.searchCashouts.bind(this);
+        this.searchDonations = this.searchDonations.bind(this);
         this.enterSearch = this.enterSearch.bind(this);
     }
 
     enterSearch(event) {
         if (event.keyCode === 13) {
-            this.searchCashouts();
+            this.searchDonations();
         }
     }
 
@@ -51,16 +51,16 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
         });
     }
 
-    searchCashouts() {
+    searchDonations() {
         if (this.search) {
-            let resultedPrograms = this.state.defaultCashoutsList
+            let resultedPrograms = this.state.defaultDonationsList
                 .filter(value => value.userId.startsWith(this.search));
             this.setState({
-                cashouts: resultedPrograms
+                donations: resultedPrograms
             })
         } else {
             this.setState({
-                cashouts: this.state.defaultCashoutsList
+                donations: this.state.defaultDonationsList
             })
         }
     }
@@ -69,11 +69,11 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
     async componentDidMount() {
         document.addEventListener('keydown', this.enterSearch, false);
         try {
-            let response = await getTransactions(TxType.CASHOUT);
+            let response = await getTransactions(TxType.DONATION);
             if (response) {
                 this.setState({
-                    cashouts: response as TransactionDto[],
-                    defaultCashoutsList: response as TransactionDto[],
+                    donations: response as TransactionDto[],
+                    defaultDonationsList: response as TransactionDto[],
                     isLoading: false
                 });
             }
@@ -96,24 +96,24 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
 
     render(): React.ReactNode {
         let pageCount = 0;
-        let cashoutList;
-        if (this.state.cashouts && this.state.cashouts.length > 0) {
-            cashoutList = this.state.cashouts;
+        let donationsList;
+        if (this.state.donations && this.state.donations.length > 0) {
+            donationsList = this.state.donations;
 
-            if (cashoutList.length > pageLimit) {
-                pageCount = cashoutList.length / pageLimit;
+            if (donationsList.length > pageLimit) {
+                pageCount = donationsList.length / pageLimit;
                 let offset = this.state.currentPage;
-                cashoutList = cashoutList
+                donationsList = donationsList
                     .slice(offset * pageLimit, (offset + 1) * pageLimit);
             } else {
                 pageCount = 1;
             }
 
-            cashoutList = cashoutList
+            donationsList = donationsList
                 .map((value, index) => {
                     return (
-                        <CashoutElement key={index} cashout={value}
-                                        email={this.state.users.get((value as TransactionDto).userId)}/>
+                        <DonationElement key={index} donation={value}
+                                         email={this.state.users.get((value as TransactionDto).userId)}/>
                     );
                 });
         }
@@ -122,7 +122,7 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
             <React.Fragment>
                 <div className="row">
                     <div className="col-md-12">
-                        <h3 className="title-5 m-b-35">Cashouts</h3>
+                        <h3 className="title-5 m-b-35">Donations</h3>
                         <FadeLoader
                             loading={this.state.isLoading}
                             color={'#1641ff'}
@@ -138,7 +138,7 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
                                         style={{marginTop: 25}}
                                         size={"large"}
                                         onClick={
-                                            this.searchCashouts
+                                            this.searchDonations
                                         }
                                     >
                                         >
@@ -195,7 +195,7 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {cashoutList}
+                                    {donationsList}
                                     </tbody>
                                 </table>
                             </div>
@@ -208,4 +208,4 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
     }
 }
 
-export default Cashouts;
+export default Donations;
