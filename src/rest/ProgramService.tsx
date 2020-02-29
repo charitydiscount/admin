@@ -97,7 +97,7 @@ export async function getPrograms() {
             }
         });
 }
-6
+
 export async function getExternalPrograms() {
     if (!auth.currentUser) {
         return [];
