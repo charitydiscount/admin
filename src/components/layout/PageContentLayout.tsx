@@ -7,6 +7,7 @@ import Programs from '../programs/Programs';
 import cases from '../cases';
 import Cashouts from "../cashout/Cashouts";
 import Donations from "../donation/Donations";
+import Contacts from "../contact/Contacts";
 
 class PageContentLayout extends React.Component {
     public render() {
@@ -45,7 +46,12 @@ class PageContentLayout extends React.Component {
                             component={Donations}
                         />
                         <Route
-                            render={() => <Redirect to={Routes.DASHBOARD} />}
+                            exact={true}
+                            path={Routes.MESSAGES}
+                            component={Contacts}
+                        />
+                        <Route
+                            render={() => <Redirect to={Routes.DASHBOARD}/>}
                         />
                     </Switch>
                 </main>
