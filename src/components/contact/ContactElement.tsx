@@ -79,6 +79,7 @@ class ContactElement extends React.Component<ContactElementProps, ContactElement
                                 .toDate()
                                 .toLocaleDateString('ro-RO', dateOptions)}
                     </td>
+                    <td>{this.props.message.status}</td>
                     <td>{this.props.message.email}</td>
                     <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
                         <a href={emptyHrefLink} style={{

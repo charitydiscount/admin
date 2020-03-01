@@ -8,7 +8,8 @@ export interface MessageDto {
     message: string,
     name: string,
     subject: string,
-    userId: string
+    userId: string,
+    status: string
 }
 
 export function getMessages() {
@@ -26,6 +27,23 @@ export function getMessages() {
                         else return 1;
                     });
                     resolve(data);
+                }
+            ).catch(() => reject());
+    });
+}
+
+export function getNewMessages() {
+    return new Promise((resolve, reject) => {
+        DB.collection(FirebaseTable.CONTACT)
+            .get()
+            .then(
+                querySnapshot => {
+                    let data = [] as MessageDto[];
+                    querySnapshot.docs.forEach(value => {
+                        data.push(value.data() as MessageDto)
+                    });
+                    data = data.filter(value => value.status === "NEW" );
+                    resolve(data.length);
                 }
             ).catch(() => reject());
     });

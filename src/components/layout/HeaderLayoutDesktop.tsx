@@ -1,8 +1,38 @@
 import React from 'react'
-import {getUserInfo} from "../../rest/UserService";
+import { getUserInfo } from "../../rest/UserService";
+import { getNewMessages } from "../../rest/ContactsService";
+import { Routes } from "./Routes";
+import { Link } from "react-router-dom";
 
+interface HeaderLayoutDesktopProps {
 
-class HeaderLayoutDesktop extends React.Component {
+}
+
+interface HeaderLayoutDesktopState {
+    newMessages: number
+}
+
+class HeaderLayoutDesktop extends React.Component<HeaderLayoutDesktopProps, HeaderLayoutDesktopState> {
+
+    constructor(props: Readonly<HeaderLayoutDesktopProps>) {
+        super(props);
+        this.state = {
+            newMessages: 0
+        };
+    }
+
+    async componentDidMount() {
+        try {
+            let response = await getNewMessages();
+            if (response) {
+                this.setState({
+                    newMessages: response as number
+                });
+            }
+        } catch (error) {
+            //nothing happens
+        }
+    }
 
     render() {
         return (
@@ -16,8 +46,12 @@ class HeaderLayoutDesktop extends React.Component {
                                 <div className="header-button">
                                     <div className="noti-wrap">
                                         <div className="noti__item js-item-menu">
-                                            <i className="zmdi zmdi-comment-more"/>
-                                            <span className="quantity">1</span>
+                                            <Link to={Routes.MESSAGES}>
+                                                <i className="zmdi zmdi-comment-more"/>
+                                                {this.state.newMessages && this.state.newMessages > 0 &&
+                                                <span className="quantity">{this.state.newMessages}</span>
+                                                }
+                                            </Link>
                                         </div>
                                     </div>
                                     <div className="account-wrap">

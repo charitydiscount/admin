@@ -128,6 +128,7 @@ class Contacts extends React.Component<ContactsProps, ContactsState> {
                                     <thead>
                                     <tr>
                                         <th>created</th>
+                                        <th>status</th>
                                         <th>email</th>
                                         <th>name</th>
                                         <th>user Id</th>
