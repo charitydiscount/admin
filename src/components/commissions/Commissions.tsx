@@ -8,7 +8,7 @@ import {
     getCommissions
 } from "../../rest/CommissionService";
 import FadeLoader from 'react-spinners/FadeLoader';
-import { emptyHrefLink, linkStyle, spinnerCss } from "../../Helper";
+import { emptyHrefLink, linkStyle, SourceTypes, spinnerCss } from "../../Helper";
 import ReactPaginate from 'react-paginate';
 import { Button, TextField } from "@material-ui/core";
 import InputLabel from '@material-ui/core/InputLabel';
@@ -46,6 +46,7 @@ enum FilterType {
     STATUS_ACCEPTED = 'accepted',
     STATUS_REJECTED = 'rejected',
     STATUS_PENDING = 'pending',
+    EXTERNAL = 'external',
     EMPTY = ''
 }
 
@@ -176,6 +177,9 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
             case FilterType.STATUS_PENDING.toString():
                 filterType = FilterType.STATUS_PENDING;
                 break;
+            case FilterType.EXTERNAL.toString():
+                filterType = FilterType.EXTERNAL;
+                break;
             default:
                 filterType = FilterType.EMPTY;
 
@@ -249,6 +253,11 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                                 return value.details.status.includes("rejected");
                             }
                             return false;
+                        case FilterType.EXTERNAL:
+                            if (value.details.source) {
+                                return !value.details.source.includes(SourceTypes.TWO_PERFORMANT);
+                            }
+                            return false;
                         default:
                             return true;
                     }
@@ -279,7 +288,7 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                 .map((value, index) => {
                     let externalProgram = this.state.externalPrograms.find(val => val.id === (value as CommissionDto).details.shopId);
                     let externalCommission = false;
-                    if(externalProgram){
+                    if (externalProgram) {
                         externalCommission = true;
                     }
                     return (
@@ -383,6 +392,17 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                                            })
                                        }}
                             />
+                            <TextField id="originalCurrency" label={"Original Currency"} variant="filled"
+                                       style={{width: '100%'}}
+                                       value={this.state.createCommission.originalCurrency}
+                                       onChange={(event) => {
+                                           let commission = this.state.createCommission;
+                                           commission.originalCurrency = event.target.value;
+                                           this.setState({
+                                               createCommission: commission
+                                           })
+                                       }}
+                            />
                             <FormControl variant="filled" style={{width: '100%'}}>
                                 <InputLabel id="demo-simple-select-filled-label">Program</InputLabel>
                                 <Select
@@ -402,9 +422,10 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                                         createCommission.shopId = event.target.value as string;
                                         let extProgram = this.state.externalPrograms.find(value => value.id === createCommission.shopId);
                                         if (extProgram) {
-                                            createCommission.program.status = extProgram.status;
                                             createCommission.program.name = extProgram.name;
                                             createCommission.program.logo = extProgram.logoPath;
+                                            createCommission.program.status = extProgram.status;
+                                            createCommission.source = extProgram.source;
                                         }
                                         this.setState({
                                             createCommission: createCommission
@@ -466,11 +487,14 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                                                 </MenuItem>
                                                 <MenuItem
                                                     value={FilterType.STATUS_ACCEPTED.toString()}>Accepted</MenuItem>
-                                                <MenuItem value={FilterType.STATUS_PAID.toString()}>Paid</MenuItem>
+                                                <MenuItem
+                                                    value={FilterType.STATUS_PAID.toString()}>Paid</MenuItem>
                                                 <MenuItem
                                                     value={FilterType.STATUS_REJECTED.toString()}>Rejected</MenuItem>
                                                 <MenuItem
                                                     value={FilterType.STATUS_PENDING.toString()}>Pending</MenuItem>
+                                                <MenuItem
+                                                    value={FilterType.EXTERNAL.toString()}>External</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </div>

@@ -151,7 +151,7 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                             }}
                         />
                         <TextField
-                            id="amount" label={"Amount"} variant="filled" style={{width: '100%'}}
+                            id="amount" label={"AMOUNT GIVEN TO USER"} variant="filled" style={{width: '100%'}}
                             type="number"
                             value={this.state.commission.details.amount}
                             inputProps={{

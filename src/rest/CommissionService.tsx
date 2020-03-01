@@ -25,46 +25,40 @@ export interface CommissionResponseDto {
     currency: string,
     originalCurrency: string,
     program: ProgramDto,
+    source: string,
     createdAt: ProxyDate,
     updatedAt: ProxyDate
 }
 
 export interface CommissionCreateDto {
     shopId: string,
-    status: string,
-    reason: string,
+    status?: string,
+    reason?: string,
     originalAmount: number,
-    originId: string,
+    originId?: string,
     originalCurrency: string,
     program: CommissionProgramDto,
+    source: string
 }
 
 export interface CommissionProgramDto {
-    slug: string,
-    status: string,
     name: string,
-    paymentType: string,
-    userLogin: string,
-    logo: string
+    logo: string,
+    status: string
 }
 
 export const DEFAULT_COMMISSION_PROGRAM: CommissionProgramDto = {
-    slug: '',
-    status: '',
     name: '',
-    paymentType: '',
-    userLogin: '',
     logo: '',
+    status: ''
 };
 
 export const DEFAULT_COMMISSION: CommissionCreateDto = {
     shopId: '',
-    status: '',
-    reason: '',
     originalAmount: 0,
-    originId: '',
     originalCurrency: 'RON',
-    program: DEFAULT_COMMISSION_PROGRAM
+    program: DEFAULT_COMMISSION_PROGRAM,
+    source: ''
 };
 
 export async function getCommissions() {
@@ -119,7 +113,7 @@ export async function updateCommission(userId: string, commissionId: string, com
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = EXPRESS_URL + '/user' + userId + '/' + ExpressLink.COMMISSIONS + '/' + commissionId;
+    let url = EXPRESS_URL + 'user/' + userId + '/' + ExpressLink.COMMISSIONS + '/' + commissionId;
 
     let requestUpdate = {
         status: commission.details.status,
@@ -138,17 +132,20 @@ export async function createCommission(userId: string, commission: CommissionCre
     if (!auth.currentUser) {
         throw Error('User not logged in');
     }
+
     if (!userId || (userId.length < 1)) {
         throw Error('Enter an user id');
     }
     if (!commission.shopId || (commission.shopId.length < 1)) {
         throw Error('Select a shop');
     }
-    if (!commission.status || (commission.status.length < 1)) {
-        throw Error('Select a status');
-    }
+
     if (!commission.originalAmount || (commission.originalAmount < 1)) {
         throw Error('Enter an amount');
+    }
+
+    if (!commission.program || (!commission.program.name) || (commission.program.name.length < 1)) {
+        throw Error('Select a program');
     }
 
     const token = await auth.currentUser.getIdToken();
