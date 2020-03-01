@@ -1,5 +1,5 @@
 import React from "react";
-import { emptyHrefLink } from "../../Helper";
+import { dateOptions, emptyHrefLink } from "../../Helper";
 import Modal from '../modal';
 import { TextField } from "@material-ui/core";
 import { MessageDto } from "../../rest/ContactsService";
@@ -54,6 +54,12 @@ class ContactElement extends React.Component<ContactElementProps, ContactElement
                     {this.state.modalVisible &&
                     <React.Fragment>
                         <TextField
+                            id="creationDate" label={"Creation date"} variant="filled" style={{width: '100%'}}
+                            value={this.props.message.createdAt
+                                .toDate()
+                                .toLocaleDateString('ro-RO', dateOptions)} disabled={true}
+                        />
+                        <TextField
                             id="email" label={"Name"} variant="filled" style={{width: '100%'}}
                             value={this.props.message.name} disabled={true}
                         />
@@ -69,6 +75,10 @@ class ContactElement extends React.Component<ContactElementProps, ContactElement
                     }
                 </Modal>
                 <tr className="tr-shadow">
+                    <td>{this.props.message.createdAt
+                                .toDate()
+                                .toLocaleDateString('ro-RO', dateOptions)}
+                    </td>
                     <td>{this.props.message.email}</td>
                     <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
                         <a href={emptyHrefLink} style={{
