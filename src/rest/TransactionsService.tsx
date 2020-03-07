@@ -1,5 +1,5 @@
-import { EXPRESS_URL, ExpressLink, ProxyDate, TxType } from "../Helper";
-import { auth } from "../index";
+import { ExpressLink, ProxyDate, TxType } from "../Helper";
+import { auth, remoteConfig } from "../index";
 import axios from "axios";
 
 export interface TransactionDocDto {
@@ -28,7 +28,7 @@ export async function getTransactions(type: TxType) {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = EXPRESS_URL;
+    let url = remoteConfig.getString('express_url');
     if (type === TxType.CASHOUT) {
         url += ExpressLink.CASHOUT;
     } else if (type === TxType.DONATION) {
@@ -56,7 +56,7 @@ export async function getTotalAmount(type: TxType, userId: string) {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = EXPRESS_URL;
+    let url = remoteConfig.getString('express_url');
     if (type === TxType.CASHOUT) {
         url += ExpressLink.CASHOUT;
     } else if (type === TxType.DONATION) {
@@ -87,7 +87,7 @@ export async function updateTransaction(type: TxType, transaction: TransactionDt
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = EXPRESS_URL;
+    let url = remoteConfig.getString('express_url');
     if (type === TxType.CASHOUT) {
         url += ExpressLink.CASHOUT;
     } else if (type === TxType.DONATION) {

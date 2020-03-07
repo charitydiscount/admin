@@ -2,9 +2,6 @@ import { store } from './index';
 import { doLogoutAction } from './redux/actions/UserActions';
 import { css } from '@emotion/core';
 
-export const EXPRESS_URL =
-    'https://europe-west1-charitydiscount-test.cloudfunctions.net/manage/';
-
 export enum ExpressLink {
     PROGRAMS = 'programs',
     CASHOUT = 'cashout',

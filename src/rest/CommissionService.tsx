@@ -1,5 +1,5 @@
-import { auth } from "../index";
-import { EXPRESS_URL, ExpressLink, ProxyDate } from "../Helper";
+import { auth, remoteConfig } from "../index";
+import { ExpressLink, ProxyDate } from "../Helper";
 import axios from "axios";
 import { ProgramDto } from "./ProgramService";
 
@@ -67,7 +67,8 @@ export async function getCommissions() {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = EXPRESS_URL + ExpressLink.COMMISSIONS;
+    console.log("url-ul este:" + remoteConfig.getString('express_url'));
+    let url = remoteConfig.getString('express_url') + ExpressLink.COMMISSIONS;
 
     let response = await axios.get(url, {
         headers: {Authorization: `Bearer ${token}`}
@@ -113,7 +114,7 @@ export async function updateCommission(userId: string, commissionId: string, com
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = EXPRESS_URL + 'user/' + userId + '/' + ExpressLink.COMMISSIONS + '/' + commissionId;
+    let url = remoteConfig.getString('express_url') + 'user/' + userId + '/' + ExpressLink.COMMISSIONS + '/' + commissionId;
 
     let requestUpdate = {
         status: commission.details.status,
@@ -149,7 +150,7 @@ export async function createCommission(userId: string, commission: CommissionCre
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = EXPRESS_URL + 'user/' + userId + '/' + ExpressLink.COMMISSIONS;
+    let url = remoteConfig.getString('express_url') + 'user/' + userId + '/' + ExpressLink.COMMISSIONS;
 
     let response = await axios.post(url, commission, {
         headers: {Authorization: `Bearer ${token}`},
