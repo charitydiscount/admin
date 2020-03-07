@@ -1,6 +1,6 @@
-import { auth } from "../index";
+import { auth, remoteConfig } from "../index";
 import axios from 'axios';
-import { EXPRESS_URL, ExpressLink, SourceTypes } from "../Helper";
+import { ExpressLink, SourceTypes } from "../Helper";
 
 export interface ProgramDocDto {
     [uniqueCode: string]: ProgramDto;
@@ -73,7 +73,7 @@ export async function getPrograms() {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = EXPRESS_URL + ExpressLink.PROGRAMS;
+    let url = remoteConfig.getString('express_url') + ExpressLink.PROGRAMS;
 
     let response = await axios.get(url, {
         headers: {Authorization: `Bearer ${token}`}
@@ -104,7 +104,7 @@ export async function getExternalPrograms() {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = EXPRESS_URL + ExpressLink.PROGRAMS;
+    let url = remoteConfig.getString('express_url') + ExpressLink.PROGRAMS;
 
     let response = await axios.get(url, {
         headers: {Authorization: `Bearer ${token}`}
@@ -135,7 +135,7 @@ export async function updateProgram(program: ProgramDto) {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = EXPRESS_URL + ExpressLink.PROGRAMS + "/" + program.uniqueCode;
+    let url = remoteConfig.getString('express_url') + ExpressLink.PROGRAMS + "/" + program.uniqueCode;
 
     let response = await axios.put(url, program, {
         headers: {Authorization: `Bearer ${token}`},
@@ -169,7 +169,7 @@ export async function createProgram(program: ProgramDto) {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = EXPRESS_URL + ExpressLink.PROGRAMS;
+    let url = remoteConfig.getString('express_url') + ExpressLink.PROGRAMS;
 
     let response = await axios.post(url, program, {
         headers: {Authorization: `Bearer ${token}`},
