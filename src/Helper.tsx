@@ -4,6 +4,7 @@ import { css } from '@emotion/core';
 
 export enum ExpressLink {
     PROGRAMS = 'programs',
+    MESSAGES = 'messages',
     CASHOUT = 'cashout',
     DONATION = 'donations',
     COMMISSIONS = 'commissions',
@@ -13,7 +14,6 @@ export enum ExpressLink {
 export enum FirebaseTable {
     ROLES = 'roles',
     USERS = 'users',
-    CONTACT = 'contact',
     META = 'meta'
 }
 
