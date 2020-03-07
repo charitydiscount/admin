@@ -2,7 +2,11 @@ import React from "react";
 import { dateOptions, emptyHrefLink } from "../../Helper";
 import Modal from '../modal';
 import { TextField } from "@material-ui/core";
-import { MessageDto } from "../../rest/ContactsService";
+import { MessageDto, updateMessage } from "../../rest/ContactsService";
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 
 interface ContactElementProps {
     message: MessageDto,
@@ -38,10 +42,26 @@ class ContactElement extends React.Component<ContactElementProps, ContactElement
     }
 
     async onModalSave() {
-        this.closeModal();
+        try {
+            let response = await updateMessage(this.state.message);
+            if (response) {
+                alert("Message successfully updated");
+                window.location.reload();
+            } else {
+                alert("Something went wrong with update");
+            }
+        } catch (e) {
+            alert(e);
+        }
     }
 
     render(): React.ReactNode {
+        let statusColumn;
+        if (this.props.message.status === "NEW") {
+            statusColumn = <td style={{backgroundColor: "#fffc82"}}>{this.props.message.status}</td>;
+        } else if (this.props.message.status === "CHECKED") {
+            statusColumn = <td style={{backgroundColor: "#6eff24"}}>{this.props.message.status}</td>;
+        }
 
         return (
             <React.Fragment>
@@ -54,32 +74,70 @@ class ContactElement extends React.Component<ContactElementProps, ContactElement
                     {this.state.modalVisible &&
                     <React.Fragment>
                         <TextField
+                            id="od" label={"Id"} variant="filled" style={{width: '100%'}}
+                            value={this.props.message.id} disabled={true}
+                        />
+                        <TextField
                             id="creationDate" label={"Creation date"} variant="filled" style={{width: '100%'}}
-                            value={this.props.message.createdAt
-                                .toDate()
-                                .toLocaleDateString('ro-RO', dateOptions)} disabled={true}
+                            value={
+                                new Date(parseFloat(this.props.message.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)
+                            } disabled={true}
                         />
                         <TextField
                             id="email" label={"Name"} variant="filled" style={{width: '100%'}}
                             value={this.props.message.name} disabled={true}
                         />
                         <TextField
-                            id="email" label={"Subject"} variant="filled" style={{width: '100%'}}
+                            id="subject" label={"Subject"} variant="filled" style={{width: '100%'}}
                             value={this.props.message.subject} disabled={true}
                         />
                         <TextField
-                            id="email" label={"Message"} variant="filled" style={{width: '100%'}}
+                            id="message" label={"Message"} variant="filled" style={{width: '100%'}}
                             value={this.props.message.message} disabled={true}
                         />
+                        {this.state.message.status === 'NEW' &&
+                        <FormControl variant="filled" style={{width: '100%'}}>
+                            <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
+                            <Select
+                                MenuProps={{
+                                    disableScrollLock: true,
+                                    getContentAnchorEl: null,
+                                    anchorOrigin: {
+                                        vertical: 'bottom',
+                                        horizontal: 'left',
+                                    },
+                                }}
+                                labelId="demo-simple-select-filled-label"
+                                id="demo-simple-select-filled"
+                                value={this.state.message.status}
+                                onChange={event => {
+                                    let message = this.state.message;
+                                    message.status = event.target.value as string;
+                                    this.setState({
+                                        message: message
+                                    })
+                                }}
+                            >
+                                <MenuItem value={"NEW"}> NEW </MenuItem>
+                                <MenuItem value={"CHECKED"}> CHECKED </MenuItem>
+                            </Select>
+                        </FormControl>
+                        }
+                        {this.state.message.status !== 'NEW' &&
+                        <TextField
+                            id="status" label={"Status"} variant="filled" style={{width: '100%'}}
+                            value={this.state.message.status} disabled={true}
+                        />
+                        }
                     </React.Fragment>
                     }
                 </Modal>
                 <tr className="tr-shadow">
-                    <td>{this.props.message.createdAt
-                                .toDate()
-                                .toLocaleDateString('ro-RO', dateOptions)}
+                    <td>{
+                        new Date(parseFloat(this.props.message.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)
+                    }
                     </td>
-                    <td>{this.props.message.status}</td>
+                    {statusColumn}
                     <td>{this.props.message.email}</td>
                     <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
                         <a href={emptyHrefLink} style={{
