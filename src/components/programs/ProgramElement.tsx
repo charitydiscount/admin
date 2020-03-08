@@ -226,12 +226,23 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                 }
                             />
                             <TextField
-                                id="mainUrl" label={"Main Url"} variant="filled"
+                                id="mainUrl" label={"Webite"} variant="filled"
                                 style={{width: '100%'}} value={this.state.program.mainUrl}
                                 onChange={event => {
                                     const program = this.state.program;
                                     program.mainUrl = event.target.value;
-                                    program.affiliateUrl = program.mainUrl;
+                                    this.setState({
+                                        program: program
+                                    })
+                                }
+                                }
+                            />
+                            <TextField
+                                id="affiliateUrl" label={"Affiliate Link (use '{userId}' as a placeholder for the user)"} variant="filled"
+                                style={{width: '100%'}} value={this.state.program.affiliateUrl}
+                                onChange={event => {
+                                    const program = this.state.program;
+                                    program.affiliateUrl = event.target.value;
                                     this.setState({
                                         program: program
                                     })

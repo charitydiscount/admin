@@ -154,6 +154,9 @@ export async function createProgram(program: ProgramDto) {
     if (!program.mainUrl || (program.mainUrl.length < 1)) {
         throw Error('Enter a main url');
     }
+    if (!program.affiliateUrl || (program.affiliateUrl.length < 1)) {
+        throw Error('Enter an affiliate url');
+    }
     if (!program.logoPath || (program.logoPath.length < 1)) {
         throw Error('Enter a logo path');
     }
