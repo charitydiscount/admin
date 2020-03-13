@@ -146,6 +146,10 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                             value={this.props.cashout.id} disabled={true}
                         />
                         <TextField
+                            id="amount" label={"Amount(lei)"} variant="filled" style={{width: '100%'}}
+                            value={this.props.cashout.amount} disabled={true}
+                        />
+                        <TextField
                             id="userId" label={"User id"} variant="filled" style={{width: '100%'}}
                             value={this.props.cashout.userId} disabled={true}
                         />

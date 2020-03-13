@@ -139,6 +139,10 @@ class DonationElement extends React.Component<DonationElementProps, DonationElem
                             value={this.props.donation.id} disabled={true}
                         />
                         <TextField
+                            id="amount" label={"Amount(lei)"} variant="filled" style={{width: '100%'}}
+                            value={this.props.donation.amount} disabled={true}
+                        />
+                        <TextField
                             id="userId" label={"User id"} variant="filled" style={{width: '100%'}}
                             value={this.props.donation.userId} disabled={true}
                         />
