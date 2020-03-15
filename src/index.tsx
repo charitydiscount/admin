@@ -35,7 +35,7 @@ export const auth = firebaseApp.auth();
 export const remoteConfig = firebaseApp.remoteConfig();
 remoteConfig.settings = {
     minimumFetchIntervalMillis: 3600000,
-    fetchTimeoutMillis: 60000,
+    fetchTimeoutMillis: 60001,
 };
 remoteConfig.fetchAndActivate();
 
