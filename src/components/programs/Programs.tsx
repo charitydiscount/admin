@@ -320,7 +320,7 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                                })
                                            }}
                                 />
-                                <TextField id="mainUrl" label={"Main Url"} variant="filled" style={{width: '100%'}}
+                                <TextField id="mainUrl" label={"Website"} variant="filled" style={{width: '100%'}}
                                            value={this.state.createProgram.mainUrl}
                                            onChange={(event) => {
                                                let program = this.state.createProgram;
@@ -329,6 +329,30 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                                    createProgram: program
                                                })
                                            }}
+                                />
+                                <TextField
+                                    id="affiliateUrl" label={"Affiliate Link (use '{userId}' as a placeholder for the user)"} variant="filled"
+                                    style={{width: '100%'}} value={this.state.createProgram.affiliateUrl}
+                                    onChange={event => {
+                                        const program = this.state.createProgram;
+                                        program.affiliateUrl = event.target.value;
+                                        this.setState({
+                                            createProgram: program
+                                        })
+                                    }
+                                    }
+                                />
+                                <TextField
+                                    id="averagePaymentTime" label={"Average Payment Time"} variant="filled" type="number"
+                                    style={{width: '100%'}} value={this.state.createProgram.averagePaymentTime}
+                                    onChange={event => {
+                                        let program = this.state.createProgram;
+                                        program.averagePaymentTime = parseInt(event.target.value);
+                                        this.setState({
+                                            createProgram: program
+                                        })
+                                    }
+                                    }
                                 />
                                 <TextField id="source" label={"Source"} variant="filled" style={{width: '100%'}}
                                            value={this.state.createProgram.source}
