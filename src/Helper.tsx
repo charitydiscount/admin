@@ -34,6 +34,7 @@ export const mediumSpinnerCss = css`
 
 export enum SourceTypes {
     TWO_PERFORMANT = '2p',
+    REFERRAL = 'referral'
 }
 
 export const linkStyle = {

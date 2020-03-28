@@ -185,6 +185,7 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                     </td>
                     {statusColumn}
                     <td>{this.props.commission.details.amount}</td>
+                    <td>{this.props.commission.details.source}</td>
                     <td>{this.props.commission.userId}</td>
                 </tr>
                 <tr className="spacer"></tr>
