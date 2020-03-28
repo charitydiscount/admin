@@ -299,14 +299,17 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
 
             commissionsList = commissionsList
                 .map((value, index) => {
-                    let externalProgram = this.state.externalPrograms.find(
-                        val => ((value as CommissionDto).details.source.localeCompare(SourceTypes.REFERRAL)) &&
-                            (val.uniqueCode.localeCompare((value as CommissionDto).details.shopId) ||
-                            val.id.localeCompare((value as CommissionDto).details.shopId)));
-
+                    let com = value as CommissionDto;
                     let externalCommission = false;
-                    if (externalProgram) {
-                        externalCommission = true;
+                    if (com.details.source !== SourceTypes.REFERRAL) {
+                        this.state.externalPrograms.forEach((program) => {
+                                if (program.id.toString().localeCompare(com.details.shopId) === 0
+                                    || program.uniqueCode.toString().localeCompare(com.details.shopId) === 0) {
+                                    externalCommission = true;
+                                    return;
+                                }
+                            }
+                        );
                     }
                     return (
                         <CommissionsElement key={index} commission={value}
