@@ -26,6 +26,12 @@ export const spinnerCss = css`
     margin: 200px auto;
 `;
 
+
+export const mediumSpinnerCss = css`
+    display: block;
+    margin: 100px auto;
+`;
+
 export enum SourceTypes {
     TWO_PERFORMANT = '2p',
 }

@@ -152,6 +152,7 @@ export async function createCommission(userId: string, commission: CommissionCre
     const token = await auth.currentUser.getIdToken();
     let url = remoteConfig.getString('express_url') + 'user/' + userId + '/' + ExpressLink.COMMISSIONS;
 
+    commission.shopId = commission.shopId + '';
     let response = await axios.post(url, commission, {
         headers: {Authorization: `Bearer ${token}`},
     });

@@ -8,7 +8,7 @@ import {
     getCommissions
 } from "../../rest/CommissionService";
 import FadeLoader from 'react-spinners/FadeLoader';
-import { emptyHrefLink, linkStyle, SourceTypes, spinnerCss } from "../../Helper";
+import { emptyHrefLink, linkStyle, mediumSpinnerCss, SourceTypes, spinnerCss } from "../../Helper";
 import ReactPaginate from 'react-paginate';
 import { Button, TextField } from "@material-ui/core";
 import InputLabel from '@material-ui/core/InputLabel';
@@ -36,7 +36,8 @@ interface CommissionsState {
     users: Map<string, string>,
     sortOrder: boolean,
     modalVisible: boolean,
-    createCommission: CommissionCreateDto
+    isLoadingCreate: boolean
+    createCommission: CommissionCreateDto,
     createCommissionUserId: string,
     sort: SortType
 }
@@ -74,6 +75,7 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
             users: new Map<string, string>(),
             modalVisible: false,
             sortOrder: true,
+            isLoadingCreate: false,
             createCommission: {...DEFAULT_COMMISSION},
             createCommissionUserId: '',
             sort: SortType.EMPTY
@@ -208,20 +210,31 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
     }
 
     async onModalSave() {
-        try {
-            if (this.state.createCommission && this.state.createCommissionUserId) {
-                let response = await createCommission(this.state.createCommissionUserId, this.state.createCommission);
-                if (response) {
-                    alert("Commission successfully created");
-                    window.location.reload();
+        if (!this.state.isLoadingCreate) {
+            try {
+                this.setState({
+                    isLoadingCreate: true
+                });
+                if (this.state.createCommission && this.state.createCommissionUserId) {
+                    let response = await createCommission(this.state.createCommissionUserId, this.state.createCommission);
+                    if (response) {
+                        alert("Commission successfully created");
+                        window.location.reload();
+                    } else {
+                        alert("Something went wrong with creation");
+                    }
                 } else {
-                    alert("Something went wrong with creation");
+                    alert("Nothing to update")
                 }
-            } else {
-                alert("Nothing to update")
+                this.setState({
+                    isLoadingCreate: false
+                });
+            } catch (e) {
+                alert(e);
+                this.setState({
+                    isLoadingCreate: false
+                });
             }
-        } catch (e) {
-            alert(e);
         }
     }
 
@@ -322,121 +335,130 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                             title="Create commission"
                             onSave={() => this.onModalSave()}
                         >
-                            <TextField id="userId" label={"User Id"} variant="filled" style={{width: '100%'}}
-                                       value={this.state.createCommissionUserId}
-                                       onChange={(event) => {
-                                           this.setState({
-                                               createCommissionUserId: event.target.value
-                                           })
-                                       }}
+                            <FadeLoader
+                                loading={this.state.isLoadingCreate}
+                                color={'#1641ff'}
+                                css={mediumSpinnerCss}
                             />
-                            <FormControl variant="filled" style={{width: '100%'}}>
-                                <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
-                                <Select
-                                    MenuProps={{
-                                        disableScrollLock: true,
-                                        getContentAnchorEl: null,
-                                        anchorOrigin: {
-                                            vertical: 'bottom',
-                                            horizontal: 'left',
-                                        },
-                                    }}
-                                    labelId="demo-simple-select-filled-label"
-                                    id="demo-simple-select-filled"
-                                    value={this.state.createCommission.status}
-                                    onChange={event => {
-                                        let createCommission = this.state.createCommission;
-                                        createCommission.status = event.target.value as string;
-                                        this.setState({
-                                            createCommission: createCommission
-                                        })
-                                    }}
-                                >
-                                    <MenuItem value={"pending"}> Pending </MenuItem>
-                                    <MenuItem value={"accepted"}> Accepted </MenuItem>
-                                    <MenuItem value={"rejected"}> Rejected </MenuItem>
-                                    <MenuItem value={"paid"}> Paid </MenuItem>
-                                </Select>
-                            </FormControl>
-                            <TextField id="reason" label={"Reason"} variant="filled" style={{width: '100%'}}
-                                       value={this.state.createCommission.reason}
-                                       onChange={(event) => {
-                                           let createCommission = this.state.createCommission;
-                                           createCommission.reason = event.target.value;
-                                           this.setState({
-                                               createCommission: createCommission
-                                           })
-                                       }}
-                            />
-                            <TextField id="originalAmount" label={"Original Amount"} variant="filled"
-                                       style={{width: '100%'}}
-                                       type="number"
-                                       inputProps={{
-                                           min: 0,
-                                           step: '0.1'
-                                       }}
-                                       value={this.state.createCommission.originalAmount}
-                                       onChange={event => {
-                                           let commission = this.state.createCommission;
-                                           commission.originalAmount = parseFloat(event.target.value);
-                                           this.setState({
-                                               createCommission: commission
-                                           })
-                                       }}
-                            />
-                            <TextField id="originId" label={"Origin Id"} variant="filled" style={{width: '100%'}}
-                                       value={this.state.createCommission.originId}
-                                       onChange={(event) => {
-                                           let commission = this.state.createCommission;
-                                           commission.originId = event.target.value;
-                                           this.setState({
-                                               createCommission: commission
-                                           })
-                                       }}
-                            />
-                            <TextField id="originalCurrency" label={"Original Currency"} variant="filled"
-                                       style={{width: '100%'}}
-                                       value={this.state.createCommission.originalCurrency}
-                                       onChange={(event) => {
-                                           let commission = this.state.createCommission;
-                                           commission.originalCurrency = event.target.value;
-                                           this.setState({
-                                               createCommission: commission
-                                           })
-                                       }}
-                            />
-                            <FormControl variant="filled" style={{width: '100%'}}>
-                                <InputLabel id="demo-simple-select-filled-label">Program</InputLabel>
-                                <Select
-                                    MenuProps={{
-                                        disableScrollLock: true,
-                                        getContentAnchorEl: null,
-                                        anchorOrigin: {
-                                            vertical: 'bottom',
-                                            horizontal: 'left',
-                                        },
-                                    }}
-                                    labelId="demo-simple-select-filled-label"
-                                    id="demo-simple-select-filled"
-                                    value={this.state.createCommission.shopId}
-                                    onChange={event => {
-                                        let createCommission = this.state.createCommission;
-                                        createCommission.shopId = event.target.value as string;
-                                        let extProgram = this.state.externalPrograms.find(value => value.id === createCommission.shopId);
-                                        if (extProgram) {
-                                            createCommission.program.name = extProgram.name;
-                                            createCommission.program.logo = extProgram.logoPath;
-                                            createCommission.program.status = extProgram.status;
-                                            createCommission.source = extProgram.source;
-                                        }
-                                        this.setState({
-                                            createCommission: createCommission
-                                        })
-                                    }}
-                                >
-                                    {programsList}
-                                </Select>
-                            </FormControl>
+                            {!this.state.isLoadingCreate &&
+                            <React.Fragment>
+                                <TextField id="userId" label={"User Id"} variant="filled" style={{width: '100%'}}
+                                           value={this.state.createCommissionUserId}
+                                           onChange={(event) => {
+                                               this.setState({
+                                                   createCommissionUserId: event.target.value
+                                               })
+                                           }}
+                                />
+                                <FormControl variant="filled" style={{width: '100%'}}>
+                                    <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
+                                    <Select
+                                        MenuProps={{
+                                            disableScrollLock: true,
+                                            getContentAnchorEl: null,
+                                            anchorOrigin: {
+                                                vertical: 'bottom',
+                                                horizontal: 'left',
+                                            },
+                                        }}
+                                        labelId="demo-simple-select-filled-label"
+                                        id="demo-simple-select-filled"
+                                        value={this.state.createCommission.status}
+                                        onChange={event => {
+                                            let createCommission = this.state.createCommission;
+                                            createCommission.status = event.target.value as string;
+                                            this.setState({
+                                                createCommission: createCommission
+                                            })
+                                        }}
+                                    >
+                                        <MenuItem value={"pending"}> Pending </MenuItem>
+                                        <MenuItem value={"accepted"}> Accepted </MenuItem>
+                                        <MenuItem value={"rejected"}> Rejected </MenuItem>
+                                        <MenuItem value={"paid"}> Paid </MenuItem>
+                                    </Select>
+                                </FormControl>
+                                <TextField id="reason" label={"Reason"} variant="filled" style={{width: '100%'}}
+                                           value={this.state.createCommission.reason}
+                                           onChange={(event) => {
+                                               let createCommission = this.state.createCommission;
+                                               createCommission.reason = event.target.value;
+                                               this.setState({
+                                                   createCommission: createCommission
+                                               })
+                                           }}
+                                />
+                                <TextField id="originalAmount" label={"Original Amount"} variant="filled"
+                                           style={{width: '100%'}}
+                                           type="number"
+                                           inputProps={{
+                                               min: 0,
+                                               step: '0.1'
+                                           }}
+                                           value={this.state.createCommission.originalAmount}
+                                           onChange={event => {
+                                               let commission = this.state.createCommission;
+                                               commission.originalAmount = parseFloat(event.target.value);
+                                               this.setState({
+                                                   createCommission: commission
+                                               })
+                                           }}
+                                />
+                                <TextField id="originId" label={"Origin Id"} variant="filled" style={{width: '100%'}}
+                                           value={this.state.createCommission.originId}
+                                           onChange={(event) => {
+                                               let commission = this.state.createCommission;
+                                               commission.originId = event.target.value;
+                                               this.setState({
+                                                   createCommission: commission
+                                               })
+                                           }}
+                                />
+                                <TextField id="originalCurrency" label={"Original Currency"} variant="filled"
+                                           style={{width: '100%'}}
+                                           value={this.state.createCommission.originalCurrency}
+                                           onChange={(event) => {
+                                               let commission = this.state.createCommission;
+                                               commission.originalCurrency = event.target.value;
+                                               this.setState({
+                                                   createCommission: commission
+                                               })
+                                           }}
+                                />
+                                <FormControl variant="filled" style={{width: '100%'}}>
+                                    <InputLabel id="demo-simple-select-filled-label">Program</InputLabel>
+                                    <Select
+                                        MenuProps={{
+                                            disableScrollLock: true,
+                                            getContentAnchorEl: null,
+                                            anchorOrigin: {
+                                                vertical: 'bottom',
+                                                horizontal: 'left',
+                                            },
+                                        }}
+                                        labelId="demo-simple-select-filled-label"
+                                        id="demo-simple-select-filled"
+                                        value={this.state.createCommission.shopId}
+                                        onChange={event => {
+                                            let createCommission = this.state.createCommission;
+                                            createCommission.shopId = event.target.value as string;
+                                            let extProgram = this.state.externalPrograms.find(value => value.id === createCommission.shopId);
+                                            if (extProgram) {
+                                                createCommission.program.name = extProgram.name;
+                                                createCommission.program.logo = extProgram.logoPath;
+                                                createCommission.program.status = extProgram.status;
+                                                createCommission.source = extProgram.source;
+                                            }
+                                            this.setState({
+                                                createCommission: createCommission
+                                            })
+                                        }}
+                                    >
+                                        {programsList}
+                                    </Select>
+                                </FormControl>
+                            </React.Fragment>
+                            }
                         </Modal>
                         <FadeLoader
                             loading={this.state.isLoading}
