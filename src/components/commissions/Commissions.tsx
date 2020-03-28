@@ -286,7 +286,9 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
 
             commissionsList = commissionsList
                 .map((value, index) => {
-                    let externalProgram = this.state.externalPrograms.find(val => val.id === (value as CommissionDto).details.shopId);
+                    let externalProgram = this.state.externalPrograms.find(
+                        val => val.uniqueCode === (value as CommissionDto).details.shopId ||
+                            val.id === (value as CommissionDto).details.shopId);
                     let externalCommission = false;
                     if (externalProgram) {
                         externalCommission = true;
