@@ -103,6 +103,8 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                             value={this.state.commission.commissionId} disabled={true}
                         />
                         {this.props.externalCommission &&
+                        (this.state.commission.details.status === 'pending' ||
+                            this.state.commission.details.status === 'accepted') &&
                         <FormControl variant="filled" style={{width: '100%'}}>
                             <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
                             <Select
@@ -131,12 +133,6 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                                 <MenuItem value={"paid"}> Paid </MenuItem>
                             </Select>
                         </FormControl>
-                        }
-                        {!this.props.externalCommission &&
-                        <TextField
-                            id="status" label={"Status"} variant="filled" style={{width: '100%'}}
-                            value={this.state.commission.details.status} disabled={true}
-                        />
                         }
                         <TextField
                             id="reason" label={"Reason"} variant="filled" style={{width: '100%'}}

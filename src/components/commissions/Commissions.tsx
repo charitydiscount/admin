@@ -355,34 +355,6 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                                                })
                                            }}
                                 />
-                                <FormControl variant="filled" style={{width: '100%'}}>
-                                    <InputLabel id="demo-simple-select-filled-label">Status</InputLabel>
-                                    <Select
-                                        MenuProps={{
-                                            disableScrollLock: true,
-                                            getContentAnchorEl: null,
-                                            anchorOrigin: {
-                                                vertical: 'bottom',
-                                                horizontal: 'left',
-                                            },
-                                        }}
-                                        labelId="demo-simple-select-filled-label"
-                                        id="demo-simple-select-filled"
-                                        value={this.state.createCommission.status}
-                                        onChange={event => {
-                                            let createCommission = this.state.createCommission;
-                                            createCommission.status = event.target.value as string;
-                                            this.setState({
-                                                createCommission: createCommission
-                                            })
-                                        }}
-                                    >
-                                        <MenuItem value={"pending"}> Pending </MenuItem>
-                                        <MenuItem value={"accepted"}> Accepted </MenuItem>
-                                        <MenuItem value={"rejected"}> Rejected </MenuItem>
-                                        <MenuItem value={"paid"}> Paid </MenuItem>
-                                    </Select>
-                                </FormControl>
                                 <TextField id="reason" label={"Reason"} variant="filled" style={{width: '100%'}}
                                            value={this.state.createCommission.reason}
                                            onChange={(event) => {
