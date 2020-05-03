@@ -33,15 +33,15 @@ class NavigationLayout extends React.Component {
                                         Charity Cases
                                     </Link>
                                     <Link to={Routes.CASHOUT}>
-                                        <i className="fas fa-table" />
+                                        <i className="zmdi zmdi-money" />
                                         Cashouts
                                     </Link>
                                     <Link to={Routes.DONATIONS}>
-                                        <i className="fas fa-table" />
+                                        <i className="zmdi zmdi-favorite" />
                                         Donations
                                     </Link>
                                     <Link to={Routes.MESSAGES}>
-                                        <i className="fas fa-table" />
+                                        <i className="zmdi zmdi-email" />
                                         Messages
                                     </Link>
                                     <a

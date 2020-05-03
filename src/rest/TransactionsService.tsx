@@ -50,6 +50,36 @@ export async function getTransactions(type: TxType) {
         });
 }
 
+export async function getNewTransactions(type: TxType) {
+    if (!auth.currentUser) {
+        return [];
+    }
+
+    const token = await auth.currentUser.getIdToken();
+    let url = remoteConfig.getString('express_url');
+    if (type === TxType.CASHOUT) {
+        url += ExpressLink.CASHOUT;
+    } else if (type === TxType.DONATION) {
+        url += ExpressLink.DONATION;
+    } else {
+        return;
+    }
+
+    let response = await axios.get(url, {
+        headers: {Authorization: `Bearer ${token}`}
+    });
+
+
+    let entries = Object.entries(response.data as TransactionDocDto)
+        .map(([id, transaction]) => {
+            return transaction
+        })
+        .filter(
+            value => value.status !== "PAID" && value.status !== "REJECTED"
+        );
+    return entries.length;
+}
+
 export async function getTotalAmount(type: TxType, userId: string) {
     if (!auth.currentUser) {
         throw Error('User not logged in');

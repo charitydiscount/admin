@@ -3,6 +3,8 @@ import { getUserInfo } from "../../rest/UserService";
 import { getNewMessages } from "../../rest/ContactsService";
 import { Routes } from "./Routes";
 import { Link } from "react-router-dom";
+import { getNewTransactions } from "../../rest/TransactionsService";
+import { TxType } from "../../Helper";
 
 interface HeaderLayoutDesktopProps {
 
@@ -10,6 +12,8 @@ interface HeaderLayoutDesktopProps {
 
 interface HeaderLayoutDesktopState {
     newMessages: number
+    newCashouts: number
+    newDonations: number
 }
 
 class HeaderLayoutDesktop extends React.Component<HeaderLayoutDesktopProps, HeaderLayoutDesktopState> {
@@ -17,7 +21,9 @@ class HeaderLayoutDesktop extends React.Component<HeaderLayoutDesktopProps, Head
     constructor(props: Readonly<HeaderLayoutDesktopProps>) {
         super(props);
         this.state = {
-            newMessages: 0
+            newMessages: 0,
+            newCashouts: 0,
+            newDonations: 0
         };
     }
 
@@ -27,6 +33,26 @@ class HeaderLayoutDesktop extends React.Component<HeaderLayoutDesktopProps, Head
             if (response) {
                 this.setState({
                     newMessages: response as number
+                });
+            }
+        } catch (error) {
+            //nothing happens
+        }
+        try {
+            let response = await getNewTransactions(TxType.DONATION);
+            if (response) {
+                this.setState({
+                    newDonations: response as number
+                });
+            }
+        } catch (error) {
+            //nothing happens
+        }
+        try {
+            let response = await getNewTransactions(TxType.CASHOUT);
+            if (response) {
+                this.setState({
+                    newCashouts: response as number
                 });
             }
         } catch (error) {
@@ -46,11 +72,25 @@ class HeaderLayoutDesktop extends React.Component<HeaderLayoutDesktopProps, Head
                                 <div className="header-button">
                                     <div className="noti-wrap">
                                         <div className="noti__item js-item-menu">
+                                            <Link to={Routes.CASHOUT}>
+                                                <i className="zmdi zmdi-money"/>
+                                                <span className="quantity">{this.state.newCashouts}</span>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                    <div className="noti-wrap">
+                                        <div className="noti__item js-item-menu">
+                                            <Link to={Routes.DONATIONS}>
+                                                <i className="zmdi zmdi-favorite"/>
+                                                <span className="quantity">{this.state.newDonations}</span>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                    <div className="noti-wrap">
+                                        <div className="noti__item js-item-menu">
                                             <Link to={Routes.MESSAGES}>
-                                                <i className="zmdi zmdi-comment-more"/>
-                                                {this.state.newMessages && this.state.newMessages > 0 &&
+                                                <i className="zmdi zmdi-email"/>
                                                 <span className="quantity">{this.state.newMessages}</span>
-                                                }
                                             </Link>
                                         </div>
                                     </div>
