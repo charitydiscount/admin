@@ -8,6 +8,7 @@ import cases from '../cases';
 import Cashouts from "../cashout/Cashouts";
 import Donations from "../donation/Donations";
 import Contacts from "../contact/Contacts";
+import Settings from "../settings/Settings";
 
 class PageContentLayout extends React.Component {
     public render() {
@@ -19,6 +20,11 @@ class PageContentLayout extends React.Component {
                             exact={true}
                             path={Routes.DASHBOARD}
                             component={EmptyComponent}
+                        />
+                        <Route
+                            exact={true}
+                            path={Routes.SETTINGS}
+                            component={Settings}
                         />
                         <Route
                             exact={true}

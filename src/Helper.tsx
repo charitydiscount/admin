@@ -5,6 +5,7 @@ import { css } from '@emotion/core';
 export enum ExpressLink {
     PROGRAMS = 'programs',
     MESSAGES = 'messages',
+    SETTINGS = 'settings',
     CASHOUT = 'cashout',
     DONATION = 'donations',
     COMMISSIONS = 'commissions',
@@ -18,7 +19,8 @@ export enum FirebaseTable {
 }
 
 export enum TableDocument {
-    PROGRAMS = 'programs'
+    PROGRAMS = 'programs',
+    SETTINGS = 'settings'
 }
 
 export const spinnerCss = css`

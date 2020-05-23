@@ -20,6 +20,10 @@ class NavigationLayout extends React.Component {
                         <nav className="navbar-sidebar">
                             <ul className="list-unstyled navbar__list">
                                 <li>
+                                    <Link to={Routes.SETTINGS}>
+                                        <i className="fas fa-table" />
+                                        Settings
+                                    </Link>
                                     <Link to={Routes.COMMISSIONS}>
                                         <i className="fas fa-table" />
                                         Commissions

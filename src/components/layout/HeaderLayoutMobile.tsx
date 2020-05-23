@@ -27,6 +27,11 @@ class HeaderLayoutMobile extends React.Component {
                         <div className="container-fluid">
                             <ul className="navbar-mobile__list list-unstyled">
                                 <li className="has-sub">
+                                    <Link to={Routes.SETTINGS}>
+                                        <i className="fas fa-table"/>Settings
+                                    </Link>
+                                </li>
+                                <li className="has-sub">
                                     <Link to={Routes.COMMISSIONS}>
                                         <i className="fas fa-table"/>Commissions
                                     </Link>

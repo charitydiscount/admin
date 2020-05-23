@@ -7,5 +7,6 @@ export enum Routes {
     CASES = '/cases',
     CASHOUT = '/cashout',
     MESSAGES = '/messages',
-    DONATIONS = '/donations'
+    DONATIONS = '/donations',
+    SETTINGS = '/settings'
 }

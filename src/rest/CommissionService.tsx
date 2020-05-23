@@ -67,7 +67,6 @@ export async function getCommissions() {
     }
 
     const token = await auth.currentUser.getIdToken();
-    console.log("url-ul este:" + remoteConfig.getString('express_url'));
     let url = remoteConfig.getString('express_url') + ExpressLink.COMMISSIONS;
 
     let response = await axios.get(url, {
