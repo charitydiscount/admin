@@ -91,40 +91,20 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
         document.addEventListener('keydown', this.enterSearch, false);
 
         try {
-            let response = await getCommissions();
-            if (response) {
+            let responseCommissions = await getCommissions();
+            let responseExternalPrograms = await getExternalPrograms();
+            let responseUsers = await getAllUsers();
+            if (responseCommissions && responseExternalPrograms && responseUsers) {
                 this.setState({
-                    commissions: response as CommissionDto[],
-                    defaultCommissionsList: response as CommissionDto[],
+                    commissions: responseCommissions as CommissionDto[],
+                    externalPrograms: responseExternalPrograms,
+                    users: responseUsers as Map<string, string>,
+                    defaultCommissionsList: responseCommissions as CommissionDto[],
                     isLoading: false
                 });
             }
         } catch (error) {
             alert(error);
-        }
-
-        try {
-            let response = await getExternalPrograms();
-            if (response) {
-                this.setState({
-                    externalPrograms: response,
-                });
-            }
-        } catch (error) {
-            alert(error);
-            //programs not loaded
-        }
-
-        try {
-            let response = await getAllUsers();
-            if (response) {
-                this.setState({
-                    users: response as Map<string, string>,
-                });
-            }
-        } catch (error) {
-            alert(error);
-            //users not loaded
         }
     }
 

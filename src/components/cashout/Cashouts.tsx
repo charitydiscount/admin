@@ -69,28 +69,18 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
     async componentDidMount() {
         document.addEventListener('keydown', this.enterSearch, false);
         try {
-            let response = await getTransactions(TxType.CASHOUT);
-            if (response) {
+            let responseCashouts = await getTransactions(TxType.CASHOUT);
+            let responseUsers = await getAllUsers();
+            if (responseCashouts && responseUsers) {
                 this.setState({
-                    cashouts: response as TransactionDto[],
-                    defaultCashoutsList: response as TransactionDto[],
+                    cashouts: responseCashouts as TransactionDto[],
+                    users: responseUsers as Map<string, string>,
+                    defaultCashoutsList: responseCashouts as TransactionDto[],
                     isLoading: false
                 });
             }
         } catch (error) {
             alert(error);
-        }
-
-        try {
-            let response = await getAllUsers();
-            if (response) {
-                this.setState({
-                    users: response as Map<string, string>,
-                });
-            }
-        } catch (error) {
-            alert(error);
-            //users not loaded
         }
     }
 

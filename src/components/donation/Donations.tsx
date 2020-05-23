@@ -69,28 +69,18 @@ class Donations extends React.Component<CashoutsProps, CashoutsState> {
     async componentDidMount() {
         document.addEventListener('keydown', this.enterSearch, false);
         try {
-            let response = await getTransactions(TxType.DONATION);
-            if (response) {
+            let responseDonations = await getTransactions(TxType.DONATION);
+            let responseUsers = await getAllUsers();
+            if (responseDonations && responseUsers) {
                 this.setState({
-                    donations: response as TransactionDto[],
-                    defaultDonationsList: response as TransactionDto[],
+                    donations: responseDonations as TransactionDto[],
+                    users: responseUsers as Map<string, string>,
+                    defaultDonationsList: responseDonations as TransactionDto[],
                     isLoading: false
                 });
             }
         } catch (error) {
             alert(error);
-        }
-
-        try {
-            let response = await getAllUsers();
-            if (response) {
-                this.setState({
-                    users: response as Map<string, string>,
-                });
-            }
-        } catch (error) {
-            alert(error);
-            //users not loaded
         }
     }
 
