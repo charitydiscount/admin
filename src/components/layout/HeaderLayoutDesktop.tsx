@@ -11,9 +11,9 @@ interface HeaderLayoutDesktopProps {
 }
 
 interface HeaderLayoutDesktopState {
-    newMessages: number
-    newCashouts: number
-    newDonations: number
+    newMessages: string
+    newCashouts: string
+    newDonations: string
 }
 
 class HeaderLayoutDesktop extends React.Component<HeaderLayoutDesktopProps, HeaderLayoutDesktopState> {
@@ -21,9 +21,9 @@ class HeaderLayoutDesktop extends React.Component<HeaderLayoutDesktopProps, Head
     constructor(props: Readonly<HeaderLayoutDesktopProps>) {
         super(props);
         this.state = {
-            newMessages: 0,
-            newCashouts: 0,
-            newDonations: 0
+            newMessages: '-',
+            newCashouts: '-',
+            newDonations: '-'
         };
     }
 
@@ -32,7 +32,7 @@ class HeaderLayoutDesktop extends React.Component<HeaderLayoutDesktopProps, Head
             let response = await getNewMessages();
             if (response) {
                 this.setState({
-                    newMessages: response as number
+                    newMessages: String(response)
                 });
             }
         } catch (error) {
@@ -42,7 +42,7 @@ class HeaderLayoutDesktop extends React.Component<HeaderLayoutDesktopProps, Head
             let response = await getNewTransactions(TxType.DONATION);
             if (response) {
                 this.setState({
-                    newDonations: response as number
+                    newDonations: String(response)
                 });
             }
         } catch (error) {
@@ -52,7 +52,7 @@ class HeaderLayoutDesktop extends React.Component<HeaderLayoutDesktopProps, Head
             let response = await getNewTransactions(TxType.CASHOUT);
             if (response) {
                 this.setState({
-                    newCashouts: response as number
+                    newCashouts: String(response)
                 });
             }
         } catch (error) {
