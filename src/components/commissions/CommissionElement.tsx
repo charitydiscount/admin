@@ -1,5 +1,5 @@
 import React from "react";
-import { CommissionDto, updateCommission } from "../../rest/CommissionService";
+import { CommissionDto, getTotalAmountForUserId, updateCommission } from "../../rest/CommissionService";
 import Modal from '../modal';
 import { TextField } from "@material-ui/core";
 import { dateOptions, emptyHrefLink } from "../../Helper";
@@ -10,13 +10,16 @@ import Select from '@material-ui/core/Select';
 
 interface CommissionsElementProps {
     commission: CommissionDto,
+    defaultCommissions: CommissionDto[],
     externalCommission : boolean,
     email?: string
 }
 
 interface CommissionsElementState {
     modalVisible: boolean,
-    commission: CommissionDto
+    commission: CommissionDto,
+    totalAmountForUser: number,
+    modalUserVisible: boolean
 }
 
 class CommissionsElement extends React.Component<CommissionsElementProps, CommissionsElementState> {
@@ -25,7 +28,9 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
         super(props);
         this.state = {
             modalVisible: false,
-            commission: this.props.commission
+            commission: this.props.commission,
+            totalAmountForUser: 0,
+            modalUserVisible: false
         };
         this.onModalSave = this.onModalSave.bind(this);
     }
@@ -40,6 +45,24 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
     closeModal() {
         this.setState({
             modalVisible: false,
+        });
+    }
+
+    openUserModal() {
+        try {
+            let result = getTotalAmountForUserId(this.props.commission.userId, this.props.defaultCommissions);
+            this.setState({
+                totalAmountForUser: result as number,
+                modalUserVisible: true
+            })
+        } catch (e) {
+            alert(e);
+        }
+    }
+
+    closeUserModal() {
+        this.setState({
+            modalUserVisible: false
         });
     }
 
@@ -165,6 +188,31 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                     </React.Fragment>
                     }
                 </Modal>
+                <Modal
+                    visible={this.state.modalUserVisible}
+                    onClose={() => this.closeUserModal()}
+                    title="Total cashout for user"
+                    onSave={() => {
+                        this.closeUserModal();
+                    }}
+                >
+                    {this.state.modalUserVisible &&
+                    <React.Fragment>
+                        <TextField
+                            id="userId" label={"User id"} variant="filled" style={{width: '100%'}}
+                            value={this.props.commission.userId} disabled={true}
+                        />
+                        <TextField
+                            id="email" label={"Email"} variant="filled" style={{width: '100%'}}
+                            value={this.props.email} disabled={true}
+                        />
+                        <TextField
+                            id="totalAmount" label={"Total Amount of all commissions(lei)"} variant="filled" style={{width: '100%'}}
+                            value={this.state.totalAmountForUser} disabled={true}
+                        />
+                    </React.Fragment>
+                    }
+                </Modal>
                 <tr className="tr-shadow">
                     <td>{
                         this.props.commission.details.createdAt &&
@@ -182,7 +230,15 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                     {statusColumn}
                     <td>{this.props.commission.details.amount}</td>
                     <td>{this.props.commission.details.source}</td>
-                    <td>{this.props.commission.userId}</td>
+                    <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
+                        <a href={emptyHrefLink} style={{
+                            textDecoration: "underline",
+                            color: "#007bff",
+                            cursor: "pointer"
+                        }} onClick={() => this.openUserModal()}>
+                            {this.props.commission.userId}
+                        </a>
+                    </td>
                 </tr>
                 <tr className="spacer"></tr>
             </React.Fragment>

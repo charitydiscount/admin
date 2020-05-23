@@ -1,4 +1,4 @@
-import { ExpressLink, ProxyDate, TxType } from "../Helper";
+import { ExpressLink, ProxyDate, roundAmount, TxType } from "../Helper";
 import { auth, remoteConfig } from "../index";
 import axios from "axios";
 
@@ -108,7 +108,7 @@ export async function getTotalAmount(type: TxType, userId: string) {
         totalAmount += (element as TransactionDto).amount;
     });
 
-    return totalAmount;
+    return roundAmount(totalAmount);
 }
 
 export async function updateTransaction(type: TxType, transaction: TransactionDto) {

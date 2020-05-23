@@ -97,9 +97,9 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
             if (responseCommissions && responseExternalPrograms && responseUsers) {
                 this.setState({
                     commissions: responseCommissions as CommissionDto[],
+                    defaultCommissionsList: responseCommissions as CommissionDto[],
                     externalPrograms: responseExternalPrograms,
                     users: responseUsers as Map<string, string>,
-                    defaultCommissionsList: responseCommissions as CommissionDto[],
                     isLoading: false
                 });
             }
@@ -294,7 +294,8 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                     return (
                         <CommissionsElement key={index} commission={value}
                                             externalCommission={externalCommission}
-                                            email={this.state.users.get((value as CommissionDto).userId)}/>
+                                            email={this.state.users.get((value as CommissionDto).userId)}
+                                            defaultCommissions = {this.state.defaultCommissionsList}/>
                     );
                 });
         }

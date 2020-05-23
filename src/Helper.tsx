@@ -116,3 +116,6 @@ export const dateOptions = {
     second: 'numeric',
 };
 
+export function roundAmount(comission) {
+    return comission.toFixed(2);
+}

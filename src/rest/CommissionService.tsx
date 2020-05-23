@@ -1,5 +1,5 @@
 import { auth, remoteConfig } from "../index";
-import { ExpressLink, ProxyDate } from "../Helper";
+import { ExpressLink, ProxyDate, roundAmount } from "../Helper";
 import axios from "axios";
 import { ProgramDto } from "./ProgramService";
 
@@ -157,4 +157,15 @@ export async function createCommission(userId: string, commission: CommissionCre
     });
 
     return response.status === 200;
+}
+
+export function getTotalAmountForUserId(userId: string, commissions: CommissionDto[]) {
+    let totalAmount = 0;
+    commissions
+        .filter(element => element.userId === userId)
+        .forEach(element => {
+            totalAmount += element.details.amount
+        });
+
+    return roundAmount(totalAmount);
 }
