@@ -21,7 +21,7 @@ class NavigationLayout extends React.Component {
                             <ul className="list-unstyled navbar__list">
                                 <li>
                                     <Link to={Routes.SETTINGS}>
-                                        <i className="fas fa-table" />
+                                        <i className="zmdi zmdi-settings" />
                                         Settings
                                     </Link>
                                     <Link to={Routes.COMMISSIONS}>
