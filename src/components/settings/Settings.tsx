@@ -80,7 +80,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                         {!this.state.isLoading &&
                         <React.Fragment>
                             <TextField
-                                id="amount" label={"To whom to send cashout notification email separated by comma"}
+                                id="amount" label={"To whom to send cashout notification email separated by comma, if empty, no mails will be delivered"}
                                 variant="filled"
                                 style={{width: '100%'}}
                                 onChange={event => {
