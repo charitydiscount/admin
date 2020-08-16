@@ -12,6 +12,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/remote-config';
+import 'firebase/storage';
 import firebaseConfig from './config/FirebaseConfig';
 import { UserActions } from './redux/actions/UserActions';
 import { authorizeUser } from './rest/UserService';
@@ -32,6 +33,7 @@ export const store = createStore(
 export const firebaseApp = firebase.initializeApp(firebaseConfig);
 export const DB = firebaseApp.firestore();
 export const auth = firebaseApp.auth();
+export const storage = firebaseApp.storage();
 export const remoteConfig = firebaseApp.remoteConfig();
 remoteConfig.settings = {
     minimumFetchIntervalMillis: 3600000,

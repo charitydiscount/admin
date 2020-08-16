@@ -25,6 +25,10 @@ export enum TableDocument {
     SETTINGS = 'settings'
 }
 
+export enum StorageRef {
+    ICONS = "icons/",
+}
+
 export const spinnerCss = css`
     display: block;
     margin: 200px auto;

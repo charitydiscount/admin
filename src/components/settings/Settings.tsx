@@ -2,13 +2,15 @@ import React from "react";
 import { Button, TextField } from "@material-ui/core";
 import { getSettings, SettingsDTO, updateSettings } from "../../rest/SettingsService";
 import FadeLoader from 'react-spinners/FadeLoader';
-import { spinnerCss } from "../../Helper";
+import FileUploader from 'react-firebase-file-uploader';
+import { emptyHrefLink, spinnerCss, StorageRef } from "../../Helper";
 import {
     CategoryDto, getCategories,
     getImportantCategories,
     ImportantCategoryDto,
     updateImportantCategories
 } from "../../rest/CategoriesService";
+import { storage } from "../../index";
 
 interface SettingsProps {
 
@@ -18,6 +20,7 @@ interface SettingsState {
     settings: SettingsDTO,
     importantCategories: ImportantCategoryDto[],
     isLoadingSettings: boolean,
+    file: string,
     isLoadingImportantCategories: boolean,
     availableCategories: CategoryDto[]
 }
@@ -35,11 +38,13 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
             },
             importantCategories: [],
             availableCategories: [],
+            file: '',
             isLoadingSettings: true,
             isLoadingImportantCategories: true
         };
         this.updateSettings = this.updateSettings.bind(this);
         this.updateImportantCategories = this.updateImportantCategories.bind(this);
+        this.handleFileSelect = this.handleFileSelect.bind(this);
     }
 
     async updateSettings() {
@@ -103,6 +108,19 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                 isLoadingImportantCategories: false
             });
         }
+    }
+
+    handleFileSelect(e) {
+        this.setState({file: e.target.files[0]})
+    }
+
+    handleUploadSuccess() {
+        alert("File has successful updated");
+        window.location.reload();
+    }
+
+    handleUploadError(event) {
+        alert("Something went wrong with the upload");
     }
 
     public render() {
@@ -199,24 +217,44 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                     }
                 </div>
                 <br/>
-                <h3 className="title-5 m-b-35">Important Categories</h3>
+
                 <div className="row container">
                     <FadeLoader
                         loading={this.state.isLoadingImportantCategories}
                         color={'#1641ff'}
                         css={spinnerCss}
                     />
+                    <h3 className="title-5 m-b-35">Important Categories</h3>
+
                     {!this.state.isLoadingImportantCategories &&
                     <React.Fragment>
                         <div className="col-md-12">
                             <div className="card">
                                 <div className="card-header">
-                                    <strong className="card-title">Available Categories (replace the category name with one of this)</strong>
+                                    <strong className="card-title">Available Categories (replace the category name with
+                                        one of this)</strong>
                                 </div>
                                 <div className="card-body">
                                     {availableCategories}
                                 </div>
                             </div>
+                            <a href={emptyHrefLink}>
+                                <label>
+                                    {'>'} (Click)Upload ICON file to firebase storage(dimension:64x64, .PNG format)
+                                    <FileUploader hidden
+                                                  accept="image/*"
+                                                  filename={
+                                                      this.state.file
+                                                  }
+                                                  storageRef={storage.ref(StorageRef.ICONS + this.state.file)}
+                                                  onUploadError={this.handleUploadError}
+                                                  onUploadSuccess={this.handleUploadSuccess}
+                                    />
+                                </label>
+                            </a>
+                            <label>
+                                The name of the uploaded file should be used in the 'Photo name from storage'
+                            </label>
                         </div>
                         {importantCategories}
                         <Button color="primary" variant="contained"
