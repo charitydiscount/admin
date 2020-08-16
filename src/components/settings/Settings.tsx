@@ -2,15 +2,14 @@ import React from "react";
 import { Button, TextField } from "@material-ui/core";
 import { getSettings, SettingsDTO, updateSettings } from "../../rest/SettingsService";
 import FadeLoader from 'react-spinners/FadeLoader';
-import FileUploader from 'react-firebase-file-uploader';
-import { emptyHrefLink, spinnerCss, StorageRef } from "../../Helper";
+import { spinnerCss } from "../../Helper";
 import {
     CategoryDto, getCategories,
     getImportantCategories,
     ImportantCategoryDto,
     updateImportantCategories
 } from "../../rest/CategoriesService";
-import { storage } from "../../index";
+import ImportantCategory from "./ImportantCategory";
 
 interface SettingsProps {
 
@@ -19,8 +18,8 @@ interface SettingsProps {
 interface SettingsState {
     settings: SettingsDTO,
     importantCategories: ImportantCategoryDto[],
+    currentCategoryIndex: number,
     isLoadingSettings: boolean,
-    file: string,
     isLoadingImportantCategories: boolean,
     availableCategories: CategoryDto[]
 }
@@ -38,13 +37,14 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
             },
             importantCategories: [],
             availableCategories: [],
-            file: '',
+            currentCategoryIndex: 0,
             isLoadingSettings: true,
             isLoadingImportantCategories: true
         };
         this.updateSettings = this.updateSettings.bind(this);
         this.updateImportantCategories = this.updateImportantCategories.bind(this);
-        this.handleFileSelect = this.handleFileSelect.bind(this);
+        this.handleUploadSuccess = this.handleUploadSuccess.bind(this);
+        this.handleUploadStart = this.handleUploadStart.bind(this);
     }
 
     async updateSettings() {
@@ -63,7 +63,6 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
 
     async updateImportantCategories() {
         try {
-            console.log(this.state.importantCategories);
             let response = await updateImportantCategories(this.state.importantCategories);
             if (response) {
                 alert("Categories successfully updated");
@@ -95,6 +94,7 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                 })
             }
 
+            //loat available categories
             let responseAvailableCategories = await getCategories();
             if (response) {
                 this.setState({
@@ -110,17 +110,17 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
         }
     }
 
-    handleFileSelect(e) {
-        this.setState({file: e.target.files[0]})
+    handleUploadSuccess(filename) {
+        let importantCategories = this.state.importantCategories;
+        importantCategories[this.state.currentCategoryIndex].photoName = filename;
+        this.setState({
+            importantCategories: importantCategories
+        });
+        this.updateImportantCategories()
     }
 
-    handleUploadSuccess() {
-        alert("File has successful updated");
-        window.location.reload();
-    }
-
-    handleUploadError(event) {
-        alert("Something went wrong with the upload");
+    handleUploadStart(index) {
+        this.setState({currentCategoryIndex: index});
     }
 
     public render() {
@@ -135,47 +135,32 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
             }
         );
 
+
         let importantCategories = this.state.importantCategories && this.state.importantCategories.map(
             (value, index) => {
-                return <React.Fragment key={index}>
-                    <div className="col-md-4" key={index}>
-                        <div className="card" key={index}>
-                            <div className="card-body" key={index}>
-                                {index}
-                                <div className="card-text" id={"card" + index} key={index}>
-                                    <TextField
-                                        id={"categoryName" + index}
-                                        label={"Category Name"}
-                                        variant="filled"
-                                        style={{width: '100%'}}
-                                        onChange={event => {
-                                            let importantCategories = this.state.importantCategories;
-                                            importantCategories[index].name = (event.target.value as string);
-                                            this.setState({
-                                                importantCategories: importantCategories
-                                            })
-                                        }}
-                                        value={this.state.importantCategories[index].name}
-                                    />
-                                    <TextField
-                                        id={"photoName" + index}
-                                        label={"Photo name from storage"}
-                                        variant="filled"
-                                        style={{width: '100%'}}
-                                        onChange={event => {
-                                            let importantCategories = this.state.importantCategories;
-                                            importantCategories[index].photoName = (event.target.value as string);
-                                            this.setState({
-                                                importantCategories: importantCategories
-                                            })
-                                        }}
-                                        value={this.state.importantCategories[index].photoName}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </React.Fragment>
+                return <ImportantCategory key={index}
+                                          index={index}
+                                          category={value}
+                                          onChangeName={(name) => {
+                                              let importantCategories = this.state.importantCategories;
+                                              importantCategories[index].name = name;
+                                              this.setState({
+                                                  importantCategories: importantCategories
+                                              })
+                                          }}
+                                          onChangePhoto={(photoName) => {
+                                              let importantCategories = this.state.importantCategories;
+                                              importantCategories[index].photoName = photoName;
+                                              this.setState({
+                                                  importantCategories: importantCategories
+                                              })
+                                          }}
+                                          onFileUploadSuccess={(filename) => {
+                                              this.handleUploadSuccess(filename);
+                                          }}
+                                          onFileUploadStart={(index) => {
+                                              this.handleUploadStart(index);
+                                          }}/>
             }
         );
 
@@ -238,23 +223,6 @@ class Settings extends React.Component<SettingsProps, SettingsState> {
                                     {availableCategories}
                                 </div>
                             </div>
-                            <a href={emptyHrefLink}>
-                                <label>
-                                    {'>'} (Click)Upload ICON file to firebase storage(dimension:64x64, .PNG format)
-                                    <FileUploader hidden
-                                                  accept="image/*"
-                                                  filename={
-                                                      this.state.file
-                                                  }
-                                                  storageRef={storage.ref(StorageRef.ICONS + this.state.file)}
-                                                  onUploadError={this.handleUploadError}
-                                                  onUploadSuccess={this.handleUploadSuccess}
-                                    />
-                                </label>
-                            </a>
-                            <label>
-                                The name of the uploaded file should be used in the 'Photo name from storage'
-                            </label>
                         </div>
                         {importantCategories}
                         <Button color="primary" variant="contained"
