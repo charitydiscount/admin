@@ -91,7 +91,7 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
             }
         } catch (error) {
             alert(error);
-            //categories not loaded
+            //available categories not loaded
         }
     }
 

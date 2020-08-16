@@ -6,6 +6,7 @@ export enum ExpressLink {
     PROGRAMS = 'programs',
     MESSAGES = 'messages',
     SETTINGS = 'settings',
+    IMPORTANT_CATEGORIES = 'importantCategories',
     CASHOUT = 'cashout',
     DONATION = 'donations',
     COMMISSIONS = 'commissions',
@@ -20,6 +21,7 @@ export enum FirebaseTable {
 
 export enum TableDocument {
     PROGRAMS = 'programs',
+    IMPORTANT_CATEGORIES = 'importantCategories',
     SETTINGS = 'settings'
 }
 
