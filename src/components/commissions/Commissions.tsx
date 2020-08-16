@@ -436,7 +436,7 @@ class Commissions extends React.Component<CommissionsProps, CommissionsState> {
                                             this.searchCommissions
                                         }
                                     >
-                                        >
+                                        {'>'}
                                     </Button>
                                     <div className="rs-select2--light rs-select2--md">
                                         <TextField

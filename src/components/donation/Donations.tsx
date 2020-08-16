@@ -131,7 +131,7 @@ class Donations extends React.Component<CashoutsProps, CashoutsState> {
                                             this.searchDonations
                                         }
                                     >
-                                        >
+                                        {'>'}
                                     </Button>
                                     <div className="rs-select2--light rs-select2--md">
                                         <TextField

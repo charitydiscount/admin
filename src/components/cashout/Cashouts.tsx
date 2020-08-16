@@ -131,7 +131,7 @@ class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
                                             this.searchCashouts
                                         }
                                     >
-                                        >
+                                        {'>'}
                                     </Button>
                                     <div className="rs-select2--light rs-select2--md">
                                         <TextField

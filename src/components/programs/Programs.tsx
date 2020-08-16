@@ -478,7 +478,7 @@ class Programs extends React.Component<ProgramsProps, ProgramsState> {
                                                 this.searchPrograms
                                             }
                                         >
-                                            >
+                                            {'>'}
                                         </Button>
                                         <div className="rs-select2--light rs-select2--md">
                                             <TextField
