@@ -8,10 +8,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { CategoryDto } from "../../rest/CategoriesService";
+import { buildDynamicLink } from "../../rest/DynamicLinksService";
 
 interface ProgramElementState {
-    modalVisible: boolean
-    program: ProgramDto
+    updateProgramModalVisible: boolean
+    dynamicLinkModalVisible: boolean
+    program: ProgramDto,
+    dynamicLink: string
 }
 
 interface ProgramElementProps {
@@ -24,22 +27,40 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
     constructor(props: ProgramElementProps) {
         super(props);
         this.state = {
-            modalVisible: false,
-            program: this.props.program
+            updateProgramModalVisible: false,
+            dynamicLinkModalVisible: false,
+            program: this.props.program,
+            dynamicLink: ''
         };
         this.onModalSave = this.onModalSave.bind(this);
+        this.openDynamicLinkModal = this.openDynamicLinkModal.bind(this);
+    }
+
+    async openDynamicLinkModal() {
+        try {
+            const dynamicLink = await buildDynamicLink(
+                this.props.program.name
+            );
+            this.setState({
+                dynamicLink: dynamicLink,
+                dynamicLinkModalVisible: true,
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     openModal() {
         this.setState({
             program: this.props.program,
-            modalVisible: true,
+            updateProgramModalVisible: true,
         });
     }
 
     closeModal() {
         this.setState({
-            modalVisible: false,
+            updateProgramModalVisible: false,
+            dynamicLinkModalVisible: false
         });
     }
 
@@ -70,12 +91,31 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
         return (
             <React.Fragment>
                 <Modal
-                    visible={this.state.modalVisible}
+                    visible={this.state.dynamicLinkModalVisible}
+                    onClose={() => this.closeModal()}
+                    title="Dynamic link to access directly this shop"
+                    onSave={() => this.closeModal()}
+                >
+                    {this.state.dynamicLinkModalVisible && this.state.dynamicLink &&
+                    <React.Fragment>
+                        <TextField
+                            id="name" label={"Program name"} variant="filled" style={{width: '100%'}}
+                            value={this.state.program.name} disabled={true}
+                        />
+                        <TextField
+                            id="link" label={"Dynamic link"} variant="filled" style={{width: '100%'}}
+                            value={this.state.dynamicLink} disabled={true}
+                        />
+                    </React.Fragment>
+                    }
+                </Modal>
+                <Modal
+                    visible={this.state.updateProgramModalVisible}
                     onClose={() => this.closeModal()}
                     title="Update program"
                     onSave={() => this.onModalSave()}
                 >
-                    {this.state.modalVisible &&
+                    {this.state.updateProgramModalVisible &&
                     <React.Fragment>
                         <TextField
                             id="uniqueCode" label={"Unique code"} variant="filled" style={{width: '100%'}}
@@ -210,7 +250,8 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                     program.source = event.target.value;
                                     this.setState({
                                         program: program
-                                    })}
+                                    })
+                                }
                                 }
                             />
                             <TextField
@@ -238,7 +279,8 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                 }
                             />
                             <TextField
-                                id="affiliateUrl" label={"Affiliate Link (use '{userId}' as a placeholder for the user)"} variant="filled"
+                                id="affiliateUrl"
+                                label={"Affiliate Link (use '{userId}' as a placeholder for the user)"} variant="filled"
                                 style={{width: '100%'}} value={this.state.program.affiliateUrl}
                                 onChange={event => {
                                     const program = this.state.program;
@@ -316,7 +358,8 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                 }
                             />
                             <FormControl variant="filled" style={{width: '100%'}}>
-                                <InputLabel id="demo-simple-select-filled-label">Default Lead Commission Type</InputLabel>
+                                <InputLabel id="demo-simple-select-filled-label">Default Lead Commission
+                                    Type</InputLabel>
                                 <Select
                                     MenuProps={{
                                         disableScrollLock: true,
@@ -357,7 +400,8 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                 }
                             />
                             <FormControl variant="filled" style={{width: '100%'}}>
-                                <InputLabel id="demo-simple-select-filled-label">Default Sale Commission Type</InputLabel>
+                                <InputLabel id="demo-simple-select-filled-label">Default Sale Commission
+                                    Type</InputLabel>
                                 <Select
                                     MenuProps={{
                                         disableScrollLock: true,
@@ -390,7 +434,15 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                     }
                 </Modal>
                 <tr className="tr-shadow">
-                    <td>{this.props.program.uniqueCode}</td>
+                    <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
+                        <a href={emptyHrefLink} style={{
+                            textDecoration: "underline",
+                            color: "#007bff",
+                            cursor: "pointer"
+                        }} onClick={() => this.openDynamicLinkModal()}>
+                            {this.props.program.uniqueCode}
+                        </a>
+                    </td>
                     <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
                         <a href={emptyHrefLink} style={{
                             textDecoration: "underline",
