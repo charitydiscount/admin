@@ -71,7 +71,7 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                 alert("Program successfully updated");
                 window.location.reload();
             } else {
-                alert("Something went wrong with update!");
+                alert("Something went wrong with update");
             }
         } catch (e) {
             alert(e);
