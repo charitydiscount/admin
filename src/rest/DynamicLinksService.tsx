@@ -27,13 +27,14 @@ export const buildDynamicLink = async (
                 },
                 analyticsInfo: {
                     googlePlayAnalytics: {
-                        utmCampaign: 'referrals',
+                        utmCampaign: 'shops',
                         utmMedium: 'social',
                         utmSource: 'mobile',
                     },
                 },
                 socialMetaTagInfo: {
                     socialTitle: programName,
+                    socialDescription: 'CharityDiscount',
                     socialImageLink: logoPath,
                 },
             },
