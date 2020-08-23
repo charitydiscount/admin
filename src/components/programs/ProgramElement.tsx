@@ -93,7 +93,7 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                 <Modal
                     visible={this.state.dynamicLinkModalVisible}
                     onClose={() => this.closeModal()}
-                    title="Dynamic link to access directly this shop"
+                    title="Dynamic link to access this shop"
                     onSave={() => this.closeModal()}
                 >
                     {this.state.dynamicLinkModalVisible && this.state.dynamicLink &&
