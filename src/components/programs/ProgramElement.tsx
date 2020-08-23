@@ -39,7 +39,8 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
     async openDynamicLinkModal() {
         try {
             const dynamicLink = await buildDynamicLink(
-                this.props.program.name
+                this.props.program.name,
+                this.props.program.logoPath
             );
             this.setState({
                 dynamicLink: dynamicLink,

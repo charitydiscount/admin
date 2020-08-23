@@ -2,7 +2,8 @@ import { remoteConfig } from "../index";
 import axios from "axios";
 
 export const buildDynamicLink = async (
-    programName: string
+    programName: string,
+    logoPath: string
 ): Promise<string> => {
 
     const targetBase =
@@ -32,7 +33,8 @@ export const buildDynamicLink = async (
                     },
                 },
                 socialMetaTagInfo: {
-                    socialImageLink: remoteConfig.getString('meta_image_url'),
+                    socialTitle: programName,
+                    socialImageLink: logoPath,
                 },
             },
         },
