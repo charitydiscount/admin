@@ -28,6 +28,13 @@ export async function getMessages() {
     return Object.entries(response.data as MessageDto)
         .map(([index, program]) => {
             return program;
+        })
+        .sort((p1, p2) => {
+            if (p1.createdAt._seconds > p2.createdAt._seconds) {
+                return -1;
+            } else {
+                return 1;
+            }
         });
 }
 
