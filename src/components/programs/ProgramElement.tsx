@@ -9,6 +9,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { CategoryDto } from "../../rest/CategoriesService";
 import { buildDynamicLink } from "../../rest/DynamicLinksService";
+import { remoteConfig } from "../../index";
 
 interface ProgramElementState {
     updateProgramModalVisible: boolean
@@ -89,6 +90,11 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
             });
         }
 
+        let normalLink =
+            remoteConfig.getString('dynamic_link_target') ||
+            'https://charitydiscount.ro';
+        normalLink+= "/shop/" + this.props.program.name;
+
         return (
             <React.Fragment>
                 <Modal
@@ -106,6 +112,10 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                         <TextField
                             id="link" label={"Dynamic link"} variant="filled" style={{width: '100%'}}
                             value={this.state.dynamicLink} disabled={true}
+                        />
+                        <TextField
+                            id="link" label={"Link normal"} variant="filled" style={{width: '100%'}}
+                            value={normalLink} disabled={true}
                         />
                     </React.Fragment>
                     }

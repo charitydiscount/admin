@@ -169,7 +169,7 @@ class Mails extends React.Component<MailsProps, MailsState> {
                         <p>Daca folosesti template-ul default(cel de mai jos), pentru a trimite un mail de notificare trebuie inlocuite urmatoarele field-uri</p>
                         <p>procentCashback - procentul care va aparea mare langa "Nu rata!"</p>
                         <p>textCashback - textul copiat de la postarea de pe facebook</p>
-                        <p>linkAcceseaza - dynamic link-ul generat pentru magazinul despre care se face postarea</p>
+                        <p>linkAcceseaza - dynamic link-ul generat pentru magazinul despre care se face postarea. Pe gmail pare sa nu functioneze dynamic links</p>
                         <p>linkImagine - link-ul spre poza de la postare</p>
                     </div>
                     <Button color="primary" variant="contained"
