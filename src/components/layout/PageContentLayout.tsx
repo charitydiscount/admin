@@ -9,6 +9,7 @@ import Cashouts from "../cashout/Cashouts";
 import Donations from "../donation/Donations";
 import Contacts from "../contact/Contacts";
 import Settings from "../settings/Settings";
+import Mails from "../mails/Mails";
 
 class PageContentLayout extends React.Component {
     public render() {
@@ -25,6 +26,11 @@ class PageContentLayout extends React.Component {
                             exact={true}
                             path={Routes.SETTINGS}
                             component={Settings}
+                        />
+                        <Route
+                            exact={true}
+                            path={Routes.MAILS}
+                            component={Mails}
                         />
                         <Route
                             exact={true}

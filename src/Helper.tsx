@@ -7,6 +7,7 @@ export enum ExpressLink {
     MESSAGES = 'messages',
     SETTINGS = 'settings',
     IMPORTANT_CATEGORIES = 'importantCategories',
+    MAIL_NOTIFICATION = 'notifications/mail',
     CASHOUT = 'cashout',
     DONATION = 'donations',
     COMMISSIONS = 'commissions',
