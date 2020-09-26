@@ -11,6 +11,7 @@ export enum ExpressLink {
     CASHOUT = 'cashout',
     DONATION = 'donations',
     COMMISSIONS = 'commissions',
+    CLICKS = 'clicks',
     CASES = 'cases',
 }
 
@@ -58,6 +59,7 @@ export function handleLogOut(event: any) {
 }
 
 export const emptyHrefLink = '#';
+export const blueColor = "#1641ff";
 
 export function setLocalStorage(key: string, object: any) {
     localStorage.setItem(process.env.PUBLIC_URL + key, object);

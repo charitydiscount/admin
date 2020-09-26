@@ -10,6 +10,7 @@ import Donations from "../donation/Donations";
 import Contacts from "../contact/Contacts";
 import Settings from "../settings/Settings";
 import Mails from "../mails/Mails";
+import Clicks from "../clicks/Clicks";
 
 class PageContentLayout extends React.Component {
     public render() {
@@ -41,6 +42,11 @@ class PageContentLayout extends React.Component {
                             exact={true}
                             path={Routes.PROGRAMS}
                             component={Programs}
+                        />
+                        <Route
+                            exact={true}
+                            path={Routes.CLICKS}
+                            component={Clicks}
                         />
                         <Route
                             exact={true}
