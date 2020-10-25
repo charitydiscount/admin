@@ -153,7 +153,7 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                             <React.Fragment>
                                 <TextField
                                     id="categoriesCashback"
-                                    label={"Cashback categories '\\n' for new line"}
+                                    label={"Cashback categories(one category on new line)"}
                                     multiline
                                     rows={6}
                                     variant="filled"
@@ -273,7 +273,7 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                             </FormControl>
                             <TextField
                                 id="categoriesCashback"
-                                label={"Cashback categories '\\n' for new line"}
+                                label={"Cashback categories(one category on new line)"}
                                 multiline
                                 rows={6}
                                 variant="filled"
