@@ -152,6 +152,24 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                             {this.props.program.defaultSaleCommissionType === 'variable' &&
                             <React.Fragment>
                                 <TextField
+                                    id="categoriesCashback"
+                                    label={"Cashback categories '\\n' for new line"}
+                                    multiline
+                                    rows={6}
+                                    variant="filled"
+                                    value={this.state.program.categoriesCashback}
+                                    onChange={
+                                        event => {
+                                            let program = this.state.program;
+                                            program.categoriesCashback = event.target.value;
+                                            this.setState({
+                                                program: program
+                                            })
+                                        }
+                                    }
+                                    style={{width: '100%'}}
+                                />
+                                <TextField
                                     id="defaultSaleCommissionRate" label={"Default Sale Commission Rate"}
                                     variant="filled" style={{width: '100%'}}
                                     value={this.state.program.defaultSaleCommissionRate} disabled={true}
@@ -253,6 +271,24 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                                     <MenuItem value={"inactive"}> Inactive </MenuItem>
                                 </Select>
                             </FormControl>
+                            <TextField
+                                id="categoriesCashback"
+                                label={"Cashback categories '\\n' for new line"}
+                                multiline
+                                rows={6}
+                                variant="filled"
+                                value={this.state.program.categoriesCashback}
+                                onChange={
+                                    event => {
+                                        let program = this.state.program;
+                                        program.categoriesCashback = event.target.value;
+                                        this.setState({
+                                            program: program
+                                        })
+                                    }
+                                }
+                                style={{width: '100%'}}
+                            />
                             <TextField
                                 id="source" label={"Source"} variant="filled"
                                 style={{width: '100%'}} value={this.state.program.source}
