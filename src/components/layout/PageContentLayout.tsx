@@ -11,6 +11,7 @@ import Contacts from "../contact/Contacts";
 import Settings from "../settings/Settings";
 import Mails from "../mails/Mails";
 import Clicks from "../clicks/Clicks";
+import Achievements from "../achievements/Achievements";
 
 class PageContentLayout extends React.Component {
     public render() {
@@ -32,6 +33,11 @@ class PageContentLayout extends React.Component {
                             exact={true}
                             path={Routes.MAILS}
                             component={Mails}
+                        />
+                        <Route
+                            exact={true}
+                            path={Routes.ACHIEVEMENTS}
+                            component={Achievements}
                         />
                         <Route
                             exact={true}

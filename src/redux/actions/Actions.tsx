@@ -3,6 +3,10 @@ export enum LoginActionTypes {
     RESET_LOGGED_USER_ACTION = 'RESET_LOGGED_USER_ACTION',
 }
 
+export enum AchievementActionTypes {
+    SET_ACHIEVEMENT_MODAL_VISIBLE_ACTION = 'SET_ACHIEVEMENT_MODAL_VISIBLE_ACTION'
+}
+
 export enum AuthActionTypes {
     SET_AUTHORIZED_USER_ACTION = 'SET_AUTHORIZED_USER_ACTION',
 }

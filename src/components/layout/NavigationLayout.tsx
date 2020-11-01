@@ -28,6 +28,10 @@ class NavigationLayout extends React.Component {
                                         <i className="zmdi zmdi-email" />
                                         Notification mail
                                     </Link>
+                                    <Link to={Routes.ACHIEVEMENTS}>
+                                        <i className="fas fa-table" />
+                                        Achievements
+                                    </Link>
                                     <Link to={Routes.CLICKS}>
                                         <i className="fas fa-table" />
                                         Clicks

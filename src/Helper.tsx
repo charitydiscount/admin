@@ -12,6 +12,7 @@ export enum ExpressLink {
     DONATION = 'donations',
     COMMISSIONS = 'commissions',
     CLICKS = 'clicks',
+    ACHIEVEMENTS = 'achievements',
     CASES = 'cases',
 }
 
@@ -127,4 +128,8 @@ export const dateOptions = {
 
 export function roundAmount(comission) {
     return comission.toFixed(2);
+}
+
+export function isEmpty(field) {
+    return !field || (field.length < 1)
 }

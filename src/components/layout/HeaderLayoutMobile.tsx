@@ -37,6 +37,11 @@ class HeaderLayoutMobile extends React.Component {
                                     </Link>
                                 </li>
                                 <li className="has-sub">
+                                    <Link to={Routes.ACHIEVEMENTS}>
+                                        <i className="zmdi zmdi-email"/>Achievements
+                                    </Link>
+                                </li>
+                                <li className="has-sub">
                                     <Link to={Routes.CLICKS}>
                                         <i className="zmdi zmdi-email"/>Clicks
                                     </Link>
