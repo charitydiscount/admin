@@ -1,5 +1,5 @@
 import React from "react";
-import { spinnerCss, TxType } from "../../Helper";
+import { pageLimit, spinnerCss, TxType } from "../../Helper";
 import FadeLoader from 'react-spinners/FadeLoader';
 import DonationElement from "./DonationElement";
 import ReactPaginate from 'react-paginate';
@@ -18,8 +18,6 @@ export interface CashoutsState {
     users: Map<string, string>,
     defaultDonationsList: TransactionDto[]
 }
-
-const pageLimit = 8; // donations per page
 
 class Donations extends React.Component<CashoutsProps, CashoutsState> {
 

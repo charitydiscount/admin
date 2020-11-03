@@ -1,6 +1,6 @@
 import React from "react";
 import FadeLoader from 'react-spinners/FadeLoader';
-import { blueColor, mediumSpinnerCss, spinnerCss } from "../../Helper";
+import { blueColor, mediumSpinnerCss, pageLimit, spinnerCss } from "../../Helper";
 import ReactPaginate from 'react-paginate';
 import { Button, TextField } from "@material-ui/core";
 import InputLabel from '@material-ui/core/InputLabel';
@@ -33,8 +33,6 @@ enum ClickType{
     DESKTOP = 'desktop',
     EMPTY = ''
 }
-
-const pageLimit = 8; // clicks per page
 
 class Clicks extends React.Component<ClicksProps, ClicksState> {
 

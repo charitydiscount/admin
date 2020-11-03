@@ -10,6 +10,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import { CategoryDto } from "../../rest/CategoriesService";
 import { buildDynamicLink } from "../../rest/DynamicLinksService";
 import { remoteConfig } from "../../index";
+import ElementTableLink from "../general/ElementTableLink";
 
 interface ProgramElementState {
     updateProgramModalVisible: boolean
@@ -34,10 +35,9 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
             dynamicLink: ''
         };
         this.onModalSave = this.onModalSave.bind(this);
-        this.openDynamicLinkModal = this.openDynamicLinkModal.bind(this);
     }
 
-    async openDynamicLinkModal() {
+    openDynamicLinkModal = async () => {
         try {
             const dynamicLink = await buildDynamicLink(
                 this.props.program.name,
@@ -50,21 +50,21 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
-    openModal() {
+    openModal = () => {
         this.setState({
             program: this.props.program,
             updateProgramModalVisible: true,
         });
-    }
+    };
 
-    closeModal() {
+    closeModal = () => {
         this.setState({
             updateProgramModalVisible: false,
             dynamicLinkModalVisible: false
         });
-    }
+    };
 
     async onModalSave() {
         try {
@@ -481,24 +481,8 @@ class ProgramElement extends React.Component<ProgramElementProps, ProgramElement
                     }
                 </Modal>
                 <tr className="tr-shadow">
-                    <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                        <a href={emptyHrefLink} style={{
-                            textDecoration: "underline",
-                            color: "#007bff",
-                            cursor: "pointer"
-                        }} onClick={() => this.openDynamicLinkModal()}>
-                            {this.props.program.uniqueCode}
-                        </a>
-                    </td>
-                    <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                        <a href={emptyHrefLink} style={{
-                            textDecoration: "underline",
-                            color: "#007bff",
-                            cursor: "pointer"
-                        }} onClick={() => this.openModal()}>
-                            {this.props.program.name}
-                        </a>
-                    </td>
+                    <ElementTableLink text={this.props.program.uniqueCode} onClick={this.openDynamicLinkModal}/>
+                    <ElementTableLink text={this.props.program.name} onClick={this.openModal}/>
                     <td>{this.props.program.order}</td>
                     <td>{this.props.program.mainOrder}</td>
                     <td>{this.props.program.commissionMin}</td>

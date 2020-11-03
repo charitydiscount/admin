@@ -1,26 +1,29 @@
 import React from "react";
-import { spinnerCss } from "../../Helper";
+import { pageLimit, spinnerCss } from "../../Helper";
 import { FadeLoader } from "react-spinners";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import ReactPaginate from 'react-paginate';
-import { AppState } from "../../redux/reducer/RootReducer";
 import { connect } from "react-redux";
-import { setAchievementModalVisible } from "../../redux/actions/AchievementActions";
+import {
+    setAchievementModalCreate,
+} from "../../redux/actions/AchievementActions";
 import AchievementModal from "./AchievementModal";
+import { getAchievements } from "../../rest/AchievementService";
+import { Achievement } from "../../models/Achievement";
+import AchievementElement from "./AchievementElement";
 
 interface AchievementsProps {
-
     //global state
-    achievementModalVisible: boolean,
-    setAchievementModalVisible: (modalVisible) => void
+    setAchievementModalCreate: () => void
 }
 
 interface AchievementsState {
+    achievements: Achievement[],
     isLoading: boolean,
-    currentPage: number
+    currentPage: number,
     filterType: string
 }
 
@@ -29,14 +32,29 @@ class Achievements extends React.Component<AchievementsProps, AchievementsState>
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false,
+            achievements: [],
+            isLoading: true,
             currentPage: 0,
             filterType: ''
         }
     }
 
+    async componentDidMount() {
+        try {
+            let responseAchievements = await getAchievements();
+            if (responseAchievements) {
+                this.setState({
+                    achievements: responseAchievements as Achievement[],
+                    isLoading: false
+                });
+            }
+        } catch (error) {
+            alert(error);
+        }
+    }
+
     openModal = () => {
-        this.props.setAchievementModalVisible(true);
+        this.props.setAchievementModalCreate();
     };
 
     updatePageNumber = (data) => {
@@ -51,6 +69,25 @@ class Achievements extends React.Component<AchievementsProps, AchievementsState>
 
     public render() {
         let pageCount = 0;
+        let achievementList;
+        if (this.state.achievements && this.state.achievements.length > 0) {
+            achievementList = this.state.achievements;
+            if (achievementList.length > pageLimit) {
+                pageCount = achievementList.length / pageLimit;
+                let offset = this.state.currentPage;
+                achievementList = achievementList
+                    .slice(offset * pageLimit, (offset + 1) * pageLimit);
+            } else {
+                pageCount = 1;
+            }
+
+            achievementList = achievementList
+                .map((value, index) => {
+                    return (
+                        <AchievementElement key={index} achievement={value}/>
+                    );
+                });
+        }
 
         return (
             <React.Fragment>
@@ -132,10 +169,14 @@ class Achievements extends React.Component<AchievementsProps, AchievementsState>
                                     <thead>
                                     <tr>
                                         <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Type</th>
+                                        <th>Badge</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        {/*//achievement list*/}
+                                    {achievementList}
                                     </tbody>
                                 </table>
                             </div>
@@ -149,18 +190,12 @@ class Achievements extends React.Component<AchievementsProps, AchievementsState>
 }
 
 
-const mapStateToProps = (state: AppState) => {
-    return {
-        achievementModalVisible: state.achievement.modalVisible
-    };
-};
-
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        setAchievementModalVisible: (modalVisible: boolean) =>
-            dispatch(setAchievementModalVisible(modalVisible))
+        setAchievementModalCreate: () =>
+            dispatch(setAchievementModalCreate()),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Achievements);
+export default connect(null, mapDispatchToProps)(Achievements);
 

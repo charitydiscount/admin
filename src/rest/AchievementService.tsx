@@ -2,6 +2,25 @@ import { Achievement, AchievementType, ConditionType, ConditionUnit, RewardUnit 
 import { auth, remoteConfig } from "../index";
 import { ExpressLink, isEmpty } from "../Helper";
 import axios from "axios";
+import { ClickDto } from "./ClicksService";
+
+export async function getAchievements() {
+    if (!auth.currentUser) {
+        return [];
+    }
+
+    const token = await auth.currentUser.getIdToken();
+    let url = remoteConfig.getString('express_url') + ExpressLink.ACHIEVEMENTS;
+
+    let response = await axios.get(url, {
+        headers: {Authorization: `Bearer ${token}`}
+    });
+
+    return Object.entries(response.data as Achievement)
+        .map(([index, click]) => {
+            return click;
+        })
+}
 
 export async function createAchievement(achievement: Achievement) {
     if (!auth.currentUser) {
@@ -16,30 +35,32 @@ export async function createAchievement(achievement: Achievement) {
         throw Error('Enter both descriptions');
     }
 
-    if (isEmpty(achievement.badgePath)) {
+    if (isEmpty(achievement.badge)) {
         throw Error('Enter the image path of the badge');
     }
 
-    if (isEmpty(achievement.condition1.target)) {
+    if (isEmpty(achievement.conditions[0].target)) {
         throw Error('Enter the target for Condition 1');
     }
 
-    let condition1Unit = ConditionUnit[achievement.condition1.unit];
-    if (!condition1Unit) {
+    if (isEmpty(achievement.conditions[0].unit)) {
         throw Error('Select the unit for Condition 1');
     }
 
-    let condition2Type = ConditionType[achievement.condition2.type];
-    if (condition2Type && isEmpty(achievement.condition2.target)) {
-        throw Error('Enter the target for Condition 2');
+    if (achievement.conditions.length > 1 && achievement.conditions[1]) {
+        if (isEmpty(achievement.conditions[1].type)) {
+            throw Error('Enter the type for Condition 2');
+        }
+        if (isEmpty(achievement.conditions[1].target)) {
+            throw Error('Enter the target for Condition 2');
+        }
     }
 
     if (isEmpty(achievement.reward.amount)) {
         throw Error('Enter the amount for Reward');
     }
 
-    let rewardUnit = RewardUnit[achievement.reward.unit];
-    if (!rewardUnit) {
+    if (isEmpty(achievement.reward.unit)) {
         throw Error('Select the unit for Reward');
     }
 
@@ -47,8 +68,7 @@ export async function createAchievement(achievement: Achievement) {
         throw Error('Enter the weight');
     }
 
-    let achievementType = AchievementType[achievement.type];
-    if (!achievementType) {
+    if (isEmpty(achievement.type)) {
         throw Error('Select the type');
     }
 
@@ -61,36 +81,15 @@ export async function createAchievement(achievement: Achievement) {
             en: achievement.description.en,
             ro: achievement.description.ro
         },
-        conditions: {},
-        badge: achievement.badgePath,
+        conditions: achievement.conditions,
+        badge: achievement.badge,
         reward: {
-            unit: rewardUnit,
+            unit: achievement.reward.unit,
             amount: achievement.reward.amount
         },
         weight: achievement.weight,
-        type: achievementType
+        type: achievement.type
     };
-    if (condition2Type) {
-        data.conditions = [
-            {
-                type: achievement.condition1.type,
-                target: achievement.condition1.target,
-                unit: condition1Unit
-            },
-            {
-                type: condition2Type,
-                target: achievement.condition2.target,
-            }
-        ]
-    } else {
-        data.conditions = [
-            {
-                type: achievement.condition1.type,
-                target: achievement.condition1.target,
-                unit: condition1Unit
-            }
-        ];
-    }
 
     const token = await auth.currentUser.getIdToken();
     let url = remoteConfig.getString('express_url') + ExpressLink.ACHIEVEMENTS;

@@ -37,7 +37,6 @@ export const spinnerCss = css`
     margin: 200px auto;
 `;
 
-
 export const mediumSpinnerCss = css`
     display: block;
     margin: 100px auto;
@@ -53,54 +52,6 @@ export const linkStyle = {
     color: "#007bff",
     cursor: "pointer"
 };
-
-export function handleLogOut(event: any) {
-    event.preventDefault();
-    store.dispatch(doLogoutAction());
-}
-
-export const emptyHrefLink = '#';
-export const blueColor = "#1641ff";
-
-export function setLocalStorage(key: string, object: any) {
-    localStorage.setItem(process.env.PUBLIC_URL + key, object);
-}
-
-export function getLocalStorage(key: string) {
-    return localStorage.getItem(process.env.PUBLIC_URL + key);
-}
-
-export function removeLocalStorage(key: string) {
-    localStorage.removeItem(process.env.PUBLIC_URL + key);
-}
-
-export function setSessionStorage(key: string, object: any) {
-    sessionStorage.setItem(process.env.PUBLIC_URL + key, object);
-}
-
-export function getSessionStorage(key: string) {
-    return sessionStorage.getItem(process.env.PUBLIC_URL + key);
-}
-
-export function removeSessionStorage(key: string) {
-    return sessionStorage.removeItem(process.env.PUBLIC_URL + key);
-}
-
-export function truncateText(
-    text: string,
-    length: number,
-    useWordBoundary: boolean
-) {
-    if (text.length <= length) {
-        return text;
-    }
-    const subString = text.substr(0, length - 1);
-    return (
-        (useWordBoundary
-            ? subString.substr(0, subString.lastIndexOf(' '))
-            : subString) + '...'
-    );
-}
 
 export interface ProxyDate {
     _seconds: string
@@ -125,6 +76,31 @@ export const dateOptions = {
     minute: 'numeric',
     second: 'numeric',
 };
+
+export const emptyHrefLink = '#';
+export const blueColor = "#1641ff";
+export const pageLimit = 8;
+
+export function truncateText(
+    text: string,
+    length: number,
+    useWordBoundary: boolean
+) {
+    if (text.length <= length) {
+        return text;
+    }
+    const subString = text.substr(0, length - 1);
+    return (
+        (useWordBoundary
+            ? subString.substr(0, subString.lastIndexOf(' '))
+            : subString) + '...'
+    );
+}
+
+export function handleLogOut(event: any) {
+    event.preventDefault();
+    store.dispatch(doLogoutAction());
+}
 
 export function roundAmount(comission) {
     return comission.toFixed(2);

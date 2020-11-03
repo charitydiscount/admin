@@ -7,6 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { getTotalAmount, TransactionDto, updateTransaction } from "../../rest/TransactionsService";
+import ElementTableLink from "../general/ElementTableLink";
 
 
 interface DonationElementProps {
@@ -34,14 +35,14 @@ class DonationElement extends React.Component<DonationElementProps, DonationElem
         })
     }
 
-    openModal() {
+    openModal = () => {
         this.setState({
             donation: this.props.donation,
             modalVisible: true
         });
-    }
+    };
 
-    async openUserModal() {
+    openUserModal = async () => {
         try {
             let response = await getTotalAmount(TxType.DONATION, this.props.donation.userId);
             if (response) {
@@ -55,20 +56,19 @@ class DonationElement extends React.Component<DonationElementProps, DonationElem
         } catch (e) {
             alert(e);
         }
-    }
+    };
 
-    closeUserModal() {
+    closeUserModal = () => {
         this.setState({
             modalUserVisible: false
         });
-    }
+    };
 
-
-    closeModal() {
+    closeModal = () => {
         this.setState({
             modalVisible: false
         });
-    }
+    };
 
     async onModalSave() {
         try {
@@ -208,26 +208,12 @@ class DonationElement extends React.Component<DonationElementProps, DonationElem
                         this.props.donation.createdAt &&
                         new Date(parseFloat(this.props.donation.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}
                     </td>
-                    <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                        <a href={emptyHrefLink} style={{
-                            textDecoration: "underline",
-                            color: "#007bff",
-                            cursor: "pointer"
-                        }} onClick={() => this.openModal()}>
-                            {this.props.donation.id}
-                        </a>
-                    </td>
+                    <ElementTableLink text={this.props.donation.id} onClick={this.openModal}
+                                      withoutWidth={true}/>
                     {statusColumn}
                     <td>{this.props.donation.amount}</td>
-                    <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                        <a href={emptyHrefLink} style={{
-                            textDecoration: "underline",
-                            color: "#007bff",
-                            cursor: "pointer"
-                        }} onClick={() => this.openUserModal()}>
-                            {this.props.donation.userId}
-                        </a>
-                    </td>
+                    <ElementTableLink text={this.props.donation.userId} onClick={this.openUserModal}
+                                      withoutWidth={true}/>
                 </tr>
                 <tr className="spacer"></tr>
             </React.Fragment>

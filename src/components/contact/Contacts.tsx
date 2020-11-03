@@ -1,5 +1,5 @@
 import React from "react";
-import { spinnerCss } from "../../Helper";
+import { pageLimit, spinnerCss } from "../../Helper";
 import FadeLoader from 'react-spinners/FadeLoader';
 
 import ReactPaginate from 'react-paginate';
@@ -15,8 +15,6 @@ export interface ContactsState {
     isLoading: boolean,
     currentPage: number
 }
-
-const pageLimit = 8; // messages per page
 
 class Contacts extends React.Component<ContactsProps, ContactsState> {
 

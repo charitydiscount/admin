@@ -7,6 +7,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { getTotalAmount, TransactionDto, updateTransaction } from "../../rest/TransactionsService";
+import ElementTableLink from "../general/ElementTableLink";
 
 interface CashoutElementProps {
     key: string,
@@ -33,20 +34,20 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
         })
     }
 
-    openModal() {
+    openModal = () => {
         this.setState({
             cashout: this.props.cashout,
             modalVisible: true
         });
-    }
+    };
 
-    closeModal() {
+    closeModal = () => {
         this.setState({
             modalVisible: false
         });
-    }
+    };
 
-    async openUserModal() {
+    openUserModal = async () => {
         try {
             let response = await getTotalAmount(TxType.CASHOUT, this.props.cashout.userId);
             if (response) {
@@ -60,14 +61,13 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
         } catch (e) {
             alert(e);
         }
-    }
+    };
 
-    closeUserModal() {
+    closeUserModal = () => {
         this.setState({
             modalUserVisible: false
         });
-    }
-
+    };
 
     async onModalSave() {
         try {
@@ -215,26 +215,12 @@ class CashoutElement extends React.Component<CashoutElementProps, CashoutElement
                         this.props.cashout.createdAt &&
                         new Date(parseFloat(this.props.cashout.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}
                     </td>
-                    <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                        <a href={emptyHrefLink} style={{
-                            textDecoration: "underline",
-                            color: "#007bff",
-                            cursor: "pointer"
-                        }} onClick={() => this.openModal()}>
-                            {this.props.cashout.id}
-                        </a>
-                    </td>
+                    <ElementTableLink text={this.props.cashout.id} onClick={this.openModal}
+                                      withoutWidth={true}/>
                     {statusColumn}
                     <td>{this.props.cashout.amount}</td>
-                    <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                        <a href={emptyHrefLink} style={{
-                            textDecoration: "underline",
-                            color: "#007bff",
-                            cursor: "pointer"
-                        }} onClick={() => this.openUserModal()}>
-                            {this.props.cashout.userId}
-                        </a>
-                    </td>
+                    <ElementTableLink text={this.props.cashout.userId} onClick={this.openUserModal}
+                                      withoutWidth={true}/>
                 </tr>
                 <tr className="spacer"></tr>
             </React.Fragment>

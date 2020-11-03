@@ -7,6 +7,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import ElementTableLink from "../general/ElementTableLink";
 
 interface CommissionsElementProps {
     commission: CommissionDto,
@@ -35,20 +36,20 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
         this.onModalSave = this.onModalSave.bind(this);
     }
 
-    openModal() {
+    openModal = () => {
         this.setState({
             commission: this.props.commission,
             modalVisible: true,
         });
-    }
+    };
 
-    closeModal() {
+    closeModal = () =>  {
         this.setState({
             modalVisible: false,
         });
-    }
+    };
 
-    openUserModal() {
+    openUserModal = () => {
         try {
             let result = getTotalAmountForUserId(this.props.commission.userId, this.props.defaultCommissions);
             this.setState({
@@ -58,13 +59,13 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
         } catch (e) {
             alert(e);
         }
-    }
+    };
 
-    closeUserModal() {
+    closeUserModal = () => {
         this.setState({
             modalUserVisible: false
         });
-    }
+    };
 
     async onModalSave() {
         if (this.props.externalCommission) {
@@ -218,27 +219,11 @@ class CommissionsElement extends React.Component<CommissionsElementProps, Commis
                         this.props.commission.details.createdAt &&
                         new Date(parseFloat(this.props.commission.details.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}
                     </td>
-                    <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                        <a href={emptyHrefLink} style={{
-                            textDecoration: "underline",
-                            color: "#007bff",
-                            cursor: "pointer"
-                        }} onClick={() => this.openModal()}>
-                            {this.props.commission.commissionId}
-                        </a>
-                    </td>
+                    <ElementTableLink text={this.props.commission.commissionId} onClick={this.openModal} withoutWidth={true}/>
                     {statusColumn}
                     <td>{this.props.commission.details.amount}</td>
                     <td>{this.props.commission.details.source}</td>
-                    <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                        <a href={emptyHrefLink} style={{
-                            textDecoration: "underline",
-                            color: "#007bff",
-                            cursor: "pointer"
-                        }} onClick={() => this.openUserModal()}>
-                            {this.props.commission.userId}
-                        </a>
-                    </td>
+                    <ElementTableLink text={this.props.commission.userId} onClick={this.openUserModal} withoutWidth={true}/>
                 </tr>
                 <tr className="spacer"></tr>
             </React.Fragment>

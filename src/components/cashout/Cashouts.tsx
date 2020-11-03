@@ -1,5 +1,5 @@
 import React from "react";
-import { spinnerCss, TxType } from "../../Helper";
+import { pageLimit, spinnerCss, TxType } from "../../Helper";
 import FadeLoader from 'react-spinners/FadeLoader';
 import CashoutElement from "./CashoutElement";
 import ReactPaginate from 'react-paginate';
@@ -18,8 +18,6 @@ export interface CashoutsState {
     users: Map<string, string>,
     defaultCashoutsList: TransactionDto[]
 }
-
-const pageLimit = 8; // cashouts per page
 
 class Cashouts extends React.Component<CashoutsProps, CashoutsState> {
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { createProgram, DEFAULT_PROGRAM, getPrograms, ProgramDto } from '../../rest/ProgramService';
 import ProgramElement from './ProgramElement';
 import FadeLoader from 'react-spinners/FadeLoader';
-import { emptyHrefLink, linkStyle, SourceTypes, spinnerCss } from '../../Helper';
+import { emptyHrefLink, linkStyle, pageLimit, SourceTypes, spinnerCss } from '../../Helper';
 import { Button, TextField } from "@material-ui/core";
 import ReactPaginate from 'react-paginate';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -39,8 +39,6 @@ enum FilterType {
     INACTIVE = 'inactive',
     EMPTY = ''
 }
-
-const pageLimit = 8; // programs per page
 
 class Programs extends React.Component<ProgramsProps, ProgramsState> {
 

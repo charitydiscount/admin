@@ -7,6 +7,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import ElementTableLink from "../general/ElementTableLink";
 
 interface ContactElementProps {
     message: MessageDto,
@@ -27,19 +28,19 @@ class ContactElement extends React.Component<ContactElementProps, ContactElement
         })
     }
 
-    openModal() {
+    openModal = () => {
         this.setState({
             message: this.props.message,
             modalVisible: true
         });
-    }
+    };
 
 
-    closeModal() {
+    closeModal = () => {
         this.setState({
             modalVisible: false
         });
-    }
+    };
 
     async onModalSave() {
         try {
@@ -139,15 +140,7 @@ class ContactElement extends React.Component<ContactElementProps, ContactElement
                     </td>
                     {statusColumn}
                     <td>{this.props.message.email}</td>
-                    <td style={{textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                        <a href={emptyHrefLink} style={{
-                            textDecoration: "underline",
-                            color: "#007bff",
-                            cursor: "pointer"
-                        }} onClick={() => this.openModal()}>
-                            {this.props.message.name}
-                        </a>
-                    </td>
+                    <ElementTableLink text={this.props.message.name} onClick={this.openModal}/>
                     <td>{this.props.message.userId}</td>
                 </tr>
                 <tr className="spacer"></tr>

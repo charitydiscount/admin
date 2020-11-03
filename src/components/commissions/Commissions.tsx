@@ -8,7 +8,7 @@ import {
     getCommissions
 } from "../../rest/CommissionService";
 import FadeLoader from 'react-spinners/FadeLoader';
-import { emptyHrefLink, linkStyle, mediumSpinnerCss, SourceTypes, spinnerCss } from "../../Helper";
+import { emptyHrefLink, linkStyle, mediumSpinnerCss, pageLimit, SourceTypes, spinnerCss } from "../../Helper";
 import ReactPaginate from 'react-paginate';
 import { Button, TextField } from "@material-ui/core";
 import InputLabel from '@material-ui/core/InputLabel';
@@ -56,8 +56,6 @@ enum SortType {
     AMOUNT = 'amount',
     EMPTY = ''
 }
-
-const pageLimit = 8; // commissions per page
 
 class Commissions extends React.Component<CommissionsProps, CommissionsState> {
 

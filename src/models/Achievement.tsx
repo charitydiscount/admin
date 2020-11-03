@@ -1,4 +1,4 @@
-import { firestore } from 'firebase/app';
+import { ProxyDate } from "../Helper";
 
 export interface Languages {
     en: string,
@@ -46,10 +46,9 @@ export interface Achievement {
     id?: string,
     name: Languages,
     description: Languages,
-    badgePath: string,
-    condition1: Condition,
-    condition2: Condition,
-    createdAt?: firestore.Timestamp,
+    badge: string,
+    conditions: Condition[],
+    createdAt?: ProxyDate,
     reward: Reward,
     weight: string,
     type: string
@@ -64,17 +63,14 @@ export const DEFAULT_ACHIEVEMENT: Achievement = {
         ro: '',
         en: ''
     },
-    badgePath: '',
-    condition1: {
-        type: ConditionType[ConditionType.count],
-        target: '',
-        unit: ''
-    },
-    condition2: {
-        type: '',
-        target: '',
-        unit: ''
-    },
+    badge: '',
+    conditions: [
+        {
+            type: ConditionType[ConditionType.count],
+            target: '',
+            unit: ''
+        }
+    ],
     reward: {
         amount: '',
         unit: ''

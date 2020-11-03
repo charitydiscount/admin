@@ -4,6 +4,7 @@ import { ClickDto, updateClick } from "../../rest/ClicksService";
 import Modal from '../modal';
 import { TextField } from "@material-ui/core";
 import FadeLoader from 'react-spinners/FadeLoader';
+import ElementTableLink from "../general/ElementTableLink";
 
 interface ClickElementProps {
     click: ClickDto
@@ -151,15 +152,7 @@ class ClickElement extends React.Component<ClickElementProps, ClickElementState>
                         this.props.click.createdAt &&
                         new Date(parseFloat(this.props.click.createdAt._seconds) * 1000).toLocaleDateString('ro-RO', dateOptions)}
                     </td>
-                    <td style={{maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}}>
-                        <a href={emptyHrefLink} style={{
-                            textDecoration: "underline",
-                            color: "#007bff",
-                            cursor: "pointer"
-                        }} onClick={() => this.openModal()}>
-                            {this.props.click.id}
-                        </a>
-                    </td>
+                    <ElementTableLink text={this.props.click.id} onClick={this.openModal}/>
                     <td>{this.props.click.ipAddress}</td>
                     <td>{this.props.click.deviceType}</td>
                     <td>{this.props.click.programId}</td>
