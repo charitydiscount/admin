@@ -19,7 +19,6 @@ interface AchievementElementState {
 class AchievementElement extends React.Component<AchievementElementProps, AchievementElementState> {
 
     openModal = () => {
-        // @ts-ignore
         this.props.setAchievementModalUpdate(this.props.achievement);
     };
 

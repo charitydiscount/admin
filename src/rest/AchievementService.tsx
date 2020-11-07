@@ -27,6 +27,75 @@ export async function createAchievement(achievement: Achievement) {
         throw Error('User not logged in');
     }
 
+    validateAchievement(achievement);
+
+    let data = {
+        name: {
+            en: achievement.name.en,
+            ro: achievement.name.ro
+        },
+        description: {
+            en: achievement.description.en,
+            ro: achievement.description.ro
+        },
+        conditions: achievement.conditions,
+        badge: achievement.badge,
+        reward: {
+            unit: achievement.reward.unit,
+            amount: achievement.reward.amount
+        },
+        weight: achievement.weight,
+        type: achievement.type
+    };
+
+    const token = await auth.currentUser.getIdToken();
+    let url = remoteConfig.getString('express_url') + ExpressLink.ACHIEVEMENTS;
+
+    let response = await axios.post(url, data, {
+        headers: {Authorization: `Bearer ${token}`},
+    });
+
+    return response.status === 200;
+}
+
+export async function updateAchievement(achievement: Achievement) {
+    if (!auth.currentUser) {
+        throw Error('User not logged in');
+    }
+
+    validateAchievement(achievement);
+
+    let data = {
+        name: {
+            en: achievement.name.en,
+            ro: achievement.name.ro
+        },
+        description: {
+            en: achievement.description.en,
+            ro: achievement.description.ro
+        },
+        conditions: achievement.conditions,
+        badge: achievement.badge,
+        reward: {
+            unit: achievement.reward.unit,
+            amount: achievement.reward.amount
+        },
+        weight: achievement.weight,
+        type: achievement.type
+    };
+
+    const token = await auth.currentUser.getIdToken();
+    let url = remoteConfig.getString('express_url') + ExpressLink.ACHIEVEMENTS + '/' + achievement.id;
+
+    let response = await axios.put(url, data, {
+        headers: {Authorization: `Bearer ${token}`},
+    });
+
+    return response.status === 200;
+}
+
+
+function validateAchievement(achievement: Achievement) {
     if (isEmpty(achievement.name.en) || isEmpty(achievement.name.ro)) {
         throw Error('Enter both names');
     }
@@ -71,32 +140,4 @@ export async function createAchievement(achievement: Achievement) {
     if (isEmpty(achievement.type)) {
         throw Error('Select the type');
     }
-
-    let data = {
-        name: {
-            en: achievement.name.en,
-            ro: achievement.name.ro
-        },
-        description: {
-            en: achievement.description.en,
-            ro: achievement.description.ro
-        },
-        conditions: achievement.conditions,
-        badge: achievement.badge,
-        reward: {
-            unit: achievement.reward.unit,
-            amount: achievement.reward.amount
-        },
-        weight: achievement.weight,
-        type: achievement.type
-    };
-
-    const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.ACHIEVEMENTS;
-
-    let response = await axios.post(url, data, {
-        headers: {Authorization: `Bearer ${token}`},
-    });
-
-    return response.status === 200;
 }

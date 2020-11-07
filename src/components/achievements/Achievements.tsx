@@ -1,10 +1,6 @@
 import React from "react";
 import { pageLimit, spinnerCss } from "../../Helper";
 import { FadeLoader } from "react-spinners";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import FormControl from "@material-ui/core/FormControl";
 import ReactPaginate from 'react-paginate';
 import { connect } from "react-redux";
 import {
@@ -104,31 +100,7 @@ class Achievements extends React.Component<AchievementsProps, AchievementsState>
                         <React.Fragment>
                             <div className="table-data__tool">
                                 <div className="table-data__tool-left">
-                                    <div className="rs-select2--light rs-select2--md">
-                                        <FormControl fullWidth>
-                                            <InputLabel id="demo-simple-select-filled-label">
-                                                Filters
-                                            </InputLabel>
-                                            <Select
-                                                MenuProps={{
-                                                    disableScrollLock: true,
-                                                    getContentAnchorEl: null,
-                                                    anchorOrigin: {
-                                                        vertical: 'bottom',
-                                                        horizontal: 'left',
-                                                    },
-                                                }}
-                                                labelId="demo-simple-select-filled-label"
-                                                id="demo-simple-select-filled"
-                                                value={this.state.filterType}
-                                                onChange={this.filter}
-                                            >
-                                                <MenuItem value="">
-                                                    <em>None</em>
-                                                </MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </div>
+
                                 </div>
                                 <div className="table-data__tool-right">
                                     <button className="au-btn au-btn-icon au-btn--green au-btn--small"

@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 import { setAchievementModalVisible, updateAchievementModal } from "../../redux/actions/AchievementActions";
 import ModalSelect from "../general/ModalSelect";
 import { MenuItem } from "@material-ui/core";
-import { createAchievement } from "../../rest/AchievementService";
+import { createAchievement, updateAchievement } from "../../rest/AchievementService";
 import { spinnerCss } from "../../Helper";
 import { FadeLoader } from "react-spinners";
 
@@ -22,6 +22,7 @@ interface AchievementModalProps {
 
     //global state
     achievementModalVisible: boolean,
+    createAchievement: boolean,
     setAchievementModalVisible: (modalVisible) => void
     achievementModal: Achievement,
     updateAchievementModal: (achievement) => void
@@ -44,7 +45,6 @@ class AchievementModal extends React.Component<AchievementModalProps, Achievemen
         this.setState({
             isLoading: false
         });
-        // @ts-ignore
         this.props.setAchievementModalVisible(false);
     };
 
@@ -54,9 +54,14 @@ class AchievementModal extends React.Component<AchievementModalProps, Achievemen
                 this.setState({
                     isLoading: true
                 });
-                let response = await createAchievement(this.props.achievementModal);
+                let response;
+                if (this.props.createAchievement) {
+                    response = await createAchievement(this.props.achievementModal);
+                } else {
+                    response = await updateAchievement(this.props.achievementModal);
+                }
                 if (response) {
-                    alert("Achievement successfully created");
+                    alert("Achievement successfully created/updated");
                     window.location.reload();
                 }
                 this.setState({
@@ -280,6 +285,7 @@ const
     mapStateToProps = (state: AppState) => {
         return {
             achievementModalVisible: state.achievement.modalVisible,
+            createAchievement: state.achievement.createAchievement,
             achievementModal: state.achievement.achievementModal
         };
     };
