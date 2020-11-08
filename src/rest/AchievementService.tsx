@@ -1,8 +1,7 @@
-import { Achievement, AchievementType, ConditionType, ConditionUnit, RewardUnit } from "../models/Achievement";
+import { Achievement } from "../models/Achievement";
 import { auth, remoteConfig } from "../index";
 import { ExpressLink, isEmpty } from "../Helper";
 import axios from "axios";
-import { ClickDto } from "./ClicksService";
 
 export async function getAchievements() {
     if (!auth.currentUser) {

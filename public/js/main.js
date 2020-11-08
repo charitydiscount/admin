@@ -1567,11 +1567,6 @@ $(document).ready(function () {
 
 
         try {
-            // Hamburger Menu
-            $('.hamburger').on('click', function () {
-                $(this).toggleClass('is-active');
-                $('.navbar-mobile').slideToggle('500');
-            });
             $('.navbar-mobile__list li.has-dropdown > a').on('click', function () {
                 var dropdown = $(this).siblings('ul.navbar-mobile__dropdown');
                 $(this).toggleClass('active');

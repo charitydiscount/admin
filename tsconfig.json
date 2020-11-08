@@ -8,6 +8,7 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": false,
@@ -19,7 +20,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "noUnusedLocals": false,
-    "jsx": "preserve",
+    "jsx": "react",
     "noImplicitAny": false
   },
   "include": [

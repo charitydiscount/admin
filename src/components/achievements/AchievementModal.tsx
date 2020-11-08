@@ -94,7 +94,8 @@ class AchievementModal extends React.Component<AchievementModalProps, Achievemen
 
         let achievementTypes = [
             <MenuItem key={'type0'} value={AchievementType[AchievementType.click]}>Click</MenuItem>,
-            <MenuItem key={'type1'} value={AchievementType[AchievementType.commission]}>Commission</MenuItem>,
+            <MenuItem key={'type1'} value={AchievementType[AchievementType.commission_paid]}>Commission Paid</MenuItem>,
+            <MenuItem key={'type1'} value={AchievementType[AchievementType.commission_pending]}>Commission Pending</MenuItem>,
             <MenuItem key={'type2'} value={AchievementType[AchievementType.donation]}>Donation</MenuItem>,
             <MenuItem key={'type3'} value={AchievementType[AchievementType.invite]}>Referral Invite</MenuItem>,
             <MenuItem key={'type4'} value={AchievementType[AchievementType.cashout]}>Cashout</MenuItem>,
@@ -199,7 +200,7 @@ class AchievementModal extends React.Component<AchievementModalProps, Achievemen
                                      options={conditionsTypes}
                                      onChange={(event) => {
                                          let conditions = this.props.achievementModal.conditions as Condition[];
-                                         if (conditions.length == 1) {
+                                         if (conditions.length === 1) {
                                              conditions.push({
                                                  type: event.target.value,
                                                  target: '',
@@ -219,7 +220,7 @@ class AchievementModal extends React.Component<AchievementModalProps, Achievemen
                                             ''}
                                         onChange={(event) => {
                                             let conditions = this.props.achievementModal.conditions as Condition[];
-                                            if (conditions.length == 1) {
+                                            if (conditions.length === 1) {
                                                 conditions.push({
                                                     type: '',
                                                     target: event.target.value,

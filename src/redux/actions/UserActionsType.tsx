@@ -12,7 +12,7 @@ export const UserActions = {
     setAuthorizedUserAction: () =>
         createAction(AuthActionTypes.SET_AUTHORIZED_USER_ACTION),
 };
-export type UserActions = ActionTypesUnion<typeof UserActions>;
+export type UserActionsType = ActionTypesUnion<typeof UserActions>;
 
 export function doLogoutAction(): any {
     return (dispatch: any) => {

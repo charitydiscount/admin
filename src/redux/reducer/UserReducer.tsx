@@ -1,5 +1,5 @@
 import { LoginActionTypes, AuthActionTypes } from '../actions/Actions';
-import { UserActions } from '../actions/UserActions';
+import { UserActionsType } from '../actions/UserActionsType';
 
 export interface IUserState {
     isLoggedIn: boolean;
@@ -13,7 +13,7 @@ const initialState: IUserState = {
 
 export default function(
     state: IUserState = initialState,
-    action: UserActions
+    action: UserActionsType
 ): IUserState {
     switch (action.type) {
         case LoginActionTypes.SET_LOGGED_USER_ACTION:

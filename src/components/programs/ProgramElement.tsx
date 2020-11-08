@@ -1,7 +1,7 @@
 import React from "react";
 import { ProgramDto, updateProgram } from "../../rest/ProgramService";
 import { TextField } from '@material-ui/core';
-import { emptyHrefLink, SourceTypes } from "../../Helper";
+import { SourceTypes } from "../../Helper";
 import Modal from '../modal';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';

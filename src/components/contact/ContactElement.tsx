@@ -1,5 +1,5 @@
 import React from "react";
-import { dateOptions, emptyHrefLink } from "../../Helper";
+import { dateOptions } from "../../Helper";
 import Modal from '../modal';
 import { TextField } from "@material-ui/core";
 import { MessageDto, updateMessage } from "../../rest/ContactsService";

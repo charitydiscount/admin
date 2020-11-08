@@ -23,7 +23,8 @@ export enum RewardUnit {
 
 export enum AchievementType {
     click,
-    commission,
+    commission_paid,
+    commission_pending,
     donation,
     invite,
     cashout,

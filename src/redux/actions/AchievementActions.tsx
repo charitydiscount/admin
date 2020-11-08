@@ -39,6 +39,6 @@ export function updateAchievementModal(achievement: Achievement): any {
 }
 
 
-export type AchievementActions = ActionTypesUnion<typeof AchievementActions>;
+export type AchievementActionsType = ActionTypesUnion<typeof AchievementActions>;
 
 

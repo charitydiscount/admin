@@ -1,5 +1,5 @@
 import React from "react";
-import { blueColor, dateOptions, emptyHrefLink, mediumSpinnerCss } from "../../Helper";
+import { blueColor, dateOptions, mediumSpinnerCss } from "../../Helper";
 import { ClickDto, updateClick } from "../../rest/ClicksService";
 import Modal from '../modal';
 import { TextField } from "@material-ui/core";

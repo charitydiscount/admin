@@ -14,7 +14,7 @@ import 'firebase/firestore';
 import 'firebase/remote-config';
 import 'firebase/storage';
 import firebaseConfig from './config/FirebaseConfig';
-import { UserActions } from './redux/actions/UserActions';
+import { UserActions } from './redux/actions/UserActionsType';
 import { authorizeUser } from './rest/UserService';
 
 export const publicUrl = process.env.PUBLIC_URL || '';

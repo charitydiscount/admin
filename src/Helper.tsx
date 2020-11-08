@@ -1,5 +1,5 @@
 import { store } from './index';
-import { doLogoutAction } from './redux/actions/UserActions';
+import { doLogoutAction } from './redux/actions/UserActionsType';
 import { css } from '@emotion/core';
 
 export enum ExpressLink {

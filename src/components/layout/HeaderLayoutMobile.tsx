@@ -15,11 +15,14 @@ class HeaderLayoutMobile extends React.Component {
                                 <a className="logo" href="index.html">
                                     <img src="images/icon/logo.png" alt="CoolAdmin"/>
                                 </a>
-                                <button className="hamburger hamburger--slider" type="button">
-                            <span className="hamburger-box">
-                                <span className="hamburger-inner"></span>
-                            </span>
-                                </button>
+                                <a className="hamburger hamburger--slider" href={emptyHrefLink} onClick={()=>{
+                                    $(this).toggleClass('is-active');
+                                    $('.navbar-mobile').slideToggle('500');
+                                }}>
+                                    <span className="hamburger-box">
+                                        <span className="hamburger-inner"/>
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </div>
