@@ -30,6 +30,7 @@ export enum TableDocument {
 
 export enum StorageRef {
     ICONS = "icons/",
+    BADGES = "badges/"
 }
 
 export const spinnerCss = css`
@@ -40,6 +41,11 @@ export const spinnerCss = css`
 export const mediumSpinnerCss = css`
     display: block;
     margin: 100px auto;
+`;
+
+export const tableRowSpinnerCss = css`
+    display: block;
+    margin: auto;
 `;
 
 export enum SourceTypes {

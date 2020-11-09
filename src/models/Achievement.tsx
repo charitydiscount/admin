@@ -64,7 +64,7 @@ export const DEFAULT_ACHIEVEMENT: Achievement = {
         ro: '',
         en: ''
     },
-    badge: '',
+    badge: 'badgePath',
     conditions: [
         {
             type: ConditionType[ConditionType.count],

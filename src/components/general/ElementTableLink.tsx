@@ -10,8 +10,8 @@ interface ElementLinkProps {
 export const ElementTableLink = (props: ElementLinkProps) => (
     <td style={
         props.withoutWidth ?
-            {textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'} :
-            {maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden'}
+            {textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', verticalAlign : 'middle'} :
+            {maxWidth: 150, textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', verticalAlign : 'middle'}
 
     }>
         <a href={emptyHrefLink} style={{
