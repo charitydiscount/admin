@@ -1,82 +1,92 @@
-import { ProxyDate } from "../Helper";
+import { ProxyDate } from '../Helper';
 
-export interface Languages {
-    en: string,
-    ro: string
-}
-
-export enum ConditionType {
-    count,
-    untilDate,
-    exactDate
-}
-
-export enum ConditionUnit {
-    count,
-    ron
+export interface LocalizedText {
+    en: string;
+    ro: string;
 }
 
 export enum RewardUnit {
-    charityPoints,
-    ron
+    RON = 'ron',
+    EUR = 'eur',
+    CHARITY_POINTS = 'CharityPoints',
 }
 
 export enum AchievementType {
-    click,
-    commission_paid,
-    commission_pending,
-    donation,
-    invite,
-    cashout,
-    review,
-    favorite
+    COMMISSION_PAID = 'commission-paid',
+    COMMISSION_PENDING = 'commission-pending',
+    CLICK = 'click',
+    DONATION = 'donation',
+    CASHOUT = 'cashout',
+    REVIEW = 'review',
+    INVITE = 'invite',
+    FAVORITE = 'favorite',
+}
+
+export enum AchievementConditionType {
+    COUNT = 'count',
+    EXACT_DATE = 'exactDate',
+    UNTIL_DATE = 'untilDate',
+}
+
+export enum AchievementConditionUnit {
+    SHOP = 'shop',
+    COMMISSION = 'commission',
+    DONATION = 'donation',
+    CASHOUT = 'cashout',
+    REVIEW = 'review',
+    INVITE = 'invite',
 }
 
 export interface Reward {
-    amount: string,
-    unit: string
+    amount: number;
+    unit: string;
 }
 
 export interface Condition {
-    type: string,
-    target: string,
-    unit: string
+    target: number | Date | string;
+    type: AchievementConditionType;
+    unit: AchievementConditionUnit;
 }
 
 export interface Achievement {
-    id?: string,
-    name: Languages,
-    description: Languages,
-    badge: string,
-    conditions: Condition[],
-    createdAt?: ProxyDate,
-    reward: Reward,
-    weight: string,
-    type: string
+    id?: string;
+    name: LocalizedText;
+    description: LocalizedText;
+    badgeUrl: string;
+    conditions: Condition[];
+    createdAt?: ProxyDate;
+    updatedAt?: ProxyDate;
+    reward: Reward;
+    weight: number;
+    type: AchievementType;
+    order: number;
+    targetDate?: Date;
+    exactDate?: boolean;
 }
 
 export const DEFAULT_ACHIEVEMENT: Achievement = {
     name: {
         ro: '',
-        en: ''
+        en: '',
     },
     description: {
         ro: '',
-        en: ''
+        en: '',
     },
-    badge: 'badgePath',
+    badgeUrl:
+        'https://firebasestorage.googleapis.com/v0/b/charitydiscount-test.appspot.com/o/badges%2F157152.png?alt=media',
     conditions: [
         {
-            type: ConditionType[ConditionType.count],
+            type: AchievementConditionType.COUNT,
             target: '',
-            unit: ''
-        }
+            unit: AchievementConditionUnit.SHOP,
+        },
     ],
     reward: {
-        amount: '',
-        unit: ''
+        amount: 0,
+        unit: '',
     },
-    weight: '',
-    type: ''
+    weight: 0,
+    type: AchievementType.CLICK,
+    order: 100,
 };
-

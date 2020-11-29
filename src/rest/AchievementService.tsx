@@ -1,9 +1,9 @@
-import { Achievement } from "../models/Achievement";
-import { auth, remoteConfig } from "../index";
-import { ExpressLink, isEmpty } from "../Helper";
-import axios from "axios";
+import { Achievement } from '../models/Achievement';
+import { auth, remoteConfig } from '../index';
+import { ExpressLink, isEmpty } from '../Helper';
+import axios from 'axios';
 
-export async function getAchievements() {
+export async function getAchievements(): Promise<Achievement[]> {
     if (!auth.currentUser) {
         return [];
     }
@@ -12,13 +12,10 @@ export async function getAchievements() {
     let url = remoteConfig.getString('express_url') + ExpressLink.ACHIEVEMENTS;
 
     let response = await axios.get(url, {
-        headers: {Authorization: `Bearer ${token}`}
+        headers: { Authorization: `Bearer ${token}` },
     });
 
-    return Object.entries(response.data as Achievement)
-        .map(([index, click]) => {
-            return click;
-        })
+    return response.data;
 }
 
 export async function createAchievement(achievement: Achievement) {
@@ -28,30 +25,11 @@ export async function createAchievement(achievement: Achievement) {
 
     validateAchievement(achievement);
 
-    let data = {
-        name: {
-            en: achievement.name.en,
-            ro: achievement.name.ro
-        },
-        description: {
-            en: achievement.description.en,
-            ro: achievement.description.ro
-        },
-        conditions: achievement.conditions,
-        badge: achievement.badge,
-        reward: {
-            unit: achievement.reward.unit,
-            amount: achievement.reward.amount
-        },
-        weight: achievement.weight,
-        type: achievement.type
-    };
-
     const token = await auth.currentUser.getIdToken();
     let url = remoteConfig.getString('express_url') + ExpressLink.ACHIEVEMENTS;
 
-    let response = await axios.post(url, data, {
-        headers: {Authorization: `Bearer ${token}`},
+    let response = await axios.post(url, achievement, {
+        headers: { Authorization: `Bearer ${token}` },
     });
 
     return response.status === 200;
@@ -64,46 +42,33 @@ export async function updateAchievement(achievement: Achievement) {
 
     validateAchievement(achievement);
 
-    let data = {
-        name: {
-            en: achievement.name.en,
-            ro: achievement.name.ro
-        },
-        description: {
-            en: achievement.description.en,
-            ro: achievement.description.ro
-        },
-        conditions: achievement.conditions,
-        badge: achievement.badge,
-        reward: {
-            unit: achievement.reward.unit,
-            amount: achievement.reward.amount
-        },
-        weight: achievement.weight,
-        type: achievement.type
-    };
-
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.ACHIEVEMENTS + '/' + achievement.id;
+    let url =
+        remoteConfig.getString('express_url') +
+        ExpressLink.ACHIEVEMENTS +
+        '/' +
+        achievement.id;
 
-    let response = await axios.put(url, data, {
-        headers: {Authorization: `Bearer ${token}`},
+    let response = await axios.put(url, achievement, {
+        headers: { Authorization: `Bearer ${token}` },
     });
 
     return response.status === 200;
 }
-
 
 function validateAchievement(achievement: Achievement) {
     if (isEmpty(achievement.name.en) || isEmpty(achievement.name.ro)) {
         throw Error('Enter both names');
     }
 
-    if (isEmpty(achievement.description.en) || isEmpty(achievement.description.ro)) {
+    if (
+        isEmpty(achievement.description.en) ||
+        isEmpty(achievement.description.ro)
+    ) {
         throw Error('Enter both descriptions');
     }
 
-    if (isEmpty(achievement.badge)) {
+    if (isEmpty(achievement.badgeUrl)) {
         throw Error('Enter the image path of the badge');
     }
 

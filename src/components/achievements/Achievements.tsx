@@ -1,52 +1,44 @@
-import React from "react";
-import { pageLimit, spinnerCss } from "../../Helper";
-import { FadeLoader } from "react-spinners";
+import React from 'react';
+import { pageLimit, spinnerCss } from '../../Helper';
+import { FadeLoader } from 'react-spinners';
 import ReactPaginate from 'react-paginate';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import {
+    loadAchievements,
     setAchievementModalCreate,
-} from "../../redux/actions/AchievementActions";
-import AchievementModal from "./AchievementModal";
-import { getAchievements } from "../../rest/AchievementService";
-import { Achievement } from "../../models/Achievement";
-import AchievementElement from "./AchievementElement";
+} from '../../redux/actions/AchievementActions';
+import AchievementModal from './AchievementModal';
+import { Achievement } from '../../models/Achievement';
+import AchievementElement from './AchievementElement';
+import { AppState } from '../../redux/reducer/RootReducer';
 
 interface AchievementsProps {
     //global state
-    setAchievementModalCreate: () => void
+    setAchievementModalCreate: () => void;
+    achievements: Achievement[];
+    isLoading: boolean;
+    loadAchievements: () => {};
 }
 
 interface AchievementsState {
-    achievements: Achievement[],
-    isLoading: boolean,
-    currentPage: number,
-    filterType: string
+    currentPage: number;
+    filterType: string;
 }
 
-class Achievements extends React.Component<AchievementsProps, AchievementsState> {
-
+class Achievements extends React.Component<
+    AchievementsProps,
+    AchievementsState
+> {
     constructor(props) {
         super(props);
         this.state = {
-            achievements: [],
-            isLoading: true,
             currentPage: 0,
-            filterType: ''
-        }
+            filterType: '',
+        };
     }
 
     async componentDidMount() {
-        try {
-            let responseAchievements = await getAchievements();
-            if (responseAchievements) {
-                this.setState({
-                    achievements: responseAchievements as Achievement[],
-                    isLoading: false
-                });
-            }
-        } catch (error) {
-            alert(error);
-        }
+        this.props.loadAchievements();
     }
 
     openModal = () => {
@@ -55,34 +47,31 @@ class Achievements extends React.Component<AchievementsProps, AchievementsState>
 
     updatePageNumber = (data) => {
         this.setState({
-            currentPage: data.selected
+            currentPage: data.selected,
         });
     };
 
-    filter = () => {
-
-    };
+    filter = () => {};
 
     public render() {
         let pageCount = 0;
         let achievementList;
-        if (this.state.achievements && this.state.achievements.length > 0) {
-            achievementList = this.state.achievements;
+        if (this.props.achievements && this.props.achievements.length > 0) {
+            achievementList = this.props.achievements;
             if (achievementList.length > pageLimit) {
                 pageCount = achievementList.length / pageLimit;
                 let offset = this.state.currentPage;
-                achievementList = achievementList
-                    .slice(offset * pageLimit, (offset + 1) * pageLimit);
+                achievementList = achievementList.slice(
+                    offset * pageLimit,
+                    (offset + 1) * pageLimit
+                );
             } else {
                 pageCount = 1;
             }
 
-            achievementList = achievementList
-                .map((value, index) => {
-                    return (
-                        <AchievementElement key={index} achievement={value}/>
-                    );
-                });
+            achievementList = achievementList.map((value, index) => {
+                return <AchievementElement key={index} achievement={value} />;
+            });
         }
 
         return (
@@ -90,84 +79,79 @@ class Achievements extends React.Component<AchievementsProps, AchievementsState>
                 <div className="row">
                     <div className="col-md-12">
                         <h3 className="title-5 m-b-35">Achievements</h3>
-                        <AchievementModal title={"Create achievement"}/>
+                        <AchievementModal title={'Create achievement'} />
                         <FadeLoader
-                            loading={this.state.isLoading}
+                            loading={this.props.isLoading}
                             color={'#1641ff'}
                             css={spinnerCss}
                         />
-                        {!this.state.isLoading &&
-                        <React.Fragment>
-                            <div className="table-data__tool">
-                                <div className="table-data__tool-left">
-
+                        {!this.props.isLoading && (
+                            <React.Fragment>
+                                <div className="table-data__tool">
+                                    <div className="table-data__tool-left"></div>
+                                    <div className="table-data__tool-right">
+                                        <button
+                                            className="au-btn au-btn-icon au-btn--green au-btn--small"
+                                            onClick={this.openModal}
+                                        >
+                                            <i className="zmdi zmdi-plus" />
+                                            add achievement
+                                        </button>
+                                        <ReactPaginate
+                                            previousLabel={'<'}
+                                            previousLinkClassName={'page-link'}
+                                            nextLabel={'>'}
+                                            nextLinkClassName={'page-link'}
+                                            breakLabel={'...'}
+                                            breakClassName={'blank'}
+                                            breakLinkClassName={'page-link'}
+                                            pageCount={pageCount}
+                                            marginPagesDisplayed={1}
+                                            pageRangeDisplayed={2}
+                                            forcePage={0}
+                                            onPageChange={this.updatePageNumber}
+                                            containerClassName={'pagination'}
+                                            pageClassName={'page-item'}
+                                            pageLinkClassName={'page-link'}
+                                            activeClassName={'active'}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="table-data__tool-right">
-                                    <button className="au-btn au-btn-icon au-btn--green au-btn--small"
-                                            onClick={this.openModal}>
-                                        <i className="zmdi zmdi-plus"/>
-                                        add achievement
-                                    </button>
-                                    <ReactPaginate
-                                        previousLabel={'<'}
-                                        previousLinkClassName={
-                                            'page-link'
-                                        }
-                                        nextLabel={'>'}
-                                        nextLinkClassName={'page-link'}
-                                        breakLabel={'...'}
-                                        breakClassName={'blank'}
-                                        breakLinkClassName={'page-link'}
-                                        pageCount={pageCount}
-                                        marginPagesDisplayed={1}
-                                        pageRangeDisplayed={2}
-                                        forcePage={
-                                            0
-                                        }
-                                        onPageChange={
-                                            this.updatePageNumber
-                                        }
-                                        containerClassName={
-                                            'pagination'
-                                        }
-                                        pageClassName={'page-item'}
-                                        pageLinkClassName={'page-link'}
-                                        activeClassName={'active'}
-                                    />
+                                <div className="table-responsive table-responsive-data2">
+                                    <table className="table table-data2">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Type</th>
+                                                <th>Badge</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>{achievementList}</tbody>
+                                    </table>
                                 </div>
-                            </div>
-                            <div className="table-responsive table-responsive-data2">
-                                <table className="table table-data2">
-                                    <thead>
-                                    <tr>
-                                        <th>Id</th>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Type</th>
-                                        <th>Badge</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {achievementList}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </React.Fragment>
-                        }
+                            </React.Fragment>
+                        )}
                     </div>
                 </div>
             </React.Fragment>
-        )
+        );
     }
 }
 
-
-const mapDispatchToProps = (dispatch: any) => {
+const mapStateToProps = (state: AppState) => {
     return {
-        setAchievementModalCreate: () =>
-            dispatch(setAchievementModalCreate()),
+        achievements: state.achievement.achievements,
+        isLoading: state.achievement.loading,
     };
 };
 
-export default connect(null, mapDispatchToProps)(Achievements);
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        setAchievementModalCreate: () => dispatch(setAchievementModalCreate()),
+        loadAchievements: () => dispatch(loadAchievements()),
+    };
+};
 
+export default connect(mapStateToProps, mapDispatchToProps)(Achievements);

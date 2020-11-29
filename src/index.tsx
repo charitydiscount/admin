@@ -50,15 +50,15 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
-auth.onAuthStateChanged(user => {
+auth.onAuthStateChanged((user) => {
     if (user) {
         store.dispatch(UserActions.setLoggedUserAction());
-        authorizeUser().then(authResult => {
+        authorizeUser().then((authResult) => {
             if (authResult === true) {
                 store.dispatch(UserActions.setAuthorizedUserAction());
             } else {
-                history.push("/");
-                alert("User not authorized");
+                history.push('/');
+                alert('User not authorized');
             }
         });
     }
