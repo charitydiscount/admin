@@ -9,6 +9,7 @@ export enum Routes {
     CASHOUT = '/cashout',
     CLICKS = '/clicks',
     MESSAGES = '/messages',
+    STAFF = '/staff',
     DONATIONS = '/donations',
     SETTINGS = '/settings',
     MAILS = '/mails'

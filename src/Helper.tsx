@@ -12,6 +12,7 @@ export enum ExpressLink {
     DONATION = 'donations',
     COMMISSIONS = 'commissions',
     CLICKS = 'clicks',
+    USERS = 'users',
     ACHIEVEMENTS = 'achievements',
     CASES = 'cases',
 }

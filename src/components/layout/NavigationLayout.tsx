@@ -29,11 +29,11 @@ class NavigationLayout extends React.Component {
                                         Notification mail
                                     </Link>
                                     <Link to={Routes.ACHIEVEMENTS}>
-                                        <i className="fas fa-table" />
+                                        <i className="fas fa-trophy" />
                                         Achievements
                                     </Link>
                                     <Link to={Routes.CLICKS}>
-                                        <i className="fas fa-table" />
+                                        <i className="fas fa-mouse-pointer" />
                                         Clicks
                                     </Link>
                                     <Link to={Routes.COMMISSIONS}>
@@ -59,6 +59,10 @@ class NavigationLayout extends React.Component {
                                     <Link to={Routes.MESSAGES}>
                                         <i className="zmdi zmdi-email" />
                                         Messages
+                                    </Link>
+                                    <Link to={Routes.STAFF}>
+                                        <i className="fas fa-sticky-note" />
+                                        Staff members
                                     </Link>
                                     <a
                                         href={emptyHrefLink}

@@ -12,6 +12,7 @@ import Settings from "../settings/Settings";
 import Mails from "../mails/Mails";
 import Clicks from "../clicks/Clicks";
 import Achievements from "../achievements/Achievements";
+import Staff from "../staff/Staff";
 
 class PageContentLayout extends React.Component {
     public render() {
@@ -68,6 +69,11 @@ class PageContentLayout extends React.Component {
                             exact={true}
                             path={Routes.DONATIONS}
                             component={Donations}
+                        />
+                        <Route
+                            exact={true}
+                            path={Routes.STAFF}
+                            component={Staff}
                         />
                         <Route
                             exact={true}

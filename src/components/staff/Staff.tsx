@@ -1,49 +1,53 @@
-import React from 'react';
-import { pageLimit, spinnerCss } from '../../Helper';
-import { FadeLoader } from 'react-spinners';
+import React from "react";
+import { FadeLoader } from "react-spinners";
+import { pageLimit, spinnerCss } from "../../Helper";
+import { getStaffUsers } from "../../rest/StaffService";
 import ReactPaginate from 'react-paginate';
-import { connect } from 'react-redux';
-import {
-    loadAchievements,
-    setAchievementModalCreate,
-} from '../../redux/actions/AchievementActions';
-import AchievementModal from './AchievementModal';
-import { Achievement } from '../../models/Achievement';
-import AchievementElement from './AchievementElement';
-import { AppState } from '../../redux/reducer/RootReducer';
+import StaffElement from "./StaffElement";
+import { User } from "../../models/User";
+import StaffModal from "./StaffModal";
+import { connect } from "react-redux";
+import { setStaffModalCreate } from "../../redux/actions/StaffActions";
 
-interface AchievementsProps {
+interface RolesState {
+    isLoading: boolean,
+    staffMembers: User[],
+    currentPage: number
+}
+
+interface RolesProps {
     //global state
-    setAchievementModalCreate: () => void;
-    achievements: Achievement[];
-    isLoading: boolean;
-    loadAchievements: () => {};
+    setStaffModalCreate: () => void;
 }
 
-interface AchievementsState {
-    currentPage: number;
-    filterType: string;
-}
+class Staff extends React.Component<RolesProps, RolesState> {
 
-class Achievements extends React.Component<
-    AchievementsProps,
-    AchievementsState
-> {
     constructor(props) {
         super(props);
         this.state = {
             currentPage: 0,
-            filterType: '',
+            staffMembers: [],
+            isLoading: true
         };
     }
 
-    async componentDidMount() {
-        this.props.loadAchievements();
-    }
-
     openModal = () => {
-        this.props.setAchievementModalCreate();
+        this.props.setStaffModalCreate();
     };
+
+    async componentDidMount() {
+        try {
+            let response = await getStaffUsers();
+            if (response) {
+                this.setState({
+                    staffMembers: response,
+                    isLoading: false
+                });
+            }
+        } catch (error) {
+            alert(error);
+        }
+    }
 
     updatePageNumber = (data) => {
         this.setState({
@@ -52,14 +56,14 @@ class Achievements extends React.Component<
     };
 
     public render() {
+        let staffMemberList;
         let pageCount = 0;
-        let achievementList;
-        if (this.props.achievements && this.props.achievements.length > 0) {
-            achievementList = this.props.achievements;
-            if (achievementList.length > pageLimit) {
-                pageCount = achievementList.length / pageLimit;
+        if (this.state.staffMembers && this.state.staffMembers.length > 0) {
+            staffMemberList = this.state.staffMembers;
+            if (staffMemberList.length > pageLimit) {
+                pageCount = staffMemberList.length / pageLimit;
                 let offset = this.state.currentPage;
-                achievementList = achievementList.slice(
+                staffMemberList = staffMemberList.slice(
                     offset * pageLimit,
                     (offset + 1) * pageLimit
                 );
@@ -67,8 +71,8 @@ class Achievements extends React.Component<
                 pageCount = 1;
             }
 
-            achievementList = achievementList.map((value, index) => {
-                return <AchievementElement key={index} achievement={value} />;
+            staffMemberList = staffMemberList.map((value, index) => {
+                return <StaffElement key={index} staffUser={value}/>;
             });
         }
 
@@ -76,14 +80,14 @@ class Achievements extends React.Component<
             <React.Fragment>
                 <div className="row">
                     <div className="col-md-12">
-                        <h3 className="title-5 m-b-35">Achievements</h3>
-                        <AchievementModal title={'Create achievement'} />
+                        <h3 className="title-5 m-b-35">Staff members</h3>
+                        <StaffModal/>
                         <FadeLoader
-                            loading={this.props.isLoading}
+                            loading={this.state.isLoading}
                             color={'#1641ff'}
                             css={spinnerCss}
                         />
-                        {!this.props.isLoading && (
+                        {!this.state.isLoading && (
                             <React.Fragment>
                                 <div className="table-data__tool">
                                     <div className="table-data__tool-left"></div>
@@ -92,8 +96,8 @@ class Achievements extends React.Component<
                                             className="au-btn au-btn-icon au-btn--green au-btn--small"
                                             onClick={this.openModal}
                                         >
-                                            <i className="zmdi zmdi-plus" />
-                                            add achievement
+                                            <i className="zmdi zmdi-plus"/>
+                                            add member
                                         </button>
                                         <ReactPaginate
                                             previousLabel={'<'}
@@ -118,15 +122,15 @@ class Achievements extends React.Component<
                                 <div className="table-responsive table-responsive-data2">
                                     <table className="table table-data2">
                                         <thead>
-                                            <tr>
-                                                <th>Id</th>
-                                                <th>Name</th>
-                                                <th>Description</th>
-                                                <th>Type</th>
-                                                <th>Badge</th>
-                                            </tr>
+                                        <tr>
+                                            <th>UserId</th>
+                                            <th>Email</th>
+                                            <th>Photo</th>
+                                            <th>Staff Member</th>
+                                            <th>Admin</th>
+                                        </tr>
                                         </thead>
-                                        <tbody>{achievementList}</tbody>
+                                        <tbody>{staffMemberList}</tbody>
                                     </table>
                                 </div>
                             </React.Fragment>
@@ -134,22 +138,14 @@ class Achievements extends React.Component<
                     </div>
                 </div>
             </React.Fragment>
-        );
+        )
     }
 }
 
-const mapStateToProps = (state: AppState) => {
-    return {
-        achievements: state.achievement.achievements,
-        isLoading: state.achievement.loading,
-    };
-};
-
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        setAchievementModalCreate: () => dispatch(setAchievementModalCreate()),
-        loadAchievements: () => dispatch(loadAchievements()),
+        setStaffModalCreate: () => dispatch(setStaffModalCreate()),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Achievements);
+export default connect(null, mapDispatchToProps)(Staff);

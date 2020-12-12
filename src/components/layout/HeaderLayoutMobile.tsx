@@ -80,6 +80,11 @@ class HeaderLayoutMobile extends React.Component {
                                     </Link>
                                 </li>
                                 <li className="has-sub">
+                                    <Link to={Routes.STAFF}>
+                                        <i className="fas fa-sticky-note"/>Staff members
+                                    </Link>
+                                </li>
+                                <li className="has-sub">
                                     <a href={emptyHrefLink} onClick={handleLogOut}>
                                         <i className="zmdi zmdi-power"/>Logout
                                     </a>

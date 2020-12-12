@@ -4,7 +4,6 @@ import AchievementModal from './AchievementModal';
 import { setAchievementModalUpdate } from '../../redux/actions/AchievementActions';
 import { connect } from 'react-redux';
 import ElementTableLink from '../general/ElementTableLink';
-import { emptyHrefLink } from '../../Helper';
 
 interface AchievementElementProps {
     achievement: Achievement;
@@ -21,7 +20,7 @@ class AchievementElement extends React.Component<AchievementElementProps> {
     public render() {
         return (
             <React.Fragment>
-                <AchievementModal title={'Update achievement'} />
+                <AchievementModal title={'Update achievement'}/>
                 <tr className="tr-shadow">
                     <ElementTableLink
                         text={this.props.achievement.id || ''}
@@ -31,22 +30,12 @@ class AchievementElement extends React.Component<AchievementElementProps> {
                     <td>{this.props.achievement.description.ro}</td>
                     <td>{this.props.achievement.type}</td>
                     <td>
-                        <a href={emptyHrefLink}>
-                            <label>
-                                <div
-                                    className="image"
-                                    style={{
-                                        width: 64,
-                                        height: 64,
-                                    }}
-                                >
-                                    <img
-                                        src={this.props.achievement.badgeUrl}
-                                        alt="Badge URL"
-                                    />
-                                </div>
-                            </label>
-                        </a>
+                        <img
+                            width={64}
+                            height={64}
+                            src={this.props.achievement.badgeUrl}
+                            alt="Badge URL"
+                        />
                     </td>
                 </tr>
                 <tr className="spacer"></tr>
