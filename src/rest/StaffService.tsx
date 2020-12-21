@@ -1,7 +1,8 @@
-import { auth, remoteConfig } from "../index";
+import { auth } from "../index";
 import { ExpressLink } from "../Helper";
 import axios from "axios";
 import { User } from "../models/User";
+import { expressUrl } from "./_Connection";
 
 export async function getStaffUsers() {
     if (!auth.currentUser) {
@@ -9,7 +10,7 @@ export async function getStaffUsers() {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.USERS;
+    let url = expressUrl + ExpressLink.USERS;
 
     let response = await axios.get(url, {
         headers: {Authorization: `Bearer ${token}`}
@@ -27,7 +28,7 @@ export async function updateStaffMember(createUser: boolean, user: User) {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.USERS + '/staff/' + user.userId;
+    let url = expressUrl + ExpressLink.USERS + '/staff/' + user.userId;
 
     let staffMember;
     if (createUser) {

@@ -35,6 +35,12 @@ export const DB = firebaseApp.firestore();
 export const auth = firebaseApp.auth();
 export const storage = firebaseApp.storage();
 export const remoteConfig = firebaseApp.remoteConfig();
+
+if (window.location.hostname === 'localhost') {
+    DB.settings({ host: 'localhost:8080', ssl: false });
+    auth.useEmulator('http://localhost:9099');
+}
+
 remoteConfig.settings = {
     minimumFetchIntervalMillis: 3600000,
     fetchTimeoutMillis: 60001,

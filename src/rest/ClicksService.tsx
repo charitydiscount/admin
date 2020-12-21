@@ -1,6 +1,7 @@
-import { auth, remoteConfig } from "../index";
+import { auth } from "../index";
 import { ExpressLink, ProxyDate } from "../Helper";
 import axios from "axios";
+import { expressUrl } from "./_Connection";
 
 export interface ClickDto {
     createdAt: ProxyDate,
@@ -34,7 +35,7 @@ export async function getClicks() {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.CLICKS;
+    let url = expressUrl + ExpressLink.CLICKS;
 
     let response = await axios.get(url, {
         headers: {Authorization: `Bearer ${token}`}
@@ -75,10 +76,10 @@ export async function createClick(click: ClickCreateDto) {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.CLICKS;
+    const url = expressUrl + ExpressLink.CLICKS;
 
     click.programId = click.programId + '';
-    let response = await axios.post(url, click, {
+    const response = await axios.post(url, click, {
         headers: {Authorization: `Bearer ${token}`},
     });
 
@@ -91,7 +92,7 @@ export async function updateClick(clickId: string, click: ClickCreateDto) {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') +  ExpressLink.CLICKS + '/' + clickId;
+    let url = expressUrl +  ExpressLink.CLICKS + '/' + clickId;
 
     let requestUpdate = {
         deviceType: click.deviceType,

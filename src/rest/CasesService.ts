@@ -1,6 +1,7 @@
-import { auth, remoteConfig } from '..';
+import { auth } from '..';
 import { ExpressLink } from '../Helper';
 import { CharityCase } from '../models/CharityCase';
+import { expressUrl } from './_Connection';
 
 export const fetchCases = async (): Promise<CharityCase[]> => {
     if (!auth.currentUser) {
@@ -8,7 +9,7 @@ export const fetchCases = async (): Promise<CharityCase[]> => {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.CASES;
+    let url = expressUrl + ExpressLink.CASES;
 
     let response = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` },
@@ -39,7 +40,7 @@ export const createCase = async (charityCase: CharityCase): Promise<any> => {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = `${remoteConfig.getString('express_url')}${ExpressLink.CASES}`;
+    let url = `${expressUrl}${ExpressLink.CASES}`;
 
     return fetch(url, {
         headers: {
@@ -73,7 +74,7 @@ export const updateCase = async (charityCase: CharityCase): Promise<any> => {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = `${remoteConfig.getString('express_url')}${ExpressLink.CASES}/${charityCase.id}`;
+    let url = `${expressUrl}${ExpressLink.CASES}/${charityCase.id}`;
 
     return fetch(url, {
         headers: {
@@ -91,7 +92,7 @@ export const deleteCase = async (charityCase: CharityCase): Promise<any> => {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = `${remoteConfig.getString('express_url')}${ExpressLink.CASES}/${charityCase.id}`;
+    let url = `${expressUrl}${ExpressLink.CASES}/${charityCase.id}`;
 
     return fetch(url, {
         headers: { Authorization: `Bearer ${token}` },
