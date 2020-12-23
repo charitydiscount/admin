@@ -127,7 +127,6 @@ class Staff extends React.Component<RolesProps, RolesState> {
                                             <th>Email</th>
                                             <th>Photo</th>
                                             <th>Staff Member</th>
-                                            <th>Admin</th>
                                         </tr>
                                         </thead>
                                         <tbody>{staffMemberList}</tbody>

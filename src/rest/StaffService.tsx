@@ -33,10 +33,10 @@ export async function updateStaffMember(createUser: boolean, user: User) {
     if (createUser) {
         staffMember = 'true';
     } else {
-        staffMember = user.staff;
+        staffMember = user.isStaff;
     }
 
-    let response = await axios.put(url, {staff: staffMember}, {
+    let response = await axios.put(url, {isStaff: staffMember}, {
         headers: {Authorization: `Bearer ${token}`},
     });
 

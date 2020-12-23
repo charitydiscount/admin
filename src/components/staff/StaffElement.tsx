@@ -40,10 +40,7 @@ class StaffElement extends React.Component<StaffElementProps, StaffElementState>
                         />
                     </td>
                     <td>
-                        {this.props.staffUser.staff ? <i className="fa fa-check"/> : 'Inactive'}
-                    </td>
-                    <td>
-                        {this.props.staffUser.admin ? <i className="fa fa-check"/> : 'Inactive'}
+                        {this.props.staffUser.isStaff ? <i className="fa fa-check"/> : 'Inactive'}
                     </td>
                 </tr>
                 <tr className="spacer"></tr>
