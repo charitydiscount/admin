@@ -1,6 +1,7 @@
 import { ExpressLink, FirebaseTable, TableDocument } from "../Helper";
-import { auth, DB, remoteConfig } from "../index";
+import { auth, DB } from "../index";
 import axios from "axios";
+import { expressUrl } from "./_Connection";
 
 export interface CategoryDto {
     category: string
@@ -45,7 +46,7 @@ export async function updateImportantCategories(importantCategories: ImportantCa
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.IMPORTANT_CATEGORIES;
+    let url = expressUrl + ExpressLink.IMPORTANT_CATEGORIES;
 
     let response = await axios.put(url, {
         categories: importantCategories

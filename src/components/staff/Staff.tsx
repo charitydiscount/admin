@@ -1,33 +1,34 @@
-import React from "react";
-import { FadeLoader } from "react-spinners";
-import { pageLimit, spinnerCss } from "../../Helper";
-import { getStaffUsers } from "../../rest/StaffService";
+import React from 'react';
+import { FadeLoader } from 'react-spinners';
+import { pageLimit, spinnerCss } from '../../Helper';
 import ReactPaginate from 'react-paginate';
-import StaffElement from "./StaffElement";
-import { User } from "../../models/User";
-import StaffModal from "./StaffModal";
-import { connect } from "react-redux";
-import { setStaffModalCreate } from "../../redux/actions/StaffActions";
+import StaffElement from './StaffElement';
+import { User } from '../../models/User';
+import StaffModal from './StaffModal';
+import { connect } from 'react-redux';
+import {
+    loadStaffMembers,
+    setStaffModalCreate,
+} from '../../redux/actions/StaffActions';
+import { AppState } from '../../redux/reducer/RootReducer';
 
 interface RolesState {
-    isLoading: boolean,
-    staffMembers: User[],
-    currentPage: number
+    currentPage: number;
 }
 
 interface RolesProps {
     //global state
     setStaffModalCreate: () => void;
+    loadMembers: () => {};
+    staffMembers: User[];
+    isLoading: boolean;
 }
 
 class Staff extends React.Component<RolesProps, RolesState> {
-
-    constructor(props) {
+    constructor(props: RolesProps) {
         super(props);
         this.state = {
             currentPage: 0,
-            staffMembers: [],
-            isLoading: true
         };
     }
 
@@ -36,17 +37,7 @@ class Staff extends React.Component<RolesProps, RolesState> {
     };
 
     async componentDidMount() {
-        try {
-            let response = await getStaffUsers();
-            if (response) {
-                this.setState({
-                    staffMembers: response,
-                    isLoading: false
-                });
-            }
-        } catch (error) {
-            alert(error);
-        }
+        this.props.loadMembers();
     }
 
     updatePageNumber = (data) => {
@@ -58,8 +49,8 @@ class Staff extends React.Component<RolesProps, RolesState> {
     public render() {
         let staffMemberList;
         let pageCount = 0;
-        if (this.state.staffMembers && this.state.staffMembers.length > 0) {
-            staffMemberList = this.state.staffMembers;
+        if (this.props.staffMembers && this.props.staffMembers.length > 0) {
+            staffMemberList = this.props.staffMembers;
             if (staffMemberList.length > pageLimit) {
                 pageCount = staffMemberList.length / pageLimit;
                 let offset = this.state.currentPage;
@@ -72,7 +63,7 @@ class Staff extends React.Component<RolesProps, RolesState> {
             }
 
             staffMemberList = staffMemberList.map((value, index) => {
-                return <StaffElement key={index} staffUser={value}/>;
+                return <StaffElement key={index} staffUser={value} />;
             });
         }
 
@@ -81,13 +72,13 @@ class Staff extends React.Component<RolesProps, RolesState> {
                 <div className="row">
                     <div className="col-md-12">
                         <h3 className="title-5 m-b-35">Staff members</h3>
-                        <StaffModal/>
+                        <StaffModal />
                         <FadeLoader
-                            loading={this.state.isLoading}
+                            loading={this.props.isLoading}
                             color={'#1641ff'}
                             css={spinnerCss}
                         />
-                        {!this.state.isLoading && (
+                        {!this.props.isLoading && (
                             <React.Fragment>
                                 <div className="table-data__tool">
                                     <div className="table-data__tool-left"></div>
@@ -96,7 +87,7 @@ class Staff extends React.Component<RolesProps, RolesState> {
                                             className="au-btn au-btn-icon au-btn--green au-btn--small"
                                             onClick={this.openModal}
                                         >
-                                            <i className="zmdi zmdi-plus"/>
+                                            <i className="zmdi zmdi-plus" />
                                             add member
                                         </button>
                                         <ReactPaginate
@@ -122,12 +113,12 @@ class Staff extends React.Component<RolesProps, RolesState> {
                                 <div className="table-responsive table-responsive-data2">
                                     <table className="table table-data2">
                                         <thead>
-                                        <tr>
-                                            <th>UserId</th>
-                                            <th>Email</th>
-                                            <th>Photo</th>
-                                            <th>Staff Member</th>
-                                        </tr>
+                                            <tr>
+                                                <th>UserId</th>
+                                                <th>Email</th>
+                                                <th>Photo</th>
+                                                <th>Staff Member</th>
+                                            </tr>
                                         </thead>
                                         <tbody>{staffMemberList}</tbody>
                                     </table>
@@ -137,14 +128,22 @@ class Staff extends React.Component<RolesProps, RolesState> {
                     </div>
                 </div>
             </React.Fragment>
-        )
+        );
     }
 }
+
+const mapStateToProps = (state: AppState) => {
+    return {
+        staffMembers: state.staff.members,
+        isLoading: state.staff.loading,
+    };
+};
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
         setStaffModalCreate: () => dispatch(setStaffModalCreate()),
+        loadMembers: () => dispatch(loadStaffMembers()),
     };
 };
 
-export default connect(null, mapDispatchToProps)(Staff);
+export default connect(mapStateToProps, mapDispatchToProps)(Staff);

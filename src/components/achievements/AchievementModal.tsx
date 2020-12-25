@@ -254,17 +254,6 @@ class AchievementModal extends React.Component<AchievementModalProps> {
                                     });
                                 }}
                             />
-                            <ModalTextField
-                                label={'Weight'}
-                                value={this.props.achievementModal.weight}
-                                onChange={(event) => {
-                                    this.props.updateAchievementModal({
-                                        ...this.props.achievementModal,
-                                        weight: parseInt(event.target.value),
-                                    });
-                                }}
-                                type="number"
-                            />
                             <ModalSelect
                                 id={'type'}
                                 title={'Type'}

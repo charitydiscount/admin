@@ -57,7 +57,6 @@ export interface Achievement {
     createdAt?: ProxyDate;
     updatedAt?: ProxyDate;
     reward: Reward;
-    weight: number;
     type: AchievementType;
     order: number;
     targetDate?: Date;
@@ -86,7 +85,6 @@ export const DEFAULT_ACHIEVEMENT: Achievement = {
         amount: 0,
         unit: '',
     },
-    weight: 0,
     type: AchievementType.CLICK,
     order: 100,
 };

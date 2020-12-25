@@ -1,24 +1,22 @@
-import { auth, remoteConfig } from "../index";
-import { ExpressLink } from "../Helper";
-import axios from "axios";
-import { User } from "../models/User";
+import { auth } from '../index';
+import { ExpressLink } from '../Helper';
+import axios from 'axios';
+import { User } from '../models/User';
+import { expressUrl } from './_Connection';
 
-export async function getStaffUsers() {
+export async function getStaffUsers(): Promise<User[]> {
     if (!auth.currentUser) {
         return [];
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.USERS;
+    let url = expressUrl + ExpressLink.USERS;
 
     let response = await axios.get(url, {
-        headers: {Authorization: `Bearer ${token}`}
+        headers: { Authorization: `Bearer ${token}` },
     });
 
-    return Object.entries(response.data as User)
-        .map(([index, staffUser]) => {
-            return staffUser;
-        })
+    return response.data;
 }
 
 export async function updateStaffMember(createUser: boolean, user: User) {
@@ -27,18 +25,16 @@ export async function updateStaffMember(createUser: boolean, user: User) {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.USERS + '/staff/' + user.userId;
+    let url = expressUrl + ExpressLink.USERS + '/staff/' + user.userId;
 
-    let staffMember;
-    if (createUser) {
-        staffMember = 'true';
-    } else {
-        staffMember = user.isStaff;
-    }
-
-    let response = await axios.put(url, {isStaff: staffMember}, {
-        headers: {Authorization: `Bearer ${token}`},
-    });
+    const isAdmin: boolean = createUser ? true : user.roles.admin;
+    const response = await axios.put(
+        url,
+        { admin: isAdmin },
+        {
+            headers: { Authorization: `Bearer ${token}` },
+        }
+    );
 
     return response.status === 200;
 }

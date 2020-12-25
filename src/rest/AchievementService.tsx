@@ -1,7 +1,8 @@
 import { Achievement } from '../models/Achievement';
-import { auth, remoteConfig } from '../index';
+import { auth } from '../index';
 import { ExpressLink, isEmpty } from '../Helper';
 import axios from 'axios';
+import { expressUrl } from './_Connection';
 
 export async function getAchievements(): Promise<Achievement[]> {
     if (!auth.currentUser) {
@@ -9,7 +10,7 @@ export async function getAchievements(): Promise<Achievement[]> {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.ACHIEVEMENTS;
+    let url = expressUrl + ExpressLink.ACHIEVEMENTS;
 
     let response = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` },
@@ -26,7 +27,7 @@ export async function createAchievement(achievement: Achievement) {
     validateAchievement(achievement);
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.ACHIEVEMENTS;
+    let url = expressUrl + ExpressLink.ACHIEVEMENTS;
 
     let response = await axios.post(url, achievement, {
         headers: { Authorization: `Bearer ${token}` },
@@ -44,7 +45,7 @@ export async function updateAchievement(achievement: Achievement) {
 
     const token = await auth.currentUser.getIdToken();
     let url =
-        remoteConfig.getString('express_url') +
+        expressUrl +
         ExpressLink.ACHIEVEMENTS +
         '/' +
         achievement.id;
@@ -95,10 +96,6 @@ function validateAchievement(achievement: Achievement) {
 
     if (isEmpty(achievement.reward.unit)) {
         throw Error('Select the unit for Reward');
-    }
-
-    if (isEmpty(achievement.weight)) {
-        throw Error('Enter the weight');
     }
 
     if (isEmpty(achievement.type)) {

@@ -1,6 +1,7 @@
-import { auth, remoteConfig } from "../index";
+import { auth } from "../index";
 import { ExpressLink, ProxyDate } from "../Helper";
 import axios from "axios";
+import { expressUrl } from "./_Connection";
 
 export interface MessageDto {
     createdAt: ProxyDate
@@ -19,7 +20,7 @@ export async function getMessages() {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.MESSAGES;
+    let url = expressUrl + ExpressLink.MESSAGES;
 
     let response = await axios.get(url, {
         headers: {Authorization: `Bearer ${token}`}
@@ -44,7 +45,7 @@ export async function getNewMessages() {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.MESSAGES;
+    let url = expressUrl + ExpressLink.MESSAGES;
 
     let response = await axios.get(url, {
         headers: {Authorization: `Bearer ${token}`}
@@ -65,7 +66,7 @@ export async function updateMessage(message: MessageDto) {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.MESSAGES + '/' + message.id;
+    let url = expressUrl + ExpressLink.MESSAGES + '/' + message.id;
 
     let requestUpdate = {
         status: message.status

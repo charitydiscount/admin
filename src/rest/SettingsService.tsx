@@ -1,6 +1,7 @@
-import { auth, DB, remoteConfig } from "../index";
+import { auth, DB } from "../index";
 import { ExpressLink, FirebaseTable, TableDocument } from "../Helper";
 import axios from "axios";
+import { expressUrl } from "./_Connection";
 
 export interface SettingsDTO {
     cashoutEmails: string[]
@@ -27,7 +28,7 @@ export async function updateSettings(settings: SettingsDTO) {
     }
 
     const token = await auth.currentUser.getIdToken();
-    let url = remoteConfig.getString('express_url') + ExpressLink.SETTINGS;
+    let url = expressUrl + ExpressLink.SETTINGS;
 
     let response = await axios.put(url, settings, {
         headers: {Authorization: `Bearer ${token}`},

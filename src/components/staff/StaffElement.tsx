@@ -1,22 +1,23 @@
-import React from "react";
+import React from 'react';
 import ElementTableLink from '../general/ElementTableLink';
-import { User } from "../../models/User";
-import StaffModal from "./StaffModal";
-import { connect } from "react-redux";
-import { setStaffModalUpdate } from "../../redux/actions/StaffActions";
+import { User } from '../../models/User';
+import StaffModal from './StaffModal';
+import { connect } from 'react-redux';
+import { setStaffModalUpdate } from '../../redux/actions/StaffActions';
+import { isStaff } from '../../util/user';
 
 interface StaffElementProps {
-    staffUser: User,
+    staffUser: User;
     //global state
     setStaffModalUpdate?: (user: User) => void;
 }
 
-interface StaffElementState {
+interface StaffElementState {}
 
-}
-
-class StaffElement extends React.Component<StaffElementProps, StaffElementState> {
-
+class StaffElement extends React.Component<
+    StaffElementProps,
+    StaffElementState
+> {
     openModal = () => {
         this.props.setStaffModalUpdate(this.props.staffUser);
     };
@@ -24,7 +25,7 @@ class StaffElement extends React.Component<StaffElementProps, StaffElementState>
     public render() {
         return (
             <React.Fragment>
-                <StaffModal/>
+                <StaffModal />
                 <tr className="tr-shadow">
                     <ElementTableLink
                         text={this.props.staffUser.userId}
@@ -40,12 +41,16 @@ class StaffElement extends React.Component<StaffElementProps, StaffElementState>
                         />
                     </td>
                     <td>
-                        {this.props.staffUser.isStaff ? <i className="fa fa-check"/> : 'Inactive'}
+                        {isStaff(this.props.staffUser) ? (
+                            <i className="fa fa-check" />
+                        ) : (
+                            'Inactive'
+                        )}
                     </td>
                 </tr>
                 <tr className="spacer"></tr>
             </React.Fragment>
-        )
+        );
     }
 }
 
