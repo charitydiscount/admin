@@ -3,7 +3,7 @@ export interface User {
     name?: string;
     email: string;
     photoUrl: string;
-    isStaff: boolean;
+    roles?: Roles;
 }
 
 export enum BooleanOptions {
@@ -15,5 +15,9 @@ export const DEFAULT_USER: User = {
     userId: '',
     email: '',
     photoUrl: '',
-    isStaff: false,
+    roles: { admin: false },
 };
+
+export interface Roles {
+    admin: boolean;
+}
