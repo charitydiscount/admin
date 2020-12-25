@@ -75,12 +75,12 @@ class StaffModal extends React.Component<StaffModalProps> {
                         <ModalSelect
                             id={'staffMember'}
                             title={'Staff'}
-                            value={this.props.staffModal.staff}
+                            value={this.props.staffModal.isStaff}
                             options={booleanUnits}
                             onChange={(event) => {
                                 this.props.updateStaffModal({
                                     ...this.props.staffModal,
-                                    staff: event.target.value
+                                    isStaff: event.target.value
                                 });
                             }}
                         />

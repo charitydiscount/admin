@@ -1,11 +1,9 @@
 export interface User {
     userId: string;
-    firstName?: string;
-    lastName?: string;
+    name?: string;
     email: string;
     photoUrl: string;
-    staff: boolean;
-    admin: boolean;
+    isStaff: boolean;
 }
 
 export enum BooleanOptions {
@@ -17,6 +15,5 @@ export const DEFAULT_USER: User = {
     userId: '',
     email: '',
     photoUrl: '',
-    staff: false,
-    admin: false,
+    isStaff: false,
 };
