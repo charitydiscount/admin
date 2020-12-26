@@ -1,7 +1,7 @@
 import { ExpressLink, ProxyDate, roundAmount, TxType } from "../Helper";
 import { auth } from "../index";
 import axios from "axios";
-import { expressUrl } from "./_Connection";
+import { expressUrl } from "../index";
 
 export interface TransactionDocDto {
     [id: number]: TransactionDto;

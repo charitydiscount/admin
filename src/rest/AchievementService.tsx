@@ -2,7 +2,7 @@ import { Achievement } from '../models/Achievement';
 import { auth } from '../index';
 import { ExpressLink, isEmpty } from '../Helper';
 import axios from 'axios';
-import { expressUrl } from './_Connection';
+import { expressUrl } from "../index";
 
 export async function getAchievements(): Promise<Achievement[]> {
     if (!auth.currentUser) {

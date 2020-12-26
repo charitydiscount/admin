@@ -45,7 +45,10 @@ remoteConfig.settings = {
     minimumFetchIntervalMillis: 3600000,
     fetchTimeoutMillis: 60001,
 };
-remoteConfig.fetchAndActivate();
+export let expressUrl = '';
+remoteConfig.fetchAndActivate().then(() => {
+    expressUrl = remoteConfig.getString('express_url');
+});
 
 ReactDOM.render(
     <Provider store={store}>

@@ -1,7 +1,7 @@
 import { auth } from '..';
 import { ExpressLink } from '../Helper';
 import { CharityCase } from '../models/CharityCase';
-import { expressUrl } from './_Connection';
+import { expressUrl } from "../index";
 
 export const fetchCases = async (): Promise<CharityCase[]> => {
     if (!auth.currentUser) {

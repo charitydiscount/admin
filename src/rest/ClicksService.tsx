@@ -1,7 +1,6 @@
-import { auth } from "../index";
+import { auth, expressUrl } from "../index";
 import { ExpressLink, ProxyDate } from "../Helper";
 import axios from "axios";
-import { expressUrl } from "./_Connection";
 
 export interface ClickDto {
     createdAt: ProxyDate,

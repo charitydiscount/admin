@@ -2,7 +2,7 @@ import { auth } from "../index";
 import { ExpressLink, ProxyDate, roundAmount } from "../Helper";
 import axios from "axios";
 import { ProgramDto } from "./ProgramService";
-import { expressUrl } from "./_Connection";
+import { expressUrl } from "../index";
 
 export interface CommissionDto {
     userId: string,

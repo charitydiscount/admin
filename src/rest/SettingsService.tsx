@@ -1,7 +1,7 @@
 import { auth, DB } from "../index";
 import { ExpressLink, FirebaseTable, TableDocument } from "../Helper";
 import axios from "axios";
-import { expressUrl } from "./_Connection";
+import { expressUrl } from "../index";
 
 export interface SettingsDTO {
     cashoutEmails: string[]

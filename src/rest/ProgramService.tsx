@@ -1,7 +1,7 @@
 import { auth } from "../index";
 import axios from 'axios';
 import { ExpressLink, SourceTypes } from "../Helper";
-import { expressUrl } from "./_Connection";
+import { expressUrl } from "../index";
 
 export interface ProgramDocDto {
     [uniqueCode: string]: ProgramDto;

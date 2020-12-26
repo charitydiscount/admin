@@ -1,7 +1,7 @@
 import { ExpressLink, FirebaseTable, TableDocument } from "../Helper";
 import { auth, DB } from "../index";
 import axios from "axios";
-import { expressUrl } from "./_Connection";
+import { expressUrl } from "../index";
 
 export interface CategoryDto {
     category: string

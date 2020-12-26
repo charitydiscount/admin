@@ -2,7 +2,7 @@ import { auth } from '../index';
 import { ExpressLink } from '../Helper';
 import axios from 'axios';
 import { User } from '../models/User';
-import { expressUrl } from './_Connection';
+import { expressUrl } from "../index";
 
 export async function getStaffUsers(): Promise<User[]> {
     if (!auth.currentUser) {

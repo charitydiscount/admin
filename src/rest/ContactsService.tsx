@@ -1,7 +1,7 @@
 import { auth } from "../index";
 import { ExpressLink, ProxyDate } from "../Helper";
 import axios from "axios";
-import { expressUrl } from "./_Connection";
+import { expressUrl } from "../index";
 
 export interface MessageDto {
     createdAt: ProxyDate
